@@ -61,7 +61,6 @@ def for_cross_trigger(df):
   return x_trigger
 
 path='/eos/cms/store/group/phys_top/ExtraYukawa/TTC_version9/'
-path2='/eos/cms/store/group/phys_top/ExtraYukawa/TTC_newLeptonID/'
 
 doubleMu_names = ROOT.std.vector('string')()
 for f in ["DoubleMuonB.root","DoubleMuonC.root","DoubleMuonD.root","DoubleMuonE.root","DoubleMuonF.root"]:
@@ -93,19 +92,19 @@ for f in ['WJets.root']:
 
 osWW_list = ROOT.std.vector('string')()
 for f in ['osWW.root']:
-  osWW_list.push_back(path2+f)
+  osWW_list.push_back(path+f)
 
 ssWW_list = ROOT.std.vector('string')()
 for f in ['ssWW.root']:
-  ssWW_list.push_back(path2+f)
+  ssWW_list.push_back(path+f)
 
 WWdps_list = ROOT.std.vector('string')()
 for f in ['WWdps.root']:
-  WWdps_list.push_back(path2+f)
+  WWdps_list.push_back(path+f)
 
 WZew_list = ROOT.std.vector('string')()
 for f in ['WZ_ew.root']:
-  WZew_list.push_back(path2+f)
+  WZew_list.push_back(path+f)
 
 WZqcd_list = ROOT.std.vector('string')()
 for f in ['WZ_qcd.root']:
@@ -117,7 +116,7 @@ for f in ['ZZ.root']:
 
 ZG_list = ROOT.std.vector('string')()
 for f in ['ZG_ew.root']:
-  ZG_list.push_back(path2+f)
+  ZG_list.push_back(path+f)
 
 WWW_list = ROOT.std.vector('string')()
 for f in ['WWW.root']:
@@ -137,23 +136,23 @@ for f in ['ZZZ.root']:
 
 tsch_list = ROOT.std.vector('string')()
 for f in ['tsch.root']:
-  tsch_list.push_back(path2+f)
+  tsch_list.push_back(path+f)
 
 t_tch_list = ROOT.std.vector('string')()
 for f in ['t_tch.root']:
-  t_tch_list.push_back(path2+f)
+  t_tch_list.push_back(path+f)
 
 tbar_tch_list = ROOT.std.vector('string')()
 for f in ['tbar_tch.root']:
-  tbar_tch_list.push_back(path2+f)
+  tbar_tch_list.push_back(path+f)
 
 tW_list = ROOT.std.vector('string')()
 for f in ['tW.root']:
-  tW_list.push_back(path2+f)
+  tW_list.push_back(path+f)
 
 tbarW_list = ROOT.std.vector('string')()
 for f in ['tbarW.root']:
-  tbarW_list.push_back(path2+f)
+  tbarW_list.push_back(path+f)
 
 ttWtoLNu_list = ROOT.std.vector('string')()
 for f in ['ttWtoLNu.root']:
