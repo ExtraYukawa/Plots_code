@@ -64,26 +64,27 @@ path='/eos/cms/store/group/phys_top/ExtraYukawa/2018/'
 
 #2018OK
 doubleMu_names = ROOT.std.vector('string')()
-for f in ["DoubleMuonA.root","DoubleMuonB.root","DoubleMuonC.root","DoubleMuonD.root"]:
+for f in ["DoubleMuon_A.root","DoubleMuon_B.root","DoubleMuon_C.root","DoubleMuon_D_0.root","DoubleMuon_D_1.root"]:
   doubleMu_names.push_back(path+f)
 
 #2018OK
 singleMu_names = ROOT.std.vector('string')()
-for f in ["SingleMuonA.root","SingleMuonB.root","SingleMuonC.root","SingleMuonD.root"]:
+for f in ["SingleMuon_A.root","SingleMuon_B.root","SingleMuon_C.root","SingleMuon_D_0.root","SingleMuon_D_1.root"]:
   singleMu_names.push_back(path+f)
 
-#2018OK
-doubleEle_names = ROOT.std.vector('string')()
-for f in ["DoubleEGA.root","DoubleEGB.root","DoubleEGC.root","DoubleEGD.root"]:
-  doubleEle_names.push_back(path+f)
+#This does not exist in 2018?
+#doubleEle_names = ROOT.std.vector('string')()
+#for f in ["DoubleEGA.root","DoubleEGB.root","DoubleEGC.root","DoubleEGD.root"]:
+#  doubleEle_names.push_back(path+f)
 
+#2018OK
 singleEle_names = ROOT.std.vector('string')()
-for f in ["SingleEGB.root","SingleEGC.root","SingleEGD.root","SingleEGE.root","SingleEGF.root"]:
+for f in ["EGamma_A.root","EGamma_B.root","EGamma_C.root","EGamma_D_0.root","EGamma_D_1.root"]:
   singleEle_names.push_back(path+f)
 
 #2018OK
 muonEle_names = ROOT.std.vector('string')()
-for f in ["MuonEGA.root","MuonEGB.root","MuonEGC.root","MuonEGD.root"]:
+for f in ["MuonEG_A.root","MuonEG_B.root","MuonEG_C.root","MuonEG_D_0.root","MuonEG_D_1.root"]:
   muonEle_names.push_back(path+f)
 
 DY_list = ROOT.std.vector('string')()
