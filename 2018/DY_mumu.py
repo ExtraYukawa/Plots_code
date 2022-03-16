@@ -229,7 +229,7 @@ for f in ['ttZZ.root']:
 
 #2018OK
 TTTo2L_list = ROOT.std.vector('string')()
-for f in ["TTTo2L.root","TTTo2L_1.root"]:
+for f in ["TTTo2L.root"]:#,"TTTo2L_1.root"]:
   TTTo2L_list.push_back(path+f)
 
 #2018OK
@@ -331,7 +331,7 @@ def TTC_Analysis():
 
   histos = []
 
-  lumi = 41480.
+  lumi = 59830.# from https://twiki.cern.ch/twiki/bin/view/CMS/TWikiLUM
 
   DY_xs = 6077.22
   DY_ev = get_mcEventnumber(DY_list)
