@@ -101,7 +101,7 @@ for f in ['WJets.root']:
 #osWW_list = ROOT.std.vector('string')()
 #for f in ['osWW.root']:
 #  osWW_list.push_back(path+f)
-#
+
 #ssWW_list = ROOT.std.vector('string')()
 #for f in ['ssWW.root']:
 #  ssWW_list.push_back(path+f)
@@ -229,12 +229,12 @@ for f in ['ttZZ.root']:
 
 #2018OK
 TTTo2L_list = ROOT.std.vector('string')()
-for f in ['TTTo2L.root']:
+for f in ['TTTo2L.root','TTTo2L_1.root']:
   TTTo2L_list.push_back(path+f)
 
 #2018OK
 TTTo1L_list = ROOT.std.vector('string')()
-for f in ['TTTo1L.root','TTTo1L_1.root']:#How to add TTTo2L_1.root?
+for f in ['TTTo1L.root']:
   TTTo1L_list.push_back(path+f)
 
 #2018MISSING
@@ -338,27 +338,32 @@ def TTC_Analysis():
 
   WJet_xs = 61526.7
   WJet_ev = get_mcEventnumber(WJet_list)
+  
+  WW_xs = 118.7
+  WW_ev = get_mcEventnumber(WW_list)
 
-  osWW_xs = 11.09
-  osWW_ev = get_mcEventnumber(osWW_list)
+  WZ_xs = 27.6 #to be checked - from XSDB
+  WZ_ev = get_mcEventnumber(WZ_list)
+  #osWW_xs = 11.09
+  #osWW_ev = get_mcEventnumber(osWW_list)
 
-  ssWW_xs = 0.04932
-  ssWW_ev = get_mcEventnumber(ssWW_list)
+  #ssWW_xs = 0.04932
+  #ssWW_ev = get_mcEventnumber(ssWW_list)
 
-  WWdps_xs = 1.62
-  WWdps_ev = get_mcEventnumber(WWdps_list)
+  #WWdps_xs = 1.62
+  #WWdps_ev = get_mcEventnumber(WWdps_list)
 
-  WZew_xs = 0.0163
-  WZew_ev = get_mcEventnumber(WZew_list)
+  #WZew_xs = 0.0163
+  #WZew_ev = get_mcEventnumber(WZew_list)
 
-  WZqcd_xs = 5.213
-  WZqcd_ev = get_mcEventnumber(WZqcd_list)
+  #WZqcd_xs = 5.213
+  #WZqcd_ev = get_mcEventnumber(WZqcd_list)
 
-  ZZ_xs = 0.0086
-  ZZ_ev = get_mcEventnumber(ZZ_list)
+  #ZZ_xs = 0.0086
+  #ZZ_ev = get_mcEventnumber(ZZ_list)
 
-  ZG_xs = 0.1097
-  ZG_ev = get_mcEventnumber(ZG_list)
+  #ZG_xs = 0.1097
+  #ZG_ev = get_mcEventnumber(ZG_list)
 
   WWW_xs = 0.2086
   WWW_ev = get_mcEventnumber(WWW_list)
@@ -378,8 +383,8 @@ def TTC_Analysis():
   TTTo1L_xs = 365.4574
   TTTo1L_ev = get_mcEventnumber(TTTo1L_list)
 
-  TTH_xs = 0.5269
-  TTH_ev = get_mcEventnumber(ttH_list)
+#  TTH_xs = 0.5269
+#  TTH_ev = get_mcEventnumber(ttH_list)
 
   TTWtoLNu_xs = 0.1792
   TTWtoLNu_ev = get_mcEventnumber(ttWtoLNu_list)
@@ -402,38 +407,38 @@ def TTC_Analysis():
   TTZZ_xs = 0.001386
   TTZZ_ev = get_mcEventnumber(ttZZ_list)
 
-  tZq_xs = 0.07561
-  tZq_ev = get_mcEventnumber(tzq_list)
+#  tZq_xs = 0.07561
+#  tZq_ev = get_mcEventnumber(tzq_list)
 
-  tW_xs = 35.85
-  tW_ev = get_mcEventnumber(tW_list)
+#  tW_xs = 35.85
+#  tW_ev = get_mcEventnumber(tW_list)
 
-  tbarW_xs = 35.85
-  tbarW_ev = get_mcEventnumber(tbarW_list)
+#  tbarW_xs = 35.85
+#  tbarW_ev = get_mcEventnumber(tbarW_list)
 
-  t_sch_xs = 3.36
-  t_sch_ev = get_mcEventnumber(tsch_list)
+#  t_sch_xs = 3.36
+#  t_sch_ev = get_mcEventnumber(tsch_list)
 
-  t_tch_xs = 136.02
-  t_tch_ev = get_mcEventnumber(t_tch_list)
+#  t_tch_xs = 136.02
+#  t_tch_ev = get_mcEventnumber(t_tch_list)
 
-  tbar_tch_xs = 80.95
-  tbar_tch_ev = get_mcEventnumber(tbar_tch_list)
+#  tbar_tch_xs = 80.95
+#  tbar_tch_ev = get_mcEventnumber(tbar_tch_list)
 
-  ttWH_xs = 0.00114
-  ttWH_ev = get_mcEventnumber(TTWH_list)
+#  ttWH_xs = 0.00114
+#  ttWH_ev = get_mcEventnumber(TTWH_list)
 
-  ttZH_xs = 0.00113
-  ttZH_ev = get_mcEventnumber(TTZH_list)
+#  ttZH_xs = 0.00113
+#  ttZH_ev = get_mcEventnumber(TTZH_list)
 
-  tttJ_xs = 0.0004
-  tttJ_ev = get_mcEventnumber(TTTJ_list)
+#  tttJ_xs = 0.0004
+#  tttJ_ev = get_mcEventnumber(TTTJ_list)
 
-  tttW_xs = 0.00073
-  tttW_ev = get_mcEventnumber(TTTW_list)
+#  tttW_xs = 0.00073
+#  tttW_ev = get_mcEventnumber(TTTW_list)
 
-  tttt_xs = 0.0082
-  tttt_ev = get_mcEventnumber(TTTT_list)
+#  tttt_xs = 0.0082
+#  tttt_ev = get_mcEventnumber(TTTT_list)
 
 #  QCD50to80_xs = 1984000.0
 #  QCD50to80_ev = get_mcEventnumber(QCD50to80_list)
@@ -473,75 +478,75 @@ def TTC_Analysis():
     df_WJet_histo = df_WJet_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'genweight')
     df_WJet_histos.append(df_WJet_histo)
 
-  df_osWW_tree = ROOT.RDataFrame("Events",osWW_list)
-  df_osWW_tree = df_osWW_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
-  df_osWW_tree = df_osWW_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
-  df_osWW = df_osWW_tree.Filter(filters)
-  df_osWW_trigger = all_trigger(df_osWW)
-  df_osWW_histos=[]
-  for i in hists_name:
-    df_osWW_histo = df_osWW_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'genweight')
-    df_osWW_histos.append(df_osWW_histo)
+#  df_osWW_tree = ROOT.RDataFrame("Events",osWW_list)
+#  df_osWW_tree = df_osWW_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
+#  df_osWW_tree = df_osWW_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
+#  df_osWW = df_osWW_tree.Filter(filters)
+#  df_osWW_trigger = all_trigger(df_osWW)
+#  df_osWW_histos=[]
+#  for i in hists_name:
+#    df_osWW_histo = df_osWW_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'genweight')
+#    df_osWW_histos.append(df_osWW_histo)
 
-  df_ssWW_tree = ROOT.RDataFrame("Events",ssWW_list)
-  df_ssWW_tree = df_ssWW_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
-  df_ssWW_tree = df_ssWW_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
-  df_ssWW = df_ssWW_tree.Filter(filters)
-  df_ssWW_trigger = all_trigger(df_ssWW)
-  df_ssWW_histos=[]
-  for i in hists_name:
-    df_ssWW_histo = df_ssWW_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'genweight')
-    df_ssWW_histos.append(df_ssWW_histo)
+#  df_ssWW_tree = ROOT.RDataFrame("Events",ssWW_list)
+#  df_ssWW_tree = df_ssWW_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
+#  df_ssWW_tree = df_ssWW_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
+#  df_ssWW = df_ssWW_tree.Filter(filters)
+#  df_ssWW_trigger = all_trigger(df_ssWW)
+#  df_ssWW_histos=[]
+#  for i in hists_name:
+#    df_ssWW_histo = df_ssWW_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'genweight')
+#    df_ssWW_histos.append(df_ssWW_histo)
 
-  df_WWdps_tree = ROOT.RDataFrame("Events",WWdps_list)
-  df_WWdps_tree = df_WWdps_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
-  df_WWdps_tree = df_WWdps_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
-  df_WWdps = df_WWdps_tree.Filter(filters)
-  df_WWdps_trigger = all_trigger(df_WWdps)
-  df_WWdps_histos=[]
-  for i in hists_name:
-    df_WWdps_histo = df_WWdps_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'genweight')
-    df_WWdps_histos.append(df_WWdps_histo)
+#  df_WWdps_tree = ROOT.RDataFrame("Events",WWdps_list)
+#  df_WWdps_tree = df_WWdps_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
+#  df_WWdps_tree = df_WWdps_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
+#  df_WWdps = df_WWdps_tree.Filter(filters)
+#  df_WWdps_trigger = all_trigger(df_WWdps)
+#  df_WWdps_histos=[]
+#  for i in hists_name:
+#    df_WWdps_histo = df_WWdps_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'genweight')
+#    df_WWdps_histos.append(df_WWdps_histo)
 
-  df_WZew_tree = ROOT.RDataFrame("Events",WZew_list)
-  df_WZew_tree = df_WZew_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
-  df_WZew_tree = df_WZew_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
-  df_WZew = df_WZew_tree.Filter(filters)
-  df_WZew_trigger = all_trigger(df_WZew)
-  df_WZew_histos=[]
-  for i in hists_name:
-    df_WZew_histo = df_WZew_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'genweight')
-    df_WZew_histos.append(df_WZew_histo)
+#  df_WZew_tree = ROOT.RDataFrame("Events",WZew_list)
+#  df_WZew_tree = df_WZew_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
+#  df_WZew_tree = df_WZew_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
+#  df_WZew = df_WZew_tree.Filter(filters)
+#  df_WZew_trigger = all_trigger(df_WZew)
+#  df_WZew_histos=[]
+#  for i in hists_name:
+#    df_WZew_histo = df_WZew_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'genweight')
+#    df_WZew_histos.append(df_WZew_histo)
 
-  df_WZqcd_tree = ROOT.RDataFrame("Events",WZqcd_list)
-  df_WZqcd_tree = df_WZqcd_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
-  df_WZqcd_tree = df_WZqcd_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
-  df_WZqcd = df_WZqcd_tree.Filter(filters)
-  df_WZqcd_trigger = all_trigger(df_WZqcd)
-  df_WZqcd_histos=[]
-  for i in hists_name:
-    df_WZqcd_histo = df_WZqcd_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'genweight')
-    df_WZqcd_histos.append(df_WZqcd_histo)
+#  df_WZqcd_tree = ROOT.RDataFrame("Events",WZqcd_list)
+#  df_WZqcd_tree = df_WZqcd_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
+#  df_WZqcd_tree = df_WZqcd_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
+#  df_WZqcd = df_WZqcd_tree.Filter(filters)
+#  df_WZqcd_trigger = all_trigger(df_WZqcd)
+#  df_WZqcd_histos=[]
+#  for i in hists_name:
+#    df_WZqcd_histo = df_WZqcd_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'genweight')
+#    df_WZqcd_histos.append(df_WZqcd_histo)
 
-  df_ZZ_tree = ROOT.RDataFrame("Events",ZZ_list)
-  df_ZZ_tree = df_ZZ_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
-  df_ZZ_tree = df_ZZ_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
-  df_ZZ = df_ZZ_tree.Filter(filters)
-  df_ZZ_trigger = all_trigger(df_ZZ)
-  df_ZZ_histos=[]
-  for i in hists_name:
-    df_ZZ_histo = df_ZZ_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'genweight')
-    df_ZZ_histos.append(df_ZZ_histo)
+#  df_ZZ_tree = ROOT.RDataFrame("Events",ZZ_list)
+#  df_ZZ_tree = df_ZZ_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
+#  df_ZZ_tree = df_ZZ_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
+#  df_ZZ = df_ZZ_tree.Filter(filters)
+#  df_ZZ_trigger = all_trigger(df_ZZ)
+#  df_ZZ_histos=[]
+#  for i in hists_name:
+#    df_ZZ_histo = df_ZZ_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'genweight')
+#    df_ZZ_histos.append(df_ZZ_histo)
 
-  df_ZG_tree = ROOT.RDataFrame("Events",ZG_list)
-  df_ZG_tree = df_ZG_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
-  df_ZG_tree = df_ZG_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
-  df_ZG = df_ZG_tree.Filter(filters)
-  df_ZG_trigger = all_trigger(df_ZG)
-  df_ZG_histos=[]
-  for i in hists_name:
-    df_ZG_histo = df_ZG_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'genweight')
-    df_ZG_histos.append(df_ZG_histo)
+#  df_ZG_tree = ROOT.RDataFrame("Events",ZG_list)
+#  df_ZG_tree = df_ZG_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
+#  df_ZG_tree = df_ZG_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
+#  df_ZG = df_ZG_tree.Filter(filters)
+#  df_ZG_trigger = all_trigger(df_ZG)
+#  df_ZG_histos=[]
+#  for i in hists_name:
+#    df_ZG_histo = df_ZG_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'genweight')
+#    df_ZG_histos.append(df_ZG_histo)
 
   df_WWW_tree = ROOT.RDataFrame("Events",WWW_list)
   df_WWW_tree = df_WWW_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
@@ -583,55 +588,55 @@ def TTC_Analysis():
     df_ZZZ_histo = df_ZZZ_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'genweight')
     df_ZZZ_histos.append(df_ZZZ_histo)
 
-  df_tsch_tree = ROOT.RDataFrame("Events",tsch_list)
-  df_tsch_tree = df_tsch_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
-  df_tsch_tree = df_tsch_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
-  df_tsch = df_tsch_tree.Filter(filters)
-  df_tsch_trigger = all_trigger(df_tsch)
-  df_tsch_histos=[]
-  for i in hists_name:
-    df_tsch_histo = df_tsch_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'genweight')
-    df_tsch_histos.append(df_tsch_histo)
+#  df_tsch_tree = ROOT.RDataFrame("Events",tsch_list)
+#  df_tsch_tree = df_tsch_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
+#  df_tsch_tree = df_tsch_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
+#  df_tsch = df_tsch_tree.Filter(filters)
+#  df_tsch_trigger = all_trigger(df_tsch)
+#  df_tsch_histos=[]
+#  for i in hists_name:
+#    df_tsch_histo = df_tsch_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'genweight')
+#    df_tsch_histos.append(df_tsch_histo)
 
-  df_t_tch_tree = ROOT.RDataFrame("Events",t_tch_list)
-  df_t_tch_tree = df_t_tch_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
-  df_t_tch_tree = df_t_tch_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
-  df_t_tch = df_t_tch_tree.Filter(filters)
-  df_t_tch_trigger = all_trigger(df_t_tch)
-  df_t_tch_histos=[]
-  for i in hists_name:
-    df_t_tch_histo = df_t_tch_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'genweight')
-    df_t_tch_histos.append(df_t_tch_histo)
+#  df_t_tch_tree = ROOT.RDataFrame("Events",t_tch_list)
+#  df_t_tch_tree = df_t_tch_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
+#  df_t_tch_tree = df_t_tch_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
+#  df_t_tch = df_t_tch_tree.Filter(filters)
+#  df_t_tch_trigger = all_trigger(df_t_tch)
+#  df_t_tch_histos=[]
+#  for i in hists_name:
+#    df_t_tch_histo = df_t_tch_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'genweight')
+#    df_t_tch_histos.append(df_t_tch_histo)
 
-  df_tbar_tch_tree = ROOT.RDataFrame("Events",tbar_tch_list)
-  df_tbar_tch_tree = df_tbar_tch_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
-  df_tbar_tch_tree = df_tbar_tch_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
-  df_tbar_tch = df_tbar_tch_tree.Filter(filters)
-  df_tbar_tch_trigger = all_trigger(df_tbar_tch)
-  df_tbar_tch_histos=[]
-  for i in hists_name:
-    df_tbar_tch_histo = df_tbar_tch_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'genweight')
-    df_tbar_tch_histos.append(df_tbar_tch_histo)
+#  df_tbar_tch_tree = ROOT.RDataFrame("Events",tbar_tch_list)
+#  df_tbar_tch_tree = df_tbar_tch_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
+#  df_tbar_tch_tree = df_tbar_tch_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
+#  df_tbar_tch = df_tbar_tch_tree.Filter(filters)
+#  df_tbar_tch_trigger = all_trigger(df_tbar_tch)
+#  df_tbar_tch_histos=[]
+#  for i in hists_name:
+#    df_tbar_tch_histo = df_tbar_tch_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'genweight')
+#    df_tbar_tch_histos.append(df_tbar_tch_histo)
 
-  df_tW_tree = ROOT.RDataFrame("Events",tW_list)
-  df_tW_tree = df_tW_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
-  df_tW_tree = df_tW_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
-  df_tW = df_tW_tree.Filter(filters)
-  df_tW_trigger = all_trigger(df_tW)
-  df_tW_histos=[]
-  for i in hists_name:
-    df_tW_histo = df_tW_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'genweight')
-    df_tW_histos.append(df_tW_histo)
+#  df_tW_tree = ROOT.RDataFrame("Events",tW_list)
+#  df_tW_tree = df_tW_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
+#  df_tW_tree = df_tW_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
+#  df_tW = df_tW_tree.Filter(filters)
+#  df_tW_trigger = all_trigger(df_tW)
+#  df_tW_histos=[]
+#  for i in hists_name:
+#    df_tW_histo = df_tW_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'genweight')
+#    df_tW_histos.append(df_tW_histo)
 
-  df_tbarW_tree = ROOT.RDataFrame("Events",tbarW_list)
-  df_tbarW_tree = df_tbarW_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
-  df_tbarW_tree = df_tbarW_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
-  df_tbarW = df_tbarW_tree.Filter(filters)
-  df_tbarW_trigger = all_trigger(df_tbarW)
-  df_tbarW_histos=[]
-  for i in hists_name:
-    df_tbarW_histo = df_tbarW_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'genweight')
-    df_tbarW_histos.append(df_tbarW_histo)
+#  df_tbarW_tree = ROOT.RDataFrame("Events",tbarW_list)
+#  df_tbarW_tree = df_tbarW_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
+#  df_tbarW_tree = df_tbarW_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
+#  df_tbarW = df_tbarW_tree.Filter(filters)
+#  df_tbarW_trigger = all_trigger(df_tbarW)
+#  df_tbarW_histos=[]
+#  for i in hists_name:
+#    df_tbarW_histo = df_tbarW_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'genweight')
+#    df_tbarW_histos.append(df_tbarW_histo)
 
   df_ttWtoLNu_tree = ROOT.RDataFrame("Events",ttWtoLNu_list)
   df_ttWtoLNu_tree = df_ttWtoLNu_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
@@ -673,15 +678,15 @@ def TTC_Analysis():
     df_ttZtoQQ_histo = df_ttZtoQQ_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'genweight')
     df_ttZtoQQ_histos.append(df_ttZtoQQ_histo)
 
-  df_ttH_tree = ROOT.RDataFrame("Events",ttH_list)
-  df_ttH_tree = df_ttH_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
-  df_ttH_tree = df_ttH_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
-  df_ttH = df_ttH_tree.Filter(filters)
-  df_ttH_trigger = all_trigger(df_ttH)
-  df_ttH_histos=[]
-  for i in hists_name:
-    df_ttH_histo = df_ttH_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'genweight')
-    df_ttH_histos.append(df_ttH_histo)
+#  df_ttH_tree = ROOT.RDataFrame("Events",ttH_list)
+#  df_ttH_tree = df_ttH_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
+#  df_ttH_tree = df_ttH_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
+#  df_ttH = df_ttH_tree.Filter(filters)
+#  df_ttH_trigger = all_trigger(df_ttH)
+#  df_ttH_histos=[]
+#  for i in hists_name:
+#    df_ttH_histo = df_ttH_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'genweight')
+#    df_ttH_histos.append(df_ttH_histo)
 
   df_ttWW_tree = ROOT.RDataFrame("Events",ttWW_list)
   df_ttWW_tree = df_ttWW_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
@@ -713,65 +718,65 @@ def TTC_Analysis():
     df_ttZZ_histo = df_ttZZ_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'genweight')
     df_ttZZ_histos.append(df_ttZZ_histo)
 
-  df_tzq_tree = ROOT.RDataFrame("Events",tzq_list)
-  df_tzq_tree = df_tzq_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
-  df_tzq_tree = df_tzq_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
-  df_tzq = df_tzq_tree.Filter(filters)
-  df_tzq_trigger = all_trigger(df_tzq)
-  df_tzq_histos=[]
-  for i in hists_name:
-    df_tzq_histo = df_tzq_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'genweight')
-    df_tzq_histos.append(df_tzq_histo)
+#  df_tzq_tree = ROOT.RDataFrame("Events",tzq_list)
+#  df_tzq_tree = df_tzq_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
+#  df_tzq_tree = df_tzq_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
+#  df_tzq = df_tzq_tree.Filter(filters)
+#  df_tzq_trigger = all_trigger(df_tzq)
+#  df_tzq_histos=[]
+#  for i in hists_name:
+#    df_tzq_histo = df_tzq_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'genweight')
+#    df_tzq_histos.append(df_tzq_histo)
 
-  df_ttWH_tree = ROOT.RDataFrame("Events",TTWH_list)
-  df_ttWH_tree = df_ttWH_tree.Define("trigger_SF","trigger_sf_ee(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
-  df_ttWH_tree = df_ttWH_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
-  df_ttWH = df_ttWH_tree.Filter(filters)
-  df_ttWH_trigger = all_trigger(df_ttWH)
-  df_ttWH_histos=[]
-  for i in hists_name:
-    df_ttWH_histo = df_ttWH_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'genweight')
-    df_ttWH_histos.append(df_ttWH_histo)
+#  df_ttWH_tree = ROOT.RDataFrame("Events",TTWH_list)
+#  df_ttWH_tree = df_ttWH_tree.Define("trigger_SF","trigger_sf_ee(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
+#  df_ttWH_tree = df_ttWH_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
+#  df_ttWH = df_ttWH_tree.Filter(filters)
+#  df_ttWH_trigger = all_trigger(df_ttWH)
+#  df_ttWH_histos=[]
+#  for i in hists_name:
+#    df_ttWH_histo = df_ttWH_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'genweight')
+#    df_ttWH_histos.append(df_ttWH_histo)
 
-  df_ttZH_tree = ROOT.RDataFrame("Events",TTZH_list)
-  df_ttZH_tree = df_ttZH_tree.Define("trigger_SF","trigger_sf_ee(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
-  df_ttZH_tree = df_ttZH_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
-  df_ttZH = df_ttZH_tree.Filter(filters)
-  df_ttZH_trigger = all_trigger(df_ttZH)
-  df_ttZH_histos=[]
-  for i in hists_name:
-    df_ttZH_histo = df_ttZH_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'genweight')
-    df_ttZH_histos.append(df_ttZH_histo)
+#  df_ttZH_tree = ROOT.RDataFrame("Events",TTZH_list)
+#  df_ttZH_tree = df_ttZH_tree.Define("trigger_SF","trigger_sf_ee(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
+#  df_ttZH_tree = df_ttZH_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
+#  df_ttZH = df_ttZH_tree.Filter(filters)
+#  df_ttZH_trigger = all_trigger(df_ttZH)
+#  df_ttZH_histos=[]
+#  for i in hists_name:
+#    df_ttZH_histo = df_ttZH_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'genweight')
+#    df_ttZH_histos.append(df_ttZH_histo)
 
-  df_tttJ_tree = ROOT.RDataFrame("Events",TTTJ_list)
-  df_tttJ_tree = df_tttJ_tree.Define("trigger_SF","trigger_sf_ee(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
-  df_tttJ_tree = df_tttJ_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
-  df_tttJ = df_tttJ_tree.Filter(filters)
-  df_tttJ_trigger = all_trigger(df_tttJ)
-  df_tttJ_histos=[]
-  for i in hists_name:
-    df_tttJ_histo = df_tttJ_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'genweight')
-    df_tttJ_histos.append(df_tttJ_histo)
+#  df_tttJ_tree = ROOT.RDataFrame("Events",TTTJ_list)
+#  df_tttJ_tree = df_tttJ_tree.Define("trigger_SF","trigger_sf_ee(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
+#  df_tttJ_tree = df_tttJ_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
+#  df_tttJ = df_tttJ_tree.Filter(filters)
+#  df_tttJ_trigger = all_trigger(df_tttJ)
+#  df_tttJ_histos=[]
+#  for i in hists_name:
+#    df_tttJ_histo = df_tttJ_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'genweight')
+#    df_tttJ_histos.append(df_tttJ_histo)
 
-  df_tttW_tree = ROOT.RDataFrame("Events",TTTW_list)
-  df_tttW_tree = df_tttW_tree.Define("trigger_SF","trigger_sf_ee(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
-  df_tttW_tree = df_tttW_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
-  df_tttW = df_tttW_tree.Filter(filters)
-  df_tttW_trigger = all_trigger(df_tttW)
-  df_tttW_histos=[]
-  for i in hists_name:
-    df_tttW_histo = df_tttW_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'genweight')
-    df_tttW_histos.append(df_tttW_histo)
+#  df_tttW_tree = ROOT.RDataFrame("Events",TTTW_list)
+#  df_tttW_tree = df_tttW_tree.Define("trigger_SF","trigger_sf_ee(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
+#  df_tttW_tree = df_tttW_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
+#  df_tttW = df_tttW_tree.Filter(filters)
+#  df_tttW_trigger = all_trigger(df_tttW)
+#  df_tttW_histos=[]
+#  for i in hists_name:
+#    df_tttW_histo = df_tttW_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'genweight')
+#    df_tttW_histos.append(df_tttW_histo)
 
-  df_tttt_tree = ROOT.RDataFrame("Events",TTTT_list)
-  df_tttt_tree = df_tttt_tree.Define("trigger_SF","trigger_sf_ee(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
-  df_tttt_tree = df_tttt_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
-  df_tttt = df_tttt_tree.Filter(filters)
-  df_tttt_trigger = all_trigger(df_tttt)
-  df_tttt_histos=[]
-  for i in hists_name:
-    df_tttt_histo = df_tttt_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'genweight')
-    df_tttt_histos.append(df_tttt_histo)
+#  df_tttt_tree = ROOT.RDataFrame("Events",TTTT_list)
+#  df_tttt_tree = df_tttt_tree.Define("trigger_SF","trigger_sf_ee(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
+#  df_tttt_tree = df_tttt_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
+#  df_tttt = df_tttt_tree.Filter(filters)
+#  df_tttt_trigger = all_trigger(df_tttt)
+#  df_tttt_histos=[]
+#  for i in hists_name:
+#    df_tttt_histo = df_tttt_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'genweight')
+#    df_tttt_histos.append(df_tttt_histo)
 
 #  df_QCD50to80_tree = ROOT.RDataFrame("Events",QCD50to80_list)
 #  df_QCD50to80_tree = df_QCD50to80_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
@@ -905,36 +910,36 @@ def TTC_Analysis():
 
     h_DY = df_DY_histos[ij].GetValue()
     h_WJet = df_WJet_histos[ij].GetValue()
-    h_osWW = df_osWW_histos[ij].GetValue()
-    h_ssWW = df_ssWW_histos[ij].GetValue()
-    h_WWdps = df_WWdps_histos[ij].GetValue()
-    h_WZew = df_WZew_histos[ij].GetValue()
-    h_WZqcd = df_WZqcd_histos[ij].GetValue()
-    h_ZZ = df_ZZ_histos[ij].GetValue()
-    h_ZG = df_ZG_histos[ij].GetValue()
+#    h_osWW = df_osWW_histos[ij].GetValue()
+#    h_ssWW = df_ssWW_histos[ij].GetValue()
+#    h_WWdps = df_WWdps_histos[ij].GetValue()
+#    h_WZew = df_WZew_histos[ij].GetValue()
+#    h_WZqcd = df_WZqcd_histos[ij].GetValue()
+#    h_ZZ = df_ZZ_histos[ij].GetValue()
+#    h_ZG = df_ZG_histos[ij].GetValue()
     h_WWW = df_WWW_histos[ij].GetValue()
     h_WWZ = df_WWZ_histos[ij].GetValue()
     h_WZZ = df_WZZ_histos[ij].GetValue()
     h_ZZZ = df_ZZZ_histos[ij].GetValue()
-    h_tsch = df_tsch_histos[ij].GetValue()
-    h_t_tch = df_t_tch_histos[ij].GetValue()
-    h_tbar_tch = df_tbar_tch_histos[ij].GetValue()
-    h_tW = df_tW_histos[ij].GetValue()
-    h_tbarW = df_tbarW_histos[ij].GetValue()
+#    h_tsch = df_tsch_histos[ij].GetValue()
+#    h_t_tch = df_t_tch_histos[ij].GetValue()
+#    h_tbar_tch = df_tbar_tch_histos[ij].GetValue()
+#    h_tW = df_tW_histos[ij].GetValue()
+#    h_tbarW = df_tbarW_histos[ij].GetValue()
     h_ttWtoLNu = df_ttWtoLNu_histos[ij].GetValue()
     h_ttWtoQQ = df_ttWtoQQ_histos[ij].GetValue()
     h_ttZ = df_ttZ_histos[ij].GetValue()
     h_ttZtoQQ = df_ttZtoQQ_histos[ij].GetValue()
-    h_ttH = df_ttH_histos[ij].GetValue()
+#    h_ttH = df_ttH_histos[ij].GetValue()
     h_ttWW = df_ttWW_histos[ij].GetValue()
     h_ttWZ = df_ttWZ_histos[ij].GetValue()
     h_ttZZ = df_ttZZ_histos[ij].GetValue()
-    h_tzq = df_tzq_histos[ij].GetValue()
-    h_ttWH = df_ttWH_histos[ij].GetValue()
-    h_ttZH = df_ttZH_histos[ij].GetValue()
-    h_tttJ = df_tttJ_histos[ij].GetValue()
-    h_tttW = df_tttW_histos[ij].GetValue()
-    h_tttt = df_tttt_histos[ij].GetValue()
+#    h_tzq = df_tzq_histos[ij].GetValue()
+#    h_ttWH = df_ttWH_histos[ij].GetValue()
+#    h_ttZH = df_ttZH_histos[ij].GetValue()
+#    h_tttJ = df_tttJ_histos[ij].GetValue()
+#    h_tttW = df_tttW_histos[ij].GetValue()
+#    h_tttt = df_tttt_histos[ij].GetValue()
 #    h_QCD50to80 = df_QCD50to80_histos[ij].GetValue()
 #    h_QCD80to120 = df_QCD80to120_histos[ij].GetValue()
 #    h_QCD120to170 = df_QCD120to170_histos[ij].GetValue()
@@ -947,36 +952,36 @@ def TTC_Analysis():
 
     h_DY.Scale(DY_xs/DY_ev)
     h_WJet.Scale(WJet_xs/WJet_ev)
-    h_osWW.Scale(osWW_xs/osWW_ev)
-    h_ssWW.Scale(ssWW_xs/ssWW_ev)
-    h_WWdps.Scale(WWdps_xs/WWdps_ev)
-    h_WZew.Scale(WZew_xs/WZew_ev)
-    h_WZqcd.Scale(WZqcd_xs/WZqcd_ev)
-    h_ZZ.Scale(ZZ_xs/ZZ_ev)
-    h_ZG.Scale(ZG_xs/ZG_ev)
+#    h_osWW.Scale(osWW_xs/osWW_ev)
+#    h_ssWW.Scale(ssWW_xs/ssWW_ev)
+#    h_WWdps.Scale(WWdps_xs/WWdps_ev)
+#    h_WZew.Scale(WZew_xs/WZew_ev)
+#    h_WZqcd.Scale(WZqcd_xs/WZqcd_ev)
+#    h_ZZ.Scale(ZZ_xs/ZZ_ev)
+#    h_ZG.Scale(ZG_xs/ZG_ev)
     h_WWW.Scale(WWW_xs/WWW_ev)
     h_WWZ.Scale(WWZ_xs/WWZ_ev)
     h_WZZ.Scale(WZZ_xs/WZZ_ev)
     h_ZZZ.Scale(ZZZ_xs/ZZZ_ev)
-    h_tsch.Scale(t_sch_xs/t_sch_ev)
-    h_t_tch.Scale(t_tch_xs/t_tch_ev)
-    h_tbar_tch.Scale(tbar_tch_xs/tbar_tch_ev)
-    h_tW.Scale(tW_xs/tW_ev)
-    h_tbarW.Scale(tbarW_xs/tbarW_ev)
+#    h_tsch.Scale(t_sch_xs/t_sch_ev)
+#    h_t_tch.Scale(t_tch_xs/t_tch_ev)
+#    h_tbar_tch.Scale(tbar_tch_xs/tbar_tch_ev)
+#    h_tW.Scale(tW_xs/tW_ev)
+#    h_tbarW.Scale(tbarW_xs/tbarW_ev)
     h_ttWtoLNu.Scale(TTWtoLNu_xs/TTWtoLNu_ev)
     h_ttWtoQQ.Scale(TTWtoQQ_xs/TTWtoQQ_ev)
     h_ttZ.Scale(TTZ_xs/TTZ_ev)
     h_ttZtoQQ.Scale(TTZtoQQ_xs/TTZtoQQ_ev)
-    h_ttH.Scale(TTH_xs/TTH_ev)
+#    h_ttH.Scale(TTH_xs/TTH_ev)
     h_ttWW.Scale(TTWW_xs/TTWW_ev)
     h_ttWZ.Scale(TTWZ_xs/TTWZ_ev)
     h_ttZZ.Scale(TTZZ_xs/TTZZ_ev)
-    h_tzq.Scale(tZq_xs/tZq_ev)
-    h_ttWH.Scale(ttWH_xs/ttWH_ev)
-    h_ttZH.Scale(ttZH_xs/ttZH_ev)
-    h_tttJ.Scale(tttJ_xs/tttJ_ev)
-    h_tttW.Scale(tttW_xs/tttW_ev)
-    h_tttt.Scale(tttt_xs/tttt_ev)
+#    h_tzq.Scale(tZq_xs/tZq_ev)
+#    h_ttWH.Scale(ttWH_xs/ttWH_ev)
+#    h_ttZH.Scale(ttZH_xs/ttZH_ev)
+#    h_tttJ.Scale(tttJ_xs/tttJ_ev)
+#    h_tttW.Scale(tttW_xs/tttW_ev)
+#    h_tttt.Scale(tttt_xs/tttt_ev)
 #    h_QCD50to80.Scale(QCD50to80_xs/QCD50to80_ev)
 #    h_QCD80to120.Scale(QCD80to120_xs/QCD80to120_ev)
 #    h_QCD120to170.Scale(QCD120to170_xs/QCD120to170_ev)
@@ -987,36 +992,36 @@ def TTC_Analysis():
 
     histos.append(h_DY.Clone())
     histos.append(h_WJet.Clone())
-    histos.append(h_osWW.Clone())
-    histos.append(h_ssWW.Clone())
-    histos.append(h_WWdps.Clone())
-    histos.append(h_WZew.Clone())
-    histos.append(h_WZqcd.Clone())
-    histos.append(h_ZZ.Clone())
-    histos.append(h_ZG.Clone())
+#    histos.append(h_osWW.Clone())
+#    histos.append(h_ssWW.Clone())
+#    histos.append(h_WWdps.Clone())
+#    histos.append(h_WZew.Clone())
+#    histos.append(h_WZqcd.Clone())
+#    histos.append(h_ZZ.Clone())
+#    histos.append(h_ZG.Clone())
     histos.append(h_WWW.Clone())
     histos.append(h_WWZ.Clone())
     histos.append(h_WZZ.Clone())
     histos.append(h_ZZZ.Clone())
-    histos.append(h_tsch.Clone())
-    histos.append(h_t_tch.Clone())
-    histos.append(h_tbar_tch.Clone())
-    histos.append(h_tW.Clone())
-    histos.append(h_tbarW.Clone())
+#    histos.append(h_tsch.Clone())
+#    histos.append(h_t_tch.Clone())
+#    histos.append(h_tbar_tch.Clone())
+#    histos.append(h_tW.Clone())
+#    histos.append(h_tbarW.Clone())
     histos.append(h_ttWtoLNu.Clone())
     histos.append(h_ttWtoQQ.Clone())
     histos.append(h_ttZ.Clone())
     histos.append(h_ttZtoQQ.Clone())
-    histos.append(h_ttH.Clone())
+#    histos.append(h_ttH.Clone())
     histos.append(h_ttWW.Clone())
     histos.append(h_ttWZ.Clone())
     histos.append(h_ttZZ.Clone())
-    histos.append(h_ttWH.Clone())
-    histos.append(h_ttZH.Clone())
-    histos.append(h_tttJ.Clone())
-    histos.append(h_tttW.Clone())
-    histos.append(h_tttt.Clone())
-    histos.append(h_tzq.Clone())
+#    histos.append(h_ttWH.Clone())
+#    histos.append(h_ttZH.Clone())
+#    histos.append(h_tttJ.Clone())
+#    histos.append(h_tttW.Clone())
+#    histos.append(h_tttt.Clone())
+#    histos.append(h_tzq.Clone())
 #    histos.append(h_QCD50to80.Clone())
 #    histos.append(h_QCD80to120.Clone())
 #    histos.append(h_QCD120to170.Clone())
