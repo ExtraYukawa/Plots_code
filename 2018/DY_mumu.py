@@ -4,6 +4,7 @@ import os
 import math
 from math import sqrt
 import plot_DYregion
+ROOT.gROOT.SetBatch(True)
 
 TTC_header_path = os.path.join("TTC.h")
 ROOT.gInterpreter.Declare('#include "{}"'.format(TTC_header_path))
@@ -64,12 +65,12 @@ path='/eos/cms/store/group/phys_top/ExtraYukawa/2018/'
 
 #2018OK
 doubleMu_names = ROOT.std.vector('string')()
-for f in ["DoubleMuon_A.root","DoubleMuon_B.root","DoubleMuon_C.root","DoubleMuon_D_0.root","DoubleMuon_D_1.root"]:
+for f in ["DoubleMuonA.root","DoubleMuonB.root","DoubleMuonC.root","DoubleMuonD_0.root","DoubleMuonD_1.root"]:
   doubleMu_names.push_back(path+f)
 
 #2018OK
 singleMu_names = ROOT.std.vector('string')()
-for f in ["SingleMuon_A.root","SingleMuon_B.root","SingleMuon_C.root","SingleMuon_D_0.root","SingleMuon_D_1.root"]:
+for f in ["SingleMuonA.root","SingleMuonB.root","SingleMuonC.root","SingleMuonD_0.root","SingleMuonD_1.root"]:
   singleMu_names.push_back(path+f)
 
 #This does not exist in 2018?
@@ -79,149 +80,187 @@ for f in ["SingleMuon_A.root","SingleMuon_B.root","SingleMuon_C.root","SingleMuo
 
 #2018OK
 singleEle_names = ROOT.std.vector('string')()
-for f in ["EGamma_A.root","EGamma_B.root","EGamma_C.root","EGamma_D_0.root","EGamma_D_1.root"]:
+for f in ["EGammaA.root","EGammaB.root","EGammaC.root","EGammaD_0.root","EGammaD_1.root"]:
   singleEle_names.push_back(path+f)
 
 #2018OK
 muonEle_names = ROOT.std.vector('string')()
-for f in ["MuonEG_A.root","MuonEG_B.root","MuonEG_C.root","MuonEG_D_0.root","MuonEG_D_1.root"]:
+for f in ["MuonEGA.root","MuonEGB.root","MuonEGC.root","MuonEGD_0.root","MuonEGD_1.root"]:
   muonEle_names.push_back(path+f)
 
+#2018OK
 DY_list = ROOT.std.vector('string')()
 for f in ['DY.root']:
   DY_list.push_back(path+f)
 
+#2018OK
 WJet_list = ROOT.std.vector('string')()
 for f in ['WJets.root']:
   WJet_list.push_back(path+f)
 
-osWW_list = ROOT.std.vector('string')()
-for f in ['osWW.root']:
-  osWW_list.push_back(path+f)
+#osWW_list = ROOT.std.vector('string')()
+#for f in ['osWW.root']:
+#  osWW_list.push_back(path+f)
+#
+#ssWW_list = ROOT.std.vector('string')()
+#for f in ['ssWW.root']:
+#  ssWW_list.push_back(path+f)
+#
+#WWdps_list = ROOT.std.vector('string')()
+#for f in ['WWdps.root']:
+#  WWdps_list.push_back(path+f)
+#
+#WZew_list = ROOT.std.vector('string')()
+#for f in ['WZ_ew.root']:
+#  WZew_list.push_back(path+f)
+#
+#WZqcd_list = ROOT.std.vector('string')()
+#for f in ['WZ_qcd.root']:
+#  WZqcd_list.push_back(path+f)
 
-ssWW_list = ROOT.std.vector('string')()
-for f in ['ssWW.root']:
-  ssWW_list.push_back(path+f)
+#2018OK
+WW_list = ROOT.std.vector('string')()
+for f in ['WW.root']:
+  WW_list.push_back(path+f)
 
-WWdps_list = ROOT.std.vector('string')()
-for f in ['WWdps.root']:
-  WWdps_list.push_back(path+f)
+#2018OK
+WZ_list = ROOT.std.vector('string')()
+for f in ['WZ.root']:
+  WZ_list.push_back(path+f)
 
-WZew_list = ROOT.std.vector('string')()
-for f in ['WZ_ew.root']:
-  WZew_list.push_back(path+f)
+#2018MISSING
+#ZZ_list = ROOT.std.vector('string')()
+#for f in ['ZZ.root']:
+#  ZZ_list.push_back(path+f)
 
-WZqcd_list = ROOT.std.vector('string')()
-for f in ['WZ_qcd.root']:
-  WZqcd_list.push_back(path+f)
+#ZG_list = ROOT.std.vector('string')()
+#for f in ['ZG_ew.root']:
+#  ZG_list.push_back(path+f)
 
-ZZ_list = ROOT.std.vector('string')()
-for f in ['ZZ.root']:
-  ZZ_list.push_back(path+f)
-
-ZG_list = ROOT.std.vector('string')()
-for f in ['ZG_ew.root']:
-  ZG_list.push_back(path+f)
-
+#2018OK
 WWW_list = ROOT.std.vector('string')()
 for f in ['WWW.root']:
   WWW_list.push_back(path+f)
 
+#2018OK
 WWZ_list = ROOT.std.vector('string')()
 for f in ['WWZ.root']:
   WWZ_list.push_back(path+f)
 
+#2018OK
 WZZ_list = ROOT.std.vector('string')()
 for f in ['WZZ.root']:
   WZZ_list.push_back(path+f)
 
+#2018OK
 ZZZ_list = ROOT.std.vector('string')()
 for f in ['ZZZ.root']:
   ZZZ_list.push_back(path+f)
 
-tsch_list = ROOT.std.vector('string')()
-for f in ['tsch.root']:
-  tsch_list.push_back(path+f)
+#2018MISSING
+#tsch_list = ROOT.std.vector('string')()
+#for f in ['tsch.root']:
+#  tsch_list.push_back(path+f)
 
-t_tch_list = ROOT.std.vector('string')()
-for f in ['t_tch.root']:
-  t_tch_list.push_back(path+f)
+#2018MISSING
+#t_tch_list = ROOT.std.vector('string')()
+#for f in ['t_tch.root']:
+#  t_tch_list.push_back(path+f)
 
-tbar_tch_list = ROOT.std.vector('string')()
-for f in ['tbar_tch.root']:
-  tbar_tch_list.push_back(path+f)
+#2018MISSING
+#tbar_tch_list = ROOT.std.vector('string')()
+#for f in ['tbar_tch.root']:
+#  tbar_tch_list.push_back(path+f)
 
-tW_list = ROOT.std.vector('string')()
-for f in ['tW.root']:
-  tW_list.push_back(path+f)
+#2018MISSING
+#tW_list = ROOT.std.vector('string')()
+#for f in ['tW.root']:
+#  tW_list.push_back(path+f)
 
-tbarW_list = ROOT.std.vector('string')()
-for f in ['tbarW.root']:
-  tbarW_list.push_back(path+f)
+#2018MISSING
+#tbarW_list = ROOT.std.vector('string')()
+#for f in ['tbarW.root']:
+#  tbarW_list.push_back(path+f)
 
+#2018OK
 ttWtoLNu_list = ROOT.std.vector('string')()
 for f in ['ttWtoLNu.root']:
   ttWtoLNu_list.push_back(path+f)
 
+#2018OK
 ttWtoQQ_list = ROOT.std.vector('string')()
 for f in ['ttWtoQQ.root']:
   ttWtoQQ_list.push_back(path+f)
 
+#2018OK
 ttZ_list = ROOT.std.vector('string')()
 for f in ['ttZ.root']:
   ttZ_list.push_back(path+f)
 
+#2018OK
 ttZtoQQ_list = ROOT.std.vector('string')()
 for f in ['ttZtoQQ.root']:
   ttZtoQQ_list.push_back(path+f)
 
-ttH_list = ROOT.std.vector('string')()
-for f in ['ttH.root']:
-  ttH_list.push_back(path+f)
+#2018MISSING
+#ttH_list = ROOT.std.vector('string')()
+#for f in ['ttH.root']:
+#  ttH_list.push_back(path+f)
 
+#2018OK
 ttWW_list = ROOT.std.vector('string')()
 for f in ['ttWW.root']:
   ttWW_list.push_back(path+f)
 
+#2018OK
 ttWZ_list = ROOT.std.vector('string')()
 for f in ['ttWZ.root']:
   ttWZ_list.push_back(path+f)
 
+#2018OK
 ttZZ_list = ROOT.std.vector('string')()
 for f in ['ttZZ.root']:
   ttZZ_list.push_back(path+f)
 
-tzq_list = ROOT.std.vector('string')()
-for f in ['tzq.root']:
-  tzq_list.push_back(path+f)
+#2018MISSING
+#tzq_list = ROOT.std.vector('string')()
+#for f in ['tzq.root']:
+#  tzq_list.push_back(path+f)
 
+#2018OK
 TTTo2L_list = ROOT.std.vector('string')()
 for f in ['TTTo2L.root']:
   TTTo2L_list.push_back(path+f)
 
+#2018OK
 TTTo1L_list = ROOT.std.vector('string')()
-for f in ['TTTo1L.root']:
+for f in ['TTTo1L.root','TTTo1L_1.root']:#How to add TTTo2L_1.root?
   TTTo1L_list.push_back(path+f)
 
-TTWH_list = ROOT.std.vector('string')()
-for f in ['ttWH.root']:
-  TTWH_list.push_back(path+f)
+#2018MISSING
+#TTWH_list = ROOT.std.vector('string')()
+#for f in ['ttWH.root']:
+#  TTWH_list.push_back(path+f)
 
-TTZH_list = ROOT.std.vector('string')()
-for f in ['ttZH.root']:
-  TTZH_list.push_back(path+f)
+#2018MISSING
+#TTZH_list = ROOT.std.vector('string')()
+#for f in ['ttZH.root']:
+#  TTZH_list.push_back(path+f)
 
-TTTJ_list = ROOT.std.vector('string')()
-for f in ['tttJ.root']:
-  TTTJ_list.push_back(path+f)
+#2018MISSING
+#TTTJ_list = ROOT.std.vector('string')()
+#for f in ['tttJ.root']:
+#  TTTJ_list.push_back(path+f)
 
-TTTW_list = ROOT.std.vector('string')()
-for f in ['tttW.root']:
-  TTTW_list.push_back(path+f)
+#2018MISSING
+#TTTW_list = ROOT.std.vector('string')()
+#for f in ['tttW.root']:
+#  TTTW_list.push_back(path+f)
 
-TTTT_list = ROOT.std.vector('string')()
-for f in ['tttt.root']:
-  TTTT_list.push_back(path+f)
+#2018MISSING
+#TTTT_list = ROOT.std.vector('string')()
+#for f in ['tttt.root']:
+#  TTTT_list.push_back(path+f)
 
 #QCD50to80_list = ROOT.std.vector('string')()
 #for f in ['QCD50to80.root']:
