@@ -458,9 +458,11 @@ def TTC_Analysis():
   # define the filters here, 1:2mu, 2:1e1m, 3:2ele
   filters="OPS_region==1 && OPS_2P0F && OPS_z_mass>60 && OPS_z_mass<120 && OPS_l1_pt>30 && OPS_l2_pt>20 && OPS_drll>0.3 && Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_eeBadScFilter && Flag_ecalBadCalibFilter && nHad_tau==0"
 
+#  weights_str = "puWeight*PrefireWeight*genWeight/abs(genWeight)" 
+  weights_str = "puWeight*genWeight/abs(genWeight)"
   df_DY_tree = ROOT.RDataFrame("Events",DY_list)
   df_DY_tree = df_DY_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
-  df_DY_tree = df_DY_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
+  df_DY_tree = df_DY_tree.Define("genweight",weights_str)
   df_DY = df_DY_tree.Filter(filters)
   df_DY_trigger = all_trigger(df_DY)
   df_DY_histos=[]
@@ -470,13 +472,33 @@ def TTC_Analysis():
 
   df_WJet_tree = ROOT.RDataFrame("Events",WJet_list)
   df_WJet_tree = df_WJet_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
-  df_WJet_tree = df_WJet_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
+  df_WJet_tree = df_WJet_tree.Define("genweight",weights_str)
   df_WJet = df_WJet_tree.Filter(filters)
   df_WJet_trigger = all_trigger(df_WJet)
   df_WJet_histos=[]
   for i in hists_name:
     df_WJet_histo = df_WJet_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'genweight')
     df_WJet_histos.append(df_WJet_histo)
+
+  df_WW_tree = ROOT.RDataFrame("Events",WW_list)
+  df_WW_tree = df_WW_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
+  df_WW_tree = df_WW_tree.Define("genweight",weights_str)
+  df_WW = df_WW_tree.Filter(filters)
+  df_WW_trigger = all_trigger(df_WW)
+  df_WW_histos=[]
+  for i in hists_name:
+    df_WW_histo = df_WW_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'genweight')
+    df_WW_histos.append(df_WW_histo)
+
+  df_WZ_tree = ROOT.RDataFrame("Events",WZ_list)
+  df_WZ_tree = df_WZ_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
+  df_WZ_tree = df_WZ_tree.Define("genweight",weights_str)
+  df_WZ = df_WZ_tree.Filter(filters)
+  df_WZ_trigger = all_trigger(df_WZ)
+  df_WZ_histos=[]
+  for i in hists_name:
+    df_WZ_histo = df_WZ_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'genweight')
+    df_WZ_histos.append(df_WZ_histo)
 
 #  df_osWW_tree = ROOT.RDataFrame("Events",osWW_list)
 #  df_osWW_tree = df_osWW_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
@@ -550,7 +572,7 @@ def TTC_Analysis():
 
   df_WWW_tree = ROOT.RDataFrame("Events",WWW_list)
   df_WWW_tree = df_WWW_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
-  df_WWW_tree = df_WWW_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
+  df_WWW_tree = df_WWW_tree.Define("genweight",weights_str)
   df_WWW = df_WWW_tree.Filter(filters)
   df_WWW_trigger = all_trigger(df_WWW)
   df_WWW_histos=[]
@@ -560,7 +582,7 @@ def TTC_Analysis():
 
   df_WWZ_tree = ROOT.RDataFrame("Events",WWZ_list)
   df_WWZ_tree = df_WWZ_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
-  df_WWZ_tree = df_WWZ_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
+  df_WWZ_tree = df_WWZ_tree.Define("genweight",weights_str)
   df_WWZ = df_WWZ_tree.Filter(filters)
   df_WWZ_trigger = all_trigger(df_WWZ)
   df_WWZ_histos=[]
@@ -570,7 +592,7 @@ def TTC_Analysis():
 
   df_WZZ_tree = ROOT.RDataFrame("Events",WZZ_list)
   df_WZZ_tree = df_WZZ_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
-  df_WZZ_tree = df_WZZ_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
+  df_WZZ_tree = df_WZZ_tree.Define("genweight",weights_str)
   df_WZZ = df_WZZ_tree.Filter(filters)
   df_WZZ_trigger = all_trigger(df_WZZ)
   df_WZZ_histos=[]
@@ -580,7 +602,7 @@ def TTC_Analysis():
 
   df_ZZZ_tree = ROOT.RDataFrame("Events",ZZZ_list)
   df_ZZZ_tree = df_ZZZ_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
-  df_ZZZ_tree = df_ZZZ_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
+  df_ZZZ_tree = df_ZZZ_tree.Define("genweight",weights_str)
   df_ZZZ = df_ZZZ_tree.Filter(filters)
   df_ZZZ_trigger = all_trigger(df_ZZZ)
   df_ZZZ_histos=[]
@@ -640,7 +662,7 @@ def TTC_Analysis():
 
   df_ttWtoLNu_tree = ROOT.RDataFrame("Events",ttWtoLNu_list)
   df_ttWtoLNu_tree = df_ttWtoLNu_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
-  df_ttWtoLNu_tree = df_ttWtoLNu_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
+  df_ttWtoLNu_tree = df_ttWtoLNu_tree.Define("genweight",weights_str)
   df_ttWtoLNu = df_ttWtoLNu_tree.Filter(filters)
   df_ttWtoLNu_trigger = all_trigger(df_ttWtoLNu)
   df_ttWtoLNu_histos=[]
@@ -650,7 +672,7 @@ def TTC_Analysis():
 
   df_ttWtoQQ_tree = ROOT.RDataFrame("Events",ttWtoQQ_list)
   df_ttWtoQQ_tree = df_ttWtoQQ_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
-  df_ttWtoQQ_tree = df_ttWtoQQ_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
+  df_ttWtoQQ_tree = df_ttWtoQQ_tree.Define("genweight",weights_str)
   df_ttWtoQQ = df_ttWtoQQ_tree.Filter(filters)
   df_ttWtoQQ_trigger = all_trigger(df_ttWtoQQ)
   df_ttWtoQQ_histos=[]
@@ -660,7 +682,7 @@ def TTC_Analysis():
 
   df_ttZ_tree = ROOT.RDataFrame("Events",ttZ_list)
   df_ttZ_tree = df_ttZ_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
-  df_ttZ_tree = df_ttZ_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
+  df_ttZ_tree = df_ttZ_tree.Define("genweight",weights_str)
   df_ttZ = df_ttZ_tree.Filter(filters)
   df_ttZ_trigger = all_trigger(df_ttZ)
   df_ttZ_histos=[]
@@ -670,7 +692,7 @@ def TTC_Analysis():
 
   df_ttZtoQQ_tree = ROOT.RDataFrame("Events",ttZtoQQ_list)
   df_ttZtoQQ_tree = df_ttZtoQQ_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
-  df_ttZtoQQ_tree = df_ttZtoQQ_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
+  df_ttZtoQQ_tree = df_ttZtoQQ_tree.Define("genweight",weights_str)
   df_ttZtoQQ = df_ttZtoQQ_tree.Filter(filters)
   df_ttZtoQQ_trigger = all_trigger(df_ttZtoQQ)
   df_ttZtoQQ_histos=[]
@@ -690,7 +712,7 @@ def TTC_Analysis():
 
   df_ttWW_tree = ROOT.RDataFrame("Events",ttWW_list)
   df_ttWW_tree = df_ttWW_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
-  df_ttWW_tree = df_ttWW_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
+  df_ttWW_tree = df_ttWW_tree.Define("genweight",weights_str)
   df_ttWW = df_ttWW_tree.Filter(filters)
   df_ttWW_trigger = all_trigger(df_ttWW)
   df_ttWW_histos=[]
@@ -700,7 +722,7 @@ def TTC_Analysis():
 
   df_ttWZ_tree = ROOT.RDataFrame("Events",ttWZ_list)
   df_ttWZ_tree = df_ttWZ_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
-  df_ttWZ_tree = df_ttWZ_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
+  df_ttWZ_tree = df_ttWZ_tree.Define("genweight",weights_str)
   df_ttWZ = df_ttWZ_tree.Filter(filters)
   df_ttWZ_trigger = all_trigger(df_ttWZ)
   df_ttWZ_histos=[]
@@ -710,7 +732,7 @@ def TTC_Analysis():
 
   df_ttZZ_tree = ROOT.RDataFrame("Events",ttZZ_list)
   df_ttZZ_tree = df_ttZZ_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
-  df_ttZZ_tree = df_ttZZ_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
+  df_ttZZ_tree = df_ttZZ_tree.Define("genweight",weights_str)
   df_ttZZ = df_ttZZ_tree.Filter(filters)
   df_ttZZ_trigger = all_trigger(df_ttZZ)
   df_ttZZ_histos=[]
@@ -830,7 +852,7 @@ def TTC_Analysis():
 
   df_TTTo2L_tree = ROOT.RDataFrame("Events",TTTo2L_list)
   df_TTTo2L_tree = df_TTTo2L_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
-  df_TTTo2L_tree = df_TTTo2L_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
+  df_TTTo2L_tree = df_TTTo2L_tree.Define("genweight",weights_str)
   df_TTTo2L = df_TTTo2L_tree.Filter(filters)
   df_TTTo2L_trigger = all_trigger(df_TTTo2L)
   df_TTTo2L_histos=[]
@@ -840,7 +862,7 @@ def TTC_Analysis():
 
   df_TTTo1L_tree = ROOT.RDataFrame("Events",TTTo1L_list)
   df_TTTo1L_tree = df_TTTo1L_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
-  df_TTTo1L_tree = df_TTTo1L_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
+  df_TTTo1L_tree = df_TTTo1L_tree.Define("genweight",weights_str)
   df_TTTo1L = df_TTTo1L_tree.Filter(filters)
   df_TTTo1L_trigger = all_trigger(df_TTTo1L)
   df_TTTo1L_histos=[]
@@ -867,22 +889,24 @@ def TTC_Analysis():
   for ij in range(0,len(hists_name)):
     df_DY_histos[ij].Draw()
     df_WJet_histos[ij].Draw()
-    df_osWW_histos[ij].Draw()
-    df_ssWW_histos[ij].Draw()
-    df_WWdps_histos[ij].Draw()
-    df_WZew_histos[ij].Draw()
-    df_WZqcd_histos[ij].Draw()
-    df_ZZ_histos[ij].Draw()
-    df_ZG_histos[ij].Draw()
+    df_WW_histos[ij].Draw()
+    df_WZ_histos[ij].Draw()
+#    df_osWW_histos[ij].Draw()
+#    df_ssWW_histos[ij].Draw()
+#    df_WWdps_histos[ij].Draw()
+#    df_WZew_histos[ij].Draw()
+#    df_WZqcd_histos[ij].Draw()
+#    df_ZZ_histos[ij].Draw()
+#    df_ZG_histos[ij].Draw()
     df_WWW_histos[ij].Draw()
     df_WWZ_histos[ij].Draw()
     df_WZZ_histos[ij].Draw()
     df_ZZZ_histos[ij].Draw()
-    df_tsch_histos[ij].Draw()
-    df_t_tch_histos[ij].Draw()
-    df_tbar_tch_histos[ij].Draw()
-    df_tW_histos[ij].Draw()
-    df_tbarW_histos[ij].Draw()
+#    df_tsch_histos[ij].Draw()
+#    df_t_tch_histos[ij].Draw()
+#    df_tbar_tch_histos[ij].Draw()
+#    df_tW_histos[ij].Draw()
+#    df_tbarW_histos[ij].Draw()
     df_ttWtoLNu_histos[ij].Draw()
     df_ttWtoQQ_histos[ij].Draw()
     df_ttZ_histos[ij].Draw()
@@ -891,12 +915,12 @@ def TTC_Analysis():
     df_ttWW_histos[ij].Draw()
     df_ttWZ_histos[ij].Draw()
     df_ttZZ_histos[ij].Draw()
-    df_tzq_histos[ij].Draw()
-    df_ttWH_histos[ij].Draw()
-    df_ttZH_histos[ij].Draw()
-    df_tttJ_histos[ij].Draw()
-    df_tttW_histos[ij].Draw()
-    df_tttt_histos[ij].Draw()
+#    df_tzq_histos[ij].Draw()
+#    df_ttWH_histos[ij].Draw()
+#    df_ttZH_histos[ij].Draw()
+#    df_tttJ_histos[ij].Draw()
+#    df_tttW_histos[ij].Draw()
+#    df_tttt_histos[ij].Draw()
 #    df_QCD50to80_histos[ij].Draw()
 #    df_QCD80to120_histos[ij].Draw()
 #    df_QCD120to170_histos[ij].Draw()
