@@ -32,10 +32,47 @@ def set_axis(the_histo, coordinate, title, is_energy):
 	else:
 		axis.SetTitle(title) 
 
-def draw_plots(hist_array =[], draw_data=0, x_name='', isem=0):
+#need to fix a more, a dirty version (should make it work with integral???)
+def reorder_stack(var, oldStack, hQCD):
+    i = 0
+    histos = []    
+    stack = THStack("Stack", "stackName")
+    stack.Add(hQCD)
+    while i<7:
+        for histo in oldStack.GetHists():
+            if histo.GetTitle()=="Dibosons" and i==0:
+                stack.Add(histo)
+                i+=1 
+            elif histo.GetTitle()=="Z+Jets" and i==1:
+                stack.Add(histo)
+                i+=1
+            elif histo.GetTitle()=="W+Jets" and i==2:
+                stack.Add(histo)
+                i+=1
+            elif histo.GetTitle()=="t #bar{t}" and i==3:
+                stack.Add(histo)
+                i+=1
+            elif histo.GetTitle()=="tW-channel" and i==4:
+                stack.Add(histo)
+                i+=1
+            elif histo.GetTitle()=="s-channel" and i==5:
+                stack.Add(histo)
+                i+=1
+            elif histo.GetTitle()=="t-channel" and i==6:
+                stack.Add(histo)
+                i+=1
+            #print histos
+    return stack
 
-	lumi=41480.
-	DY = hist_array[0].Clone()
+def draw_plots(hist_array =[], draw_data=0, x_name='', isem=0, drawNORM=False):
+
+        if drawNORM:
+                lumi = 1.
+        else:
+                lumi=19500. #fixme-gkole
+        print "lumi: ", lumi
+        
+        DY = hist_array[0].Clone()
 	DY.SetFillColor(ROOT.kRed)
 	DY.Scale(lumi)
 
@@ -44,73 +81,78 @@ def draw_plots(hist_array =[], draw_data=0, x_name='', isem=0):
 	WJet.Scale(lumi)
 
 	VV = hist_array[2].Clone()
-	VV.Add(hist_array[3])
-	VV.Add(hist_array[4])
-	VV.Add(hist_array[5])
-	VV.Add(hist_array[6])
-	VV.Add(hist_array[7])
-	VV.Add(hist_array[8])
+	#VV.Add(hist_array[3])
+	#VV.Add(hist_array[4])
 	VV.SetFillColor(ROOT.kCyan-7)
 	VV.Scale(lumi)
 
-	VVV = hist_array[9].Clone()
-	VVV.Add(hist_array[10])
-	VVV.Add(hist_array[11])
-	VVV.Add(hist_array[12])
+	VVV = hist_array[3].Clone()
+	#VVV.Add(hist_array[6])
+	#VVV.Add(hist_array[7])
+	#VVV.Add(hist_array[8])
 	VVV.SetFillColor(ROOT.kSpring-9)
 	VVV.Scale(lumi)
 
-	SingleTop = hist_array[13].Clone()
-	SingleTop.Add(hist_array[14])
-	SingleTop.Add(hist_array[15])
-	SingleTop.Add(hist_array[16])
-	SingleTop.Add(hist_array[17])
-	SingleTop.SetFillColor(ROOT.kGray)
+	SingleTop = hist_array[4].Clone()
+	#SingleTop.Add(hist_array[10])
+	#SingleTop.Add(hist_array[11])
+	#SingleTop.Add(hist_array[12])
+	#SingleTop.Add(hist_array[13])
+	#SingleTop.SetFillColor(ROOT.kGray)
 	SingleTop.Scale(lumi)
 
-	ttXorXX = hist_array[18].Clone()
-	ttXorXX.Add(hist_array[19])
-	ttXorXX.Add(hist_array[20])
-	ttXorXX.Add(hist_array[21])
-	ttXorXX.Add(hist_array[22])
-	ttXorXX.Add(hist_array[23])
-	ttXorXX.Add(hist_array[24])
-	ttXorXX.Add(hist_array[25])
-	ttXorXX.Add(hist_array[26])
-	ttXorXX.Add(hist_array[27])
-	ttXorXX.Add(hist_array[28])
-	ttXorXX.Add(hist_array[29])
-	ttXorXX.Add(hist_array[30])
+	ttXorXX = hist_array[5].Clone()
+	#ttXorXX.Add(hist_array[15])
+	#ttXorXX.Add(hist_array[16])
+	#ttXorXX.Add(hist_array[17])
+	#ttXorXX.Add(hist_array[18])
+	#ttXorXX.Add(hist_array[19])
+	#ttXorXX.Add(hist_array[20])
+	#ttXorXX.Add(hist_array[21])
 	ttXorXX.SetFillColor(ROOT.kViolet-4)
 	ttXorXX.Scale(lumi)
 
-	tzq = hist_array[31].Clone()
+	tzq = hist_array[6].Clone()
 	tzq.SetFillColor(ROOT.kYellow-4)
 	tzq.Scale(lumi)
 
-#	QCD = hist_array[23].Clone()
-#	QCD.Add(hist_array[24])
-#	QCD.Add(hist_array[25])
-#	QCD.Add(hist_array[26])
-#	QCD.Add(hist_array[27])
-#	QCD.SetFillColor(ROOT.kOrange+1)
-#	QCD.Scale(lumi)
+        # QCD = hist_array[23].Clone()
+        # QCD.Add(hist_array[24])
+        # QCD.Add(hist_array[25])
+        # QCD.Add(hist_array[26])
+        # QCD.Add(hist_array[27])
+        # QCD.SetFillColor(ROOT.kOrange+1)
+        # QCD.Scale(lumi)
 
-	TT = hist_array[32].Clone()
-	TT.Add(hist_array[33])
+	TT = hist_array[7].Clone()
+	TT.Add(hist_array[8])
 	TT.SetFillColor(ROOT.kBlue)
 	TT.Scale(lumi)
 
-	Data = hist_array[34].Clone()
-	Data.Add(hist_array[35])
+	Data = hist_array[10].Clone() #gkole: only add SingleMuon
+        # print "data 1st int: ", Data.Integral() 
+	Data.Add(hist_array[9]) # removed DoubleMuon a lot lack of data.
+        # print "data final int: ", Data.Integral()
 	if isem==1:
-		Data.Add(hist_array[36])#if emu channel
+		Data.Add(hist_array[27])#if emu channel
 	if not draw_data: Data.Reset('ICE')
 	Data.SetMarkerStyle(20)
 	Data.SetMarkerSize(0.85)
 	Data.SetMarkerColor(1)
 	Data.SetLineWidth(1)
 
+        if drawNORM:
+                print "drawNORM"
+                weightNORM = Data.Integral()/(DY.Integral() + TT.Integral() + WJet.Integral() + VV.Integral() + VVV.Integral() + SingleTop.Integral() + ttXorXX.Integral() + tzq.Integral())
+                DY.Scale(weightNORM)
+                TT.Scale(weightNORM)
+                WJet.Scale(weightNORM)
+                VV.Scale(weightNORM)
+                VVV.Scale(weightNORM)
+                SingleTop.Scale(weightNORM)
+                ttXorXX.Scale(weightNORM)
+                tzq.Scale(weightNORM)
+        
 	h_stack = ROOT.THStack()
 	h_stack.Add(DY)
 	h_stack.Add(TT)
@@ -179,16 +221,17 @@ def draw_plots(hist_array =[], draw_data=0, x_name='', isem=0):
 	gr.SetFillColor(1)
 	gr.SetFillStyle(3005)
 	gr.Draw("SAME 2")
-	if 'OPS_l1_pt' in x_name:set_axis(h_stack,'x', 'pt of leading lepton', True)
-	if 'OPS_l1_eta' in x_name:set_axis(h_stack,'x', '#eta of leading lepton', False)
-	if 'OPS_l1_phi' in x_name:set_axis(h_stack,'x', 'phi of leading lepton', False)
-	if 'OPS_l2_pt' in x_name:set_axis(h_stack,'x', 'pt of subleading lepton', True)
-	if 'OPS_l2_eta' in x_name:set_axis(h_stack,'x', '#eta of subleading lepton', False)
-	if 'OPS_l2_phi' in x_name:set_axis(h_stack,'x', 'phi of subleading lepton', False)
-	if 'OPS_z_mass' in x_name:set_axis(h_stack,'x', 'Z mass', True)
-	if 'OPS_z_pt' in x_name:set_axis(h_stack,'x', 'Z pt', True)
-	if 'OPS_z_eta' in x_name:set_axis(h_stack,'x', 'Z #eta', False)
-	if 'OPS_z_phi' in x_name:set_axis(h_stack,'x', 'Z phi', False)
+        if 'OPS_l1_pt' in x_name:set_axis(h_stack,'x', 'pt of leading lepton', True)
+        if 'OPS_l1_eta' in x_name:set_axis(h_stack,'x', '#eta of leading lepton', False)
+        if 'OPS_l1_phi' in x_name:set_axis(h_stack,'x', 'phi of leading lepton', False)
+        if 'OPS_l2_pt' in x_name:set_axis(h_stack,'x', 'pt of subleading lepton', True)
+        if 'OPS_l2_eta' in x_name:set_axis(h_stack,'x', '#eta of subleading lepton', False)
+        if 'OPS_l2_phi' in x_name:set_axis(h_stack,'x', 'phi of subleading lepton', False)
+        if 'OPS_z_mass' in x_name:set_axis(h_stack,'x', 'Z mass', True)
+        if 'OPS_z_pt' in x_name:set_axis(h_stack,'x', 'Z pt', True)
+        if 'OPS_z_eta' in x_name:set_axis(h_stack,'x', 'Z #eta', False)
+        if 'OPS_z_phi' in x_name:set_axis(h_stack,'x', 'Z phi', False)
+        
 	# WZ region
 	if 'wl_pt' in x_name:set_axis(h_stack,'x', 'W lepton pt', True)
 	if 'wl_eta' in x_name:set_axis(h_stack,'x', 'W lepton #eta', False)
@@ -254,7 +297,6 @@ def draw_plots(hist_array =[], draw_data=0, x_name='', isem=0):
 	c.Update()
 	c.SaveAs(x_name+'.pdf')
 	c.SaveAs(x_name+'.png')
-	c.SaveAs(x_name+'.root')
 	return c
 	pad1.Close()
 	pad2.Close()
