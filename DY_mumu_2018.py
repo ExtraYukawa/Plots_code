@@ -3,10 +3,10 @@ import time
 import os
 import math
 from math import sqrt
-import plot_DYregion
+import plot_DYregion_2018
 ROOT.gROOT.SetBatch(True)
 
-TTC_header_path = os.path.join("TTC.h")
+TTC_header_path = os.path.join("TTC_2018.h")
 ROOT.gInterpreter.Declare('#include "{}"'.format(TTC_header_path))
 
 
@@ -989,7 +989,7 @@ def TTC_Analysis():
     for i in range(0,36):
       histos[i]=overunder_flowbin(histos[i])
 
-    c1 = plot_DYregion.draw_plots(histos, 1, hists_name[ij], 0)
+    c1 = plot_DYregion_2018.draw_plots(histos, 1, hists_name[ij], 0)
     del histos[:]
  
 if __name__ == "__main__":
