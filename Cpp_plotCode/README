@@ -1,0 +1,7 @@
+* The codes run under CMSSW_12_1_0
+* To run, compile using "g++ histo.C -o hist `root-config --cflags --glibs`", then "./hist"
+
+N.B. 
+* i didn't find a good way to read json in cpp code (please update it if you know how to), so i wrote all the MC processes by hand
+* thes code will output root files of all the processes, then they will be used for plot
+* ~3mins for one kinematic (stable)
