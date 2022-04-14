@@ -69,7 +69,7 @@ def draw_plots(hist_array =[], draw_data=0, x_name='', isem=0, drawNORM=False):
         if drawNORM:
                 lumi = 1.
         else:
-                lumi=19500. #fixme-gkole
+                lumi=16810. #fixme-gkole
         print "lumi: ", lumi
         
         DY = hist_array[0].Clone()

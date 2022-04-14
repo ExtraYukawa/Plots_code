@@ -5,6 +5,8 @@ import math
 from math import sqrt
 import plot_DYregion
 
+
+
 ROOT.gROOT.SetBatch(True) # no flashing canvases   
 
 TTC_header_path = os.path.join("TTC.h")
@@ -88,7 +90,7 @@ for f in ["MuonEG_B2.root","MuonEG_C.root","MuonEG_D.root","MuonEG_E.root","Muon
   muonEle_names.push_back(path+f)
 
 DY_list = ROOT.std.vector('string')()
-for f in ['DY.root']:
+for f in ['DYnlo.root']:
   DY_list.push_back(path+f)
 
 WJet_list = ROOT.std.vector('string')()
@@ -257,9 +259,9 @@ def TTC_Analysis():
 
   histos = []
 
-  lumi = 19500. #actual read from plot_DYregions.py
+  lumi = 15000. #fixme-gkole
 
-  DY_xs = 6077.22 #https://twiki.cern.ch/twiki/bin/viewauth/CMS/StandardModelCrossSectionsat13TeV 
+  DY_xs = 6077.22
   DY_ev = get_mcEventnumber(DY_list)
 
   WJet_xs = 61526.7
@@ -360,7 +362,7 @@ def TTC_Analysis():
   ##############
   df_DY_tree = ROOT.RDataFrame("Events",DY_list)
   df_DY_tree = df_DY_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
-  df_DY_tree = df_DY_tree.Define("genweight","PrefireWeight*genWeight/abs(genWeight)")
+  df_DY_tree = df_DY_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
   df_DY = df_DY_tree.Filter(filters)
   df_DY_trigger = all_trigger(df_DY)
   df_DY_histos=[]
@@ -373,7 +375,7 @@ def TTC_Analysis():
   ##############
   df_WJet_tree = ROOT.RDataFrame("Events",WJet_list)
   df_WJet_tree = df_WJet_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
-  df_WJet_tree = df_WJet_tree.Define("genweight","PrefireWeight*genWeight/abs(genWeight)")
+  df_WJet_tree = df_WJet_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
   df_WJet = df_WJet_tree.Filter(filters)
   df_WJet_trigger = all_trigger(df_WJet)
   df_WJet_histos=[]
@@ -386,7 +388,7 @@ def TTC_Analysis():
   ##############
   df_osWW_tree = ROOT.RDataFrame("Events",osWW_list)
   df_osWW_tree = df_osWW_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
-  df_osWW_tree = df_osWW_tree.Define("genweight","PrefireWeight*genWeight/abs(genWeight)")
+  df_osWW_tree = df_osWW_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
   df_osWW = df_osWW_tree.Filter(filters)
   df_osWW_trigger = all_trigger(df_osWW)
   df_osWW_histos=[]
@@ -424,7 +426,7 @@ def TTC_Analysis():
   '''
   df_WWW_tree = ROOT.RDataFrame("Events",WWW_list)
   df_WWW_tree = df_WWW_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
-  df_WWW_tree = df_WWW_tree.Define("genweight","PrefireWeight*genWeight/abs(genWeight)")
+  df_WWW_tree = df_WWW_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
   df_WWW = df_WWW_tree.Filter(filters)
   df_WWW_trigger = all_trigger(df_WWW)
   df_WWW_histos=[]
@@ -475,7 +477,7 @@ def TTC_Analysis():
   
   df_tsch_tree = ROOT.RDataFrame("Events",tsch_list)
   df_tsch_tree = df_tsch_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
-  df_tsch_tree = df_tsch_tree.Define("genweight","PrefireWeight*genWeight/abs(genWeight)")
+  df_tsch_tree = df_tsch_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
   df_tsch = df_tsch_tree.Filter(filters)
   df_tsch_trigger = all_trigger(df_tsch)
   df_tsch_histos=[]
@@ -539,7 +541,7 @@ def TTC_Analysis():
   '''
   df_ttWtoLNu_tree = ROOT.RDataFrame("Events",ttWtoLNu_list)
   df_ttWtoLNu_tree = df_ttWtoLNu_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
-  df_ttWtoLNu_tree = df_ttWtoLNu_tree.Define("genweight","PrefireWeight*genWeight/abs(genWeight)")
+  df_ttWtoLNu_tree = df_ttWtoLNu_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
   df_ttWtoLNu = df_ttWtoLNu_tree.Filter(filters)
   df_ttWtoLNu_trigger = all_trigger(df_ttWtoLNu)
   df_ttWtoLNu_histos=[]
@@ -641,7 +643,7 @@ def TTC_Analysis():
   '''
   df_tzq_tree = ROOT.RDataFrame("Events",tzq_list)
   df_tzq_tree = df_tzq_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
-  df_tzq_tree = df_tzq_tree.Define("genweight","PrefireWeight*genWeight/abs(genWeight)")
+  df_tzq_tree = df_tzq_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
   df_tzq = df_tzq_tree.Filter(filters)
   df_tzq_trigger = all_trigger(df_tzq)
   df_tzq_histos=[]
@@ -662,7 +664,7 @@ def TTC_Analysis():
   #
   #  df_QCD80to120_tree = ROOT.RDataFrame("Events",QCD80to120_list)
   #  df_QCD80to120_tree = df_QCD80to120_tree.Define("trigger_SF","trigger_sf_mm(DY_l1_pt,DY_l2_pt,DY_l1_eta,DY_l2_eta)")
-  #  df_QCD80to120_tree = df_QCD80to120_tree.Define("genweight","PrefireWeight*Muon_CutBased_TightID_SF[DY_l1_id]*Muon_CutBased_TightID_SF[DY_l2_id]*Muon_TightRelIso_TightIDandIPCut_SF[DY_l1_id]*Muon_TightRelIso_TightIDandIPCut_SF[DY_l2_id]*trigger_SF*genWeight/abs(genWeight)")
+  #  df_QCD80to120_tree = df_QCD80to120_tree.Define("genweight","puWeight*PrefireWeight*Muon_CutBased_TightID_SF[DY_l1_id]*Muon_CutBased_TightID_SF[DY_l2_id]*Muon_TightRelIso_TightIDandIPCut_SF[DY_l1_id]*Muon_TightRelIso_TightIDandIPCut_SF[DY_l2_id]*trigger_SF*genWeight/abs(genWeight)")
   #  df_QCD80to120 = df_QCD80to120_tree.Filter(filters)
   #  df_QCD80to120_trigger = all_trigger(df_QCD80to120)
   #  df_QCD80to120_histos=[]
@@ -705,7 +707,7 @@ def TTC_Analysis():
   ##############
   df_TTTo2L_tree = ROOT.RDataFrame("Events",TTTo2L_list)
   df_TTTo2L_tree = df_TTTo2L_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
-  df_TTTo2L_tree = df_TTTo2L_tree.Define("genweight","PrefireWeight*genWeight/abs(genWeight)")
+  df_TTTo2L_tree = df_TTTo2L_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
   df_TTTo2L = df_TTTo2L_tree.Filter(filters)
   df_TTTo2L_trigger = all_trigger(df_TTTo2L)
   df_TTTo2L_histos=[]
@@ -718,7 +720,7 @@ def TTC_Analysis():
   ##############
   df_TTTo1L_tree = ROOT.RDataFrame("Events",TTTo1L_list)
   df_TTTo1L_tree = df_TTTo1L_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
-  df_TTTo1L_tree = df_TTTo1L_tree.Define("genweight","PrefireWeight*genWeight/abs(genWeight)")
+  df_TTTo1L_tree = df_TTTo1L_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
   df_TTTo1L = df_TTTo1L_tree.Filter(filters)
   df_TTTo1L_trigger = all_trigger(df_TTTo1L)
   df_TTTo1L_histos=[]
