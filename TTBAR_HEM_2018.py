@@ -58,7 +58,7 @@ def for_diele_trigger(df):
   return ditri_ele_trigger
 
 def for_singleele_trigger_eechannel(df): #fixme gkole
-  sin_ele_trigger = df.Filter("!(HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL) && !(HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ) && (HLT_passEle32WPTight || HLT_Ele35_WPTight_Gsf)")
+  sin_ele_trigger = df.Filter("(!(HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL) && !(HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ) && (HLT_passEle32WPTight || HLT_Ele35_WPTight_Gsf)) || (HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL || HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ)")
   return sin_ele_trigger
 
 def for_singleele_trigger_emuchannel(df):
@@ -121,10 +121,7 @@ def HEM_Eta_Vs_Phi(opts):
     etabin=array('d',[round(-5.0+i*0.2, 2) for i in range(0, 50+1, 1)])
     phibin=array('d',[round(-3.5+i*0.2, 2) for i in range(0, 35+1, 1)]) 
 
-    #print "len(etabin)", len(etabin)
-    #print "len(phibin)", len(phibin)
     # define histogram
-    
     h2_deno=ROOT.TH2D('','',len(etabin)-1,etabin,len(phibin)-1,phibin)
     h2_nume=ROOT.TH2D('','',len(etabin)-1,etabin,len(phibin)-1,phibin)
     h2_deno_model=ROOT.RDF.TH2DModel(h2_deno)
@@ -140,7 +137,8 @@ def HEM_Eta_Vs_Phi(opts):
     print "1"
     df_SingleEle_deno_tree = ROOT.RDataFrame("Events", singleEle_names)
     print(' '.join(map(str, singleEle_names)))
-    #df_SingleEle_deno_tree = df_SingleEle_deno_tree.Define("abs_l1eta","abs(l1_eta)")
+
+    # df_SingleEle_deno_tree = df_SingleEle_deno_tree.Define("abs_l1eta","abs(l1_eta)")
     df_SingleEle_deno_tree = df_SingleEle_deno_tree.Define("jet1_eta","Jet_eta[0]")
     df_SingleEle_deno_tree = df_SingleEle_deno_tree.Define("jet1_phi","Jet_phi[0]")
     
