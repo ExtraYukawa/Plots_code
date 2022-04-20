@@ -10,7 +10,7 @@ ROOT.gROOT.SetBatch(True)
 
 import CMSTDRStyle
 CMSTDRStyle.setTDRStyle().cd()
-import CMSstyle
+#import CMSstyle
 
 from argparse import ArgumentParser
 parser = ArgumentParser()
@@ -22,10 +22,8 @@ parser.add_argument("--period", dest="period", default="B",
 
 opts = parser.parse_args()
 
-
-#TTC_header_path = os.path.join("TTC_2018.h")
-#ROOT.gInterpreter.Declare('#include "{}"'.format(TTC_header_path))
-
+TTC_header_path = os.path.join("HEM_2018.h")
+ROOT.gInterpreter.Declare('#include "{}"'.format(TTC_header_path))
 
 # the EnableImplicitMT option should only use in cluster, at lxplus, it will make the code slower(my experience)
 #ROOT.ROOT.EnableImplicitMT()
@@ -41,7 +39,7 @@ def overunder_flowbin(h1):
   return h1
 
 def get_mcEventnumber(filename):
-  print 'opening file ', filename
+  print ('opening file ', filename)
   nevent_temp=0
   for i in range(0,len(filename)):
     ftemp=ROOT.TFile.Open(filename[i])
@@ -130,7 +128,7 @@ def HEM_Eta_Vs_Phi(opts):
     # define the filters here, 1:2mu, 2:1e1m, 3:2ele
     DYfilters="OPS_region==3 && OPS_2P0F && OPS_z_mass>60 && OPS_z_mass<120 && OPS_l1_pt>30 && OPS_l2_pt>20 && OPS_drll>0.3 && Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_eeBadScFilter && Flag_ecalBadCalibFilter && nHad_tau==0"    
         
-    print "1"
+    print ("1")
     df_SingleEle_deno_tree = ROOT.RDataFrame("Events", singleEle_names)
     print(' '.join(map(str, singleEle_names)))
     #df_SingleEle_deno_tree = df_SingleEle_deno_tree.Define("abs_l1eta","abs(l1_eta)")
@@ -138,36 +136,148 @@ def HEM_Eta_Vs_Phi(opts):
     df_SingleEle_deno_tree = df_SingleEle_deno_tree.Define("jet1_phi","Jet_phi[0]")
     
     df_SingleEle_deno = df_SingleEle_deno_tree.Filter(DYfilters)
-    print "3"
+    print ("3")
     df_SingleEle_deno_trigger = for_singleele_trigger_eechannel(df_SingleEle_deno)
-    print "4"
+    print ("4")
     df_SingleEle_deno_histo = df_SingleEle_deno_trigger.Histo2D(h2_deno_model,"jet1_eta","jet1_phi")
-    print "5"
+    print ("5")
     # sys.exit(1)
     #df_SingleEle_deno_histo.Draw()
     #print "6"
     h_SingleEle_deno=df_SingleEle_deno_histo.GetValue()
-    print "7"
+    print ("7")
     
     # h_SingleEle_deno.GetXaxis().
     c1 = ROOT.TCanvas() #'','',800,600)
     pad = ROOT.TPad()
     pad.Draw()
-    print "cavas draw"
+    print ("cavas draw")
     h_SingleEle_deno.SetTitle('DY region (e^{+}e^{-}): 2018 '+opts.period+' data')
     h_SingleEle_deno.GetXaxis().SetTitle("#eta")
     h_SingleEle_deno.GetYaxis().SetTitle("#phi")
     h_SingleEle_deno.Draw("colz")
-    print "histo draw on canvas"
+    print ("histo draw on canvas")
     c1.SaveAs('DY_HEM_'+opts.period+'.pdf')
-    print "save the canvas"
+    print ("save the canvas")
     
     # return c1
     pad.Close()
 
+
+# Draw the pt, eta, phi of the leading jet(in HEM and outside HEM region)
+hists_name = ['jet1_pt','jet1_eta','jet1_phi']
+hists_xtitle = ['Leading jet p_{T}', 'Leading jet #eta', 'Leading jet #phi']
+
+#histograms bins
+histos_bins = {
+  hists_name[0]:20,
+  hists_name[1]:50,
+  hists_name[2]:20
+}
+
+#low edge
+histos_bins_low = {
+  hists_name[0]:0,
+  hists_name[1]:-5,
+  hists_name[2]:-4
+}
+
+#high edge
+histos_bins_high = {
+  hists_name[0]:200,
+  hists_name[1]:5,
+  hists_name[2]:4
+}
+
+def HEM_1D_plots(opts):
+
+  DYfilters="OPS_region==3 && OPS_2P0F && OPS_z_mass>60 && OPS_z_mass<120 && OPS_l1_pt>30 && OPS_l2_pt>20 && OPS_drll>0.3 && Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_eeBadScFilter && Flag_ecalBadCalibFilter && nHad_tau==0"
+  
+  # TTBARfilters="Flag_goodVertices"
+  # Becarefull about !(All(bla bla))
+  # inHEM  = "All(Jet_eta > -3.2) && All(Jet_eta < -1.3)" #&& All(Jet_phi > -1.57)" # && All(Jet_phi < -0.87)" # All is working ROOT>6.20
+  # outHEM = "All(Jet_eta < -3.2) && All(Jet_eta > -1.3)" #&& All(Jet_phi < -1.57)" # && All(Jet_phi > -0.87)" # All is working ROOT>6.20
+  
+  print ("1")
+  df_SingleEle_tree = ROOT.RDataFrame("Events", singleEle_names)
+  
+  print('Input Files: '.join(map(str, singleEle_names)))
+  
+  df_SingleEle_tree = df_SingleEle_tree.Define("jet1_pt","Jet_pt[0]")
+  df_SingleEle_tree = df_SingleEle_tree.Define("jet1_eta","Jet_eta[0]")
+  df_SingleEle_tree = df_SingleEle_tree.Define("jet1_phi","Jet_phi[0]")
+  
+  
+  df_SingleEle = df_SingleEle_tree.Filter(DYfilters)
+  
+  print ("1.5")
+  df_SingleEle_inHEM  = df_SingleEle.Filter("filterHEM(Jet_eta, Jet_phi)","test")
+  #df_z_dr = df_z_idx.Filter("filter_z_dr(Z_idx, Electron_eta, Electron_phi)",
+   #                           "Delta R separation of Electrons building Z system")
+  print ("1.6")
+  df_SingleEle_outHEM = df_SingleEle.Filter("notHEM(Jet_eta, Jet_phi)","not HEM")
+
+  print ("2")
+  df_SingleEle_dy_trigger  = for_singleele_trigger_eechannel(df_SingleEle)
+  df_SingleEle_inHEM_trigger  = for_singleele_trigger_eechannel(df_SingleEle_inHEM)
+  df_SingleEle_outHEM_trigger = for_singleele_trigger_eechannel(df_SingleEle_outHEM)
+  print ("3")
+
+  df_SingleEle_inHEM_histos = []
+  df_SingleEle_outHEM_histos = []
+
+  for hist in hists_name:
+    df_SingleEle_inHEM_histo  = df_SingleEle_inHEM_trigger.Histo1D((hist,"",histos_bins[hist] ,histos_bins_low[hist], histos_bins_high[hist]), hist)  
+    df_SingleEle_inHEM_histos.append(df_SingleEle_inHEM_histo)
+    
+    df_SingleEle_outHEM_histo = df_SingleEle_outHEM_trigger.Histo1D((hist,"",histos_bins[hist] ,histos_bins_low[hist], histos_bins_high[hist]), hist)
+    df_SingleEle_outHEM_histos.append(df_SingleEle_outHEM_histo)
+
+  print ("4")
+  
+  histos = []
+  histosoutHEM = []
+  for ij in range(0,len(hists_name)):
+    h_SingleEle_inHEM  = df_SingleEle_inHEM_histos[ij].GetValue()
+    histos.append(h_SingleEle_inHEM)
+    h_SingleEle_outHEM  = df_SingleEle_outHEM_histos[ij].GetValue()
+    histosoutHEM.append(h_SingleEle_outHEM)
+    
+  #print ("Integral for inHEM",  h_SingleEle_inHEM.Integral())
+  
+  for ij in range(0, len(histos)):
+    c1 = ROOT.TCanvas() #'','',800,600)
+    pad = ROOT.TPad()
+    c1.SetLogy(0)
+    pad.Draw()
+    histos[ij].SetLineColor(ROOT.kRed)
+    histosoutHEM[ij].GetXaxis().SetTitle(hists_xtitle[ij])
+    histosoutHEM[ij].SetLineColor(ROOT.kBlue)
+    histosoutHEM[ij].Draw("hist")
+    histos[ij].Draw("hist same")
+    print ("Integral for in-HEM: ", histos[ij].Integral())
+    print ("Integral for out-HEM: ", histosoutHEM[ij].Integral())
+
+    # Add legend
+    legend = ROOT.TLegend(0.62, 0.70, 0.82, 0.88)
+    legend.SetFillColor(0)
+    legend.SetBorderSize(0)
+    legend.SetTextSize(0.03)
+    legend.AddEntry(histos[ij], "in-HEM", "f")
+    legend.AddEntry(histosoutHEM[ij], "out-HEM", "f")
+    legend.Draw()
+
+    c1.SaveAs('/eos/user/g/gkole/www/public/TTC/19Apr2022/DY_'+histos[ij].GetName()+'_'+opts.period+'.pdf')
+    del c1
+  # c1.SaveAs('TTbar_HEM_'+opts.period+'.pdf')
+  print ("save the canvas")
+  
+  del histos[:]
+
+
 def TTC_Analysis():
 
-  print "inside ttc analysis"
+  print ("inside ttc analysis")
   histos = []
 
   lumi = 59830.# from https://twiki.cern.ch/twiki/bin/view/CMS/TWikiLUM
@@ -878,10 +988,11 @@ if __name__ == "__main__":
   #start = time.time()
   #start1 = time.clock() 
 
-  # TTC_Analysis()
-  HEM_Eta_Vs_Phi(opts)
+  # HEM_Eta_Vs_Phi(opts)
+  # print ("HEM 2D plots are done!")
 
-  print "back in main()"
+  HEM_1D_plots(opts)
+  print ("back in main()")
 
   #end = time.time()
   #end1 = time.clock()
