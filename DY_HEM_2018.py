@@ -110,7 +110,10 @@ singleEle_namesAB = ROOT.std.vector('string')()
 singleEle_namesCD = ROOT.std.vector('string')()
 
 #for f in ["EGammaA.root","EGammaB.root","EGammaC.root","EGammaD_0.root","EGammaD_1.root"]:
-if opts.period == "B":
+if opts.period == "A":
+  for f in ["EGammaA.root"]:
+    singleEle_names.push_back(path+f)
+elif opts.period == "B":
   for f in ["EGammaB.root"]:
     singleEle_names.push_back(path+f)
 elif opts.period == "C":
@@ -152,40 +155,54 @@ def HEM_Eta_Vs_Phi(opts):
     # define the filters here, 1:2mu, 2:1e1m, 3:2ele
     DYfilters="OPS_region==3 && OPS_2P0F && OPS_z_mass>60 && OPS_z_mass<120 && OPS_l1_pt>30 && OPS_l2_pt>20 && OPS_drll>0.3 && Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_eeBadScFilter && Flag_ecalBadCalibFilter && nHad_tau==0"    
         
-    print ("1")
+    print ("File opens")
     df_SingleEle_deno_tree = ROOT.RDataFrame("Events", singleEle_names)
     print(' '.join(map(str, singleEle_names)))
     #df_SingleEle_deno_tree = df_SingleEle_deno_tree.Define("abs_l1eta","abs(l1_eta)")
     df_SingleEle_deno_tree = df_SingleEle_deno_tree.Define("jet1_eta","Jet_eta[0]")
     df_SingleEle_deno_tree = df_SingleEle_deno_tree.Define("jet1_phi","Jet_phi[0]")
     
+    print ("Filter applied\n")
     df_SingleEle_deno = df_SingleEle_deno_tree.Filter(DYfilters)
-    print ("3")
+    print (DYfilters)
+    
+    print ("\ntrigger")
     df_SingleEle_deno_trigger = for_singleele_trigger_eechannel(df_SingleEle_deno)
-    print ("4")
-    df_SingleEle_deno_histo = df_SingleEle_deno_trigger.Histo2D(h2_deno_model,"jet1_eta","jet1_phi")
-    print ("5")
+    
+    # df_SingleEle_deno_histo = df_SingleEle_deno_trigger.Histo2D(h2_deno_model,"jet1_eta","jet1_phi")
+    # checking for leading lepton lepton 2D plots
+    df_SingleEle_deno_histo = df_SingleEle_deno_trigger.Histo2D(h2_deno_model,"OPS_l1_eta","OPS_l1_phi") #gkole-fixme
+    print ("histogram GetValue")
     # sys.exit(1)
     #df_SingleEle_deno_histo.Draw()
     #print "6"
     h_SingleEle_deno=df_SingleEle_deno_histo.GetValue()
-    print ("7")
+    print ("plotting")
     
     # h_SingleEle_deno.GetXaxis().
     c1 = ROOT.TCanvas() #'','',800,600)
-    pad = ROOT.TPad()
-    pad.Draw()
-    print ("cavas draw")
+    #pad = ROOT.TPad()
+    #pad.Draw()
+    
     h_SingleEle_deno.SetTitle('DY region (e^{+}e^{-}): 2018 '+opts.period+' data')
-    h_SingleEle_deno.GetXaxis().SetTitle("#eta")
-    h_SingleEle_deno.GetYaxis().SetTitle("#phi")
+    h_SingleEle_deno.GetXaxis().SetTitle("leading lepton #eta")
+    h_SingleEle_deno.GetYaxis().SetTitle("leading lepton #phi")
     h_SingleEle_deno.Draw("colz")
     print ("histo draw on canvas")
-    c1.SaveAs('DY_HEM_'+opts.period+'.pdf')
+
+    if opts.saveDir == None:
+        opts.saveDir = "/eos/user/g/gkole/www/public/TTC/"+datetime.datetime.now().strftime("%d%b%YT%H%M")
+
+    if not os.path.exists(opts.saveDir):
+      print ("save direcotry does not exits! so creating", opts.saveDir)
+      os.mkdir(opts.saveDir)
+
+    # c1.SaveAs(opts.saveDir+'/DY_preVSpostHEM'+histospreHEM[ij].GetName()+'_'+opts.period+'.pdf')
+    c1.SaveAs(opts.saveDir+'/DY_HEM_'+opts.period+'.pdf')
     print ("save the canvas")
     
     # return c1
-    pad.Close()
+    # pad.Close()
 
 
 # Draw the pt, eta, phi of the leading jet(in HEM and outside HEM region)
@@ -228,7 +245,7 @@ histos_bins_high = {
 
 def PreHEM_PostHEM(opts):
   
-  DYfilters="OPS_region==3 && OPS_2P0F && OPS_z_mass>60 && OPS_z_mass<120 && OPS_l1_pt>30 && OPS_l2_pt>20 && OPS_drll>0.3 && Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_eeBadScFilter && Flag_ecalBadCalibFilter && nHad_tau==0 && n_tight_jet==1"
+  DYfilters="OPS_region==3 && OPS_2P0F && OPS_z_mass>60 && OPS_z_mass<120 && OPS_l1_pt>30 && OPS_l2_pt>20 && OPS_drll>0.3 && Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_eeBadScFilter && Flag_ecalBadCalibFilter && nHad_tau==0"# && n_tight_jet==2"
   
   print ("File opens")
   df_SingleEle_treeAB = ROOT.RDataFrame("Events", singleEle_namesAB)
@@ -251,13 +268,14 @@ def PreHEM_PostHEM(opts):
   df_SingleEle_treeCD = df_SingleEle_treeCD.Define("jet2_eta","Jet_eta[1]")
   df_SingleEle_treeCD = df_SingleEle_treeCD.Define("jet2_phi","Jet_phi[1]")
 
-  print ("Filter applied")
+  print ("Filter applied\n")
+  print (DYfilters)
   df_SingleEleAB = df_SingleEle_treeAB.Filter(DYfilters)
   df_SingleEleCD = df_SingleEle_treeCD.Filter(DYfilters)
   
   df_SingleEleABpreHEM = df_SingleEleAB.Filter("run < 319077")
   
-  print ("trigger")
+  print ("\ntrigger")
   df_SingleEleABpreHEM_trigger  = for_singleele_trigger_eechannel(df_SingleEleABpreHEM)
   df_SingleEleCDpostHEM_trigger  = for_singleele_trigger_eechannel(df_SingleEleCD)
   
@@ -313,7 +331,7 @@ def PreHEM_PostHEM(opts):
     CMSstyle_2018.SetStyle(pad1)
     
     # Add legend
-    legend = ROOT.TLegend(0.62, 0.70, 0.82, 0.88)
+    legend = ROOT.TLegend(0.70, 0.70, 0.90, 0.88)
     legend.SetFillColor(0)
     legend.SetBorderSize(0)
     legend.SetTextSize(0.03)
@@ -1165,12 +1183,12 @@ if __name__ == "__main__":
   start = time.time()
   start1 = time.process_time()
 
-  # HEM_Eta_Vs_Phi(opts)
-  # print ("HEM 2D plots are done!")
+  HEM_Eta_Vs_Phi(opts)
+  print ("HEM 2D plots are done!")
 
   # HEM_1D_plots(opts)
   
-  PreHEM_PostHEM(opts)
+  # PreHEM_PostHEM(opts)
   
   print ("back in main()")
 
