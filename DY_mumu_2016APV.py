@@ -5,9 +5,30 @@ import math
 from math import sqrt
 import plot_DYregion
 
-
-
 ROOT.gROOT.SetBatch(True) # no flashing canvases   
+
+
+SAVEFORMATS  = "png" #pdf,png,C"
+SAVEDIR      = None
+
+from argparse import ArgumentParser
+parser = ArgumentParser()
+
+# https://martin-thoma.com/how-to-parse-command-line-arguments-in-python/
+# Add more options if you like
+parser.add_argument("--period", dest="period", default="B",
+                    help="When making the plots, read the files with this string, default: B")
+
+parser.add_argument("--subEra", dest="subEra", default="APV",
+                    help="When making the plots, read the files with this subEra, default: APV")
+
+parser.add_argument("-s", "--saveFormats", dest="saveFormats", default = SAVEFORMATS,
+                      help="Save formats for all plots [default: %s]" % SAVEFORMATS)
+
+parser.add_argument("--saveDir", dest="saveDir", default=SAVEDIR, 
+                      help="Directory where all pltos will be saved [default: %s]" % SAVEDIR)
+
+opts = parser.parse_args()
 
 TTC_header_path = os.path.join("TTC.h")
 ROOT.gInterpreter.Declare('#include "{}"'.format(TTC_header_path))
@@ -64,16 +85,46 @@ def for_cross_trigger(df):
   x_trigger = df.Filter("(HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ || HLT_Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ || HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ)")
   return x_trigger
 
-path='/eos/cms/store/group/phys_top/ExtraYukawa/2016apvMerged/'
+
+if opts.subEra == "APV":
+  path='/eos/cms/store/group/phys_top/ExtraYukawa/2016apvMerged/'
+elif opts.subEra == "postAPV":
+  path='/eos/cms/store/group/phys_top/ExtraYukawa/2016postapvMerged/'
+else:
+  raise Exception ("select correct subEra!")
+
 add_trigger_SF=False
 
-doubleMu_names = ROOT.std.vector('string')()
-for f in ["DoubleMuon_B2.root","DoubleMuon_C.root","DoubleMuon_D.root","DoubleMuon_E.root","DoubleMuon_F.root"]:
-  doubleMu_names.push_back(path+f)
+if opts.subEra == "APV":
+  print ("Reading 2016 APV files \n")
+  doubleMu_names = ROOT.std.vector('string')()
+  for f in ["DoubleMuon_B2.root","DoubleMuon_C.root","DoubleMuon_D.root","DoubleMuon_E.root","DoubleMuon_F.root"]:
+    doubleMu_names.push_back(path+f)
 
-singleMu_names = ROOT.std.vector('string')()
-for f in ["SingleMuon_B2.root","SingleMuon_C.root","SingleMuon_D.root","SingleMuon_E.root","SingleMuon_F.root"]:
-  singleMu_names.push_back(path+f)
+  singleMu_names = ROOT.std.vector('string')()
+  for f in ["SingleMuon_B2.root","SingleMuon_C.root","SingleMuon_D.root","SingleMuon_E.root","SingleMuon_F.root"]:
+    singleMu_names.push_back(path+f)
+    
+  muonEle_names = ROOT.std.vector('string')()
+  for f in ["MuonEG_B2.root","MuonEG_C.root","MuonEG_D.root","MuonEG_E.root","MuonEG_F.root"]:
+    muonEle_names.push_back(path+f)
+
+elif opts.subEra == "postAPV":
+  print ("Reading 2016 postAPV files \n")
+  doubleMu_names = ROOT.std.vector('string')()
+  for f in ["DoubleMuon_F.root","DoubleMuon_G.root","DoubleMuon_H.root"]:
+    doubleMu_names.push_back(path+f)
+    
+  singleMu_names = ROOT.std.vector('string')()
+  for f in ["SingleMuon_F.root","SingleMuon_G.root","SingleMuon_H.root"]:
+    singleMu_names.push_back(path+f)
+    
+  muonEle_names = ROOT.std.vector('string')()
+  for f in ["MuonEG_F.root","MuonEG_G.root","MuonEG_H.root"]:
+    muonEle_names.push_back(path+f)
+
+else:
+  raise Exception ("select correct subEra!")
 
 ##gkole-fixme
 #doubleEle_names = ROOT.std.vector('string')()
@@ -85,9 +136,6 @@ for f in ["SingleMuon_B2.root","SingleMuon_C.root","SingleMuon_D.root","SingleMu
 #for f in ["SingleEGB.root","SingleEGC.root","SingleEGD.root","SingleEGE.root","SingleEGF.root"]:
 #  singleEle_names.push_back(path+f)
 
-muonEle_names = ROOT.std.vector('string')()
-for f in ["MuonEG_B2.root","MuonEG_C.root","MuonEG_D.root","MuonEG_E.root","MuonEG_F.root"]:
-  muonEle_names.push_back(path+f)
 
 DY_list = ROOT.std.vector('string')()
 for f in ['DYnlo.root']:
@@ -255,7 +303,7 @@ histos_bins_high = {
   hists_name[9]:120,
 }
 
-def TTC_Analysis():
+def TTC_Analysis(opts):
 
   histos = []
 
@@ -732,6 +780,8 @@ def TTC_Analysis():
   ## DoubleMu samples
   ##############
   df_DoubleMu_tree = ROOT.RDataFrame("Events", doubleMu_names)
+  print ("DoubleMuon Files\n")
+  print(' '.join(map(str, doubleMu_names)))
   df_DoubleMu = df_DoubleMu_tree.Filter(filters)
   df_DoubleMu_trigger = for_dimuon_trigger(df_DoubleMu) 
   df_DoubleMu_histos=[]
@@ -743,6 +793,8 @@ def TTC_Analysis():
   ## SingleMu samples
   ##############
   df_SingleMu_tree = ROOT.RDataFrame("Events", singleMu_names)
+  print ("SingleMuon Files\n")
+  print(' '.join(map(str, singleMu_names)))
   df_SingleMu = df_SingleMu_tree.Filter(filters)
   df_SingleMu_trigger = for_singlemuon_trigger_mumuchannel(df_SingleMu)
   df_SingleMu_histos=[]
@@ -889,13 +941,15 @@ def TTC_Analysis():
     for i in range(0,11): # fixme-gkole
       histos[i]=overunder_flowbin(histos[i])
 
-    c1 = plot_DYregion.draw_plots(histos, 1, hists_name[ij], 0, False)
+    c1 = plot_DYregion.draw_plots(opts, histos, 1, hists_name[ij], 0, False)
     del histos[:]
  
 if __name__ == "__main__":
   start = time.time()
   start1 = time.clock() 
-  TTC_Analysis()
+
+  TTC_Analysis(opts)
+
   end = time.time()
   end1 = time.clock()
   print "wall time:", end-start

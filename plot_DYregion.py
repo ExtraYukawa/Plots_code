@@ -1,6 +1,9 @@
 import ROOT
 import numpy as np
 from ROOT import kFALSE
+import datetime
+import time
+import os
 
 import CMSTDRStyle
 CMSTDRStyle.setTDRStyle().cd()
@@ -64,12 +67,19 @@ def reorder_stack(var, oldStack, hQCD):
             #print histos
     return stack
 
-def draw_plots(hist_array =[], draw_data=0, x_name='', isem=0, drawNORM=False):
+def draw_plots(opts, hist_array =[], draw_data=0, x_name='', isem=0, drawNORM=False):
 
         if drawNORM:
                 lumi = 1.
         else:
-                lumi=16810. #fixme-gkole
+                if opts.subEra == "APV":
+                        print ("2016 APV")
+                        lumi=19500. 
+                elif opts.subEra == "postAPV":
+                        print ("2016 postAPV")
+                        lumi=16810.
+                else:
+                        raise Exception ("select correct era!")
         print "lumi: ", lumi
         
         DY = hist_array[0].Clone()
@@ -244,7 +254,7 @@ def draw_plots(hist_array =[], draw_data=0, x_name='', isem=0, drawNORM=False):
 	
 	set_axis(h_stack,'y', 'Event/Bin', False)
 
-	CMSstyle.SetStyle(pad1)
+	CMSstyle.SetStyle(pad1, opts.subEra) 
 
 	##legend
 	leg1 = ROOT.TLegend(0.66, 0.75, 0.94, 0.88)
@@ -295,8 +305,16 @@ def draw_plots(hist_array =[], draw_data=0, x_name='', isem=0, drawNORM=False):
 	hData.Draw()
 
 	c.Update()
-	c.SaveAs(x_name+'.pdf')
-	c.SaveAs(x_name+'.png')
+        # saving the plots
+        if opts.saveDir == None:
+                opts.saveDir = "/eos/user/g/gkole/www/public/TTC/"+datetime.datetime.now().strftime("%d%b%YT%H%M")
+
+        if not os.path.exists(opts.saveDir):
+                print ("save direcotry does not exits! so creating", opts.saveDir)
+                os.mkdir(opts.saveDir)
+
+	c.SaveAs(opts.saveDir+'/'+x_name+'.pdf')
+	c.SaveAs(opts.saveDir+'/'+x_name+'.png')
 	return c
 	pad1.Close()
 	pad2.Close()
