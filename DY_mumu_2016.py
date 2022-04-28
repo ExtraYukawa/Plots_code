@@ -1,3 +1,9 @@
+#==============
+# Last used:
+# python DY_mumu_2016.py --subEra APV
+# python DY_mumu_2016.py --subEra postAPV
+#==============
+
 import ROOT
 import time
 import os
