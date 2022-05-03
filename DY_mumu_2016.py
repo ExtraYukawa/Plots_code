@@ -72,7 +72,11 @@ def for_singleele_trigger_eechannel(df):
   return sin_ele_trigger
 
 def for_singleele_trigger_emuchannel(df):
-  sin_ele_trigger = df.Filter("!(HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ) && !(HLT_Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ) && !(HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ) && (HLT_passEle32WPTight || HLT_Ele35_WPLoose_Gsf)")
+  if opts.subEra == "APV":
+    sin_ele_trigger = df.Filter("!(HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL) && !(HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL) && (HLT_passEle32WPTight || HLT_Ele35_WPLoose_Gsf)")
+  elif opts.subEra == "postAPV":
+    sin_ele_trigger = df.Filter("!(HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ) && !(HLT_Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ) && !(HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ) && (HLT_passEle32WPTight || HLT_Ele35_WPLoose_Gsf)")
+
   return sin_ele_trigger
 
 def for_dimuon_trigger(df):
@@ -88,7 +92,11 @@ def for_singlemuon_trigger_emuchannel(df):
   return single_mu_trigger
 
 def for_cross_trigger(df):
-  x_trigger = df.Filter("(HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ || HLT_Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ || HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ)")
+  if opts.subEra == "APV":
+    x_trigger = df.Filter("(HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL || HLT_Mu17_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL || HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL)")
+  elif opts.subEra == "postAPV":
+    x_trigger = df.Filter("(HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ || HLT_Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ || HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL_DZ)")
+
   return x_trigger
 
 
@@ -450,14 +458,13 @@ def TTC_Analysis(opts):
     df_osWW_histo = df_osWW_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'genweight')
     df_osWW_histos.append(df_osWW_histo)
 
-  '''
-  # fixme-gkole
+  ##############
+  ## WZ samples
+  ##############
+
   df_WZ_tree = ROOT.RDataFrame("Events",WZ_list)
-  df_WZ_tree = df_WZ_tree.Define("trigger_SF","trigger_sf_mm(DY_l1_pt,DY_l2_pt,DY_l1_eta,DY_l2_eta)")
-  if not add_trigger_SF:
-    df_WZ_tree = df_WZ_tree.Define("genweight","puWeight*PrefireWeight*Muon_CutBased_TightID_SF[DY_l1_id]*Muon_CutBased_TightID_SF[DY_l2_id]*Muon_TightRelIso_TightIDandIPCut_SF[DY_l1_id]*Muon_TightRelIso_TightIDandIPCut_SF[DY_l2_id]*genWeight/abs(genWeight)")
-  else:
-    df_WZ_tree = df_WZ_tree.Define("genweight","puWeight*PrefireWeight*Muon_CutBased_TightID_SF[DY_l1_id]*Muon_CutBased_TightID_SF[DY_l2_id]*Muon_TightRelIso_TightIDandIPCut_SF[DY_l1_id]*Muon_TightRelIso_TightIDandIPCut_SF[DY_l2_id]*trigger_SF*genWeight/abs(genWeight)")
+  df_WZ_tree = df_WZ_tree.Define("trigger_SF","trigger_sf_mm(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
+  df_WZ_tree = df_WZ_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
   df_WZ = df_WZ_tree.Filter(filters)
   df_WZ_trigger = all_trigger(df_WZ)
   df_WZ_histos=[]
@@ -465,6 +472,8 @@ def TTC_Analysis(opts):
     df_WZ_histo = df_WZ_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'genweight')
     df_WZ_histos.append(df_WZ_histo)
 
+  '''
+  # fixme-gkole
   df_ZZ_tree = ROOT.RDataFrame("Events",ZZ_list)
   df_ZZ_tree = df_ZZ_tree.Define("trigger_SF","trigger_sf_mm(DY_l1_pt,DY_l2_pt,DY_l1_eta,DY_l2_eta)")
   if not add_trigger_SF:
