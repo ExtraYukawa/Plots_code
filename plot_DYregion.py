@@ -91,7 +91,7 @@ def draw_plots(opts, hist_array =[], draw_data=0, x_name='', isem=0, drawNORM=Fa
 	WJet.Scale(lumi)
 
 	VV = hist_array[2].Clone()
-	#VV.Add(hist_array[3])
+	#VV.Add(hist_array[3]) # fixme-gkole
 	#VV.Add(hist_array[4])
 	VV.SetFillColor(ROOT.kCyan-7)
 	VV.Scale(lumi)
@@ -140,11 +140,13 @@ def draw_plots(opts, hist_array =[], draw_data=0, x_name='', isem=0, drawNORM=Fa
 	TT.Scale(lumi)
 
 	Data = hist_array[10].Clone() #gkole: only add SingleMuon
-        # print "data 1st int: ", Data.Integral() 
+        print "Single Muon int: ", hist_array[10].Integral() 
+        print "Single Ele int: ", hist_array[9].Integral() 
+        print "Muon EG int: ", hist_array[11].Integral()
 	Data.Add(hist_array[9]) # removed DoubleMuon a lot lack of data.
         # print "data final int: ", Data.Integral()
 	if isem==1:
-		Data.Add(hist_array[27])#if emu channel
+		Data.Add(hist_array[11])#if emu channel
 	if not draw_data: Data.Reset('ICE')
 	Data.SetMarkerStyle(20)
 	Data.SetMarkerSize(0.85)
