@@ -1,6 +1,6 @@
 from ROOT import *
 
-def SetStyle(gPad, subEra='APV'):
+def SetStyle(gPad):
 	latex = TLatex();
 	latex.SetNDC()
 	l = gPad.GetLeftMargin();
@@ -18,19 +18,11 @@ def SetStyle(gPad, subEra='APV'):
 	
 	# extra 
 	extraText = "  Preliminary 2017";
-        if subEra == "APV":
-                extraText = "  Preliminary 2016(APV)"; 
-        if subEra == "postAPV":
-                extraText = "  Preliminary 2016(postAPV)"; 
 	#extraText = "";
 	extraOverCmsTextSize = 0.76;
 	extraTextFont = 52
 	
 	lumiText = "41.5 fb^{-1} (13 TeV)";
-        if subEra == "APV":
-                lumiText = "19.5 fb^{-1} (13 TeV)"; 
-        if subEra == "postAPV":
-                lumiText = "16.8 fb^{-1} (13 TeV)";
 	lumiTextSize = 0.5;
 	lumiTextOffset = 0.2;
 	relExtraDY = 1.2;
