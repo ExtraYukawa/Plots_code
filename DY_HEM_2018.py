@@ -1,5 +1,7 @@
 #==============
-# Last used python3 DY_HEM_2018.py --period ABvsCD --saveDir /eos/user/g/gkole/www/public/TTC/20Apr2022/DYee1Jets
+# Last used: 
+# python3 DY_HEM_2018.py --period ABvsCD --saveDir /eos/user/g/gkole/www/public/TTC/20Apr2022/DYee1Jets 
+# python3 DY_HEM_2018.py --period B --plottype HEM_Eta_Vs_Phi 
 #==============
 
 import ROOT
@@ -29,6 +31,9 @@ parser = ArgumentParser()
 # Add more options if you like
 parser.add_argument("--period", dest="period", default="B",
                     help="When making the plots, read the files with this string, default: B")
+
+parser.add_argument("--plottype", dest="plottype", default="HEM_Eta_Vs_Phi",
+                    help="When making the plots, read the type of plots (HEM_Eta_Vs_Phi or HEM_1D_plots or PreHEM_PostHEM) with this string, default: HEM_Eta_Vs_Phi")
 
 parser.add_argument("-s", "--saveFormats", dest="saveFormats", default = SAVEFORMATS,
                       help="Save formats for all plots [default: %s]" % SAVEFORMATS)
@@ -154,7 +159,7 @@ def HEM_Eta_Vs_Phi(opts):
     
     # define the filters here, 1:2mu, 2:1e1m, 3:2ele
     DYfilters="OPS_region==3 && OPS_2P0F && OPS_z_mass>60 && OPS_z_mass<120 && OPS_l1_pt>30 && OPS_l2_pt>20 && OPS_drll>0.3 && Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_eeBadScFilter && Flag_ecalBadCalibFilter && nHad_tau==0"    
-        
+
     print ("File opens")
     df_SingleEle_deno_tree = ROOT.RDataFrame("Events", singleEle_names)
     print(' '.join(map(str, singleEle_names)))
@@ -170,12 +175,13 @@ def HEM_Eta_Vs_Phi(opts):
     df_SingleEle_deno_trigger = for_singleele_trigger_eechannel(df_SingleEle_deno)
     
     # df_SingleEle_deno_histo = df_SingleEle_deno_trigger.Histo2D(h2_deno_model,"jet1_eta","jet1_phi")
+    
     # checking for leading lepton lepton 2D plots
     df_SingleEle_deno_histo = df_SingleEle_deno_trigger.Histo2D(h2_deno_model,"OPS_l1_eta","OPS_l1_phi") #gkole-fixme
-    print ("histogram GetValue")
-    # sys.exit(1)
+    # df_SingleEle_deno_histo = df_SingleEle_deno.Histo2D(h2_deno_model,"OPS_l1_eta","OPS_l1_phi") #gkole-fixme(w/o trigger)
+    print ("\nhistogram GetValue")
+    
     #df_SingleEle_deno_histo.Draw()
-    #print "6"
     h_SingleEle_deno=df_SingleEle_deno_histo.GetValue()
     print ("plotting")
     
@@ -188,10 +194,17 @@ def HEM_Eta_Vs_Phi(opts):
     h_SingleEle_deno.GetXaxis().SetTitle("leading lepton #eta")
     h_SingleEle_deno.GetYaxis().SetTitle("leading lepton #phi")
     h_SingleEle_deno.Draw("colz")
+    cms_label = ROOT.TLatex()
+    cms_label.SetTextSize(0.04)
+    cms_label.DrawLatexNDC(0.16, 0.96, "#bf{CMS Preliminary}")
+    header = ROOT.TLatex()
+    header.SetTextSize(0.03)
+    hdrstring = '#sqrt{s} = 13 TeV,  2018 '+opts.period+' data'
+    header.DrawLatexNDC(0.63, 0.96, hdrstring)
     print ("histo draw on canvas")
 
     if opts.saveDir == None:
-        opts.saveDir = "/eos/user/g/gkole/www/public/TTC/"+datetime.datetime.now().strftime("%d%b%YT%H%M")
+      opts.saveDir = "/eos/user/g/gkole/www/public/TTC/"+datetime.datetime.now().strftime("%d%b%YT%H%M")
 
     if not os.path.exists(opts.saveDir):
       print ("save direcotry does not exits! so creating", opts.saveDir)
@@ -203,7 +216,7 @@ def HEM_Eta_Vs_Phi(opts):
     
     # return c1
     # pad.Close()
-
+#---------------------------------------------------------------------------
 
 # Draw the pt, eta, phi of the leading jet(in HEM and outside HEM region)
 hists_name = ['jet1_pt','jet1_eta','jet1_phi','jet2_pt','jet2_eta','jet2_phi','n_tight_jet']
@@ -1183,13 +1196,21 @@ if __name__ == "__main__":
   start = time.time()
   start1 = time.process_time()
 
-  HEM_Eta_Vs_Phi(opts)
-  print ("HEM 2D plots are done!")
+  if opts.plottype == "HEM_Eta_Vs_Phi":
+    HEM_Eta_Vs_Phi(opts)
+    print ("HEM 2D plots are done!")
 
-  # HEM_1D_plots(opts)
-  
-  # PreHEM_PostHEM(opts)
-  
+  elif opts.plottype == "HEM_1D_plots":
+    HEM_1D_plots(opts)
+    print ("HEM 1D plots are done!")
+
+  elif opts.plottype == "PreHEM_PostHEM":
+    PreHEM_PostHEM(opts)
+    print ("PreHEM_PostHEM plots done!")
+    
+  else:
+    raise Exception ("select correct era!")
+    
   print ("back in main()")
 
   end = time.time()

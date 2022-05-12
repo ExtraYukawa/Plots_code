@@ -1,8 +1,12 @@
+#============== 
+# Last used: python3 TTBAR_HEM_2018.py --period B --plottype HEM_Eta_Vs_Phi 
+#==============
 import ROOT
 import time
 import os
 import math
 import sys
+import datetime
 from math import sqrt
 from array import array
 import plot_DYregion_2018
@@ -12,6 +16,8 @@ import CMSTDRStyle
 CMSTDRStyle.setTDRStyle().cd()
 #import CMSstyle
 
+SAVEFORMATS  = "png" #pdf,png,C"
+SAVEDIR      = None
 
 from argparse import ArgumentParser
 parser = ArgumentParser()
@@ -20,6 +26,15 @@ parser = ArgumentParser()
 # Add more options if you like
 parser.add_argument("--period", dest="period", default="B",
                     help="When making the plots, read the files with this string, default: B")
+
+parser.add_argument("--plottype", dest="plottype", default="HEM_Eta_Vs_Phi",
+                    help="When making the plots, read the type of plots (HEM_Eta_Vs_Phi or HEM_1D_plots or PreHEM_PostHEM) with this string, default: HEM_Eta_Vs_Phi")
+
+parser.add_argument("-s", "--saveFormats", dest="saveFormats", default = SAVEFORMATS,
+                      help="Save formats for all plots [default: %s]" % SAVEFORMATS)
+
+parser.add_argument("--saveDir", dest="saveDir", default=SAVEDIR, 
+                      help="Directory where all pltos will be saved [default: %s]" % SAVEDIR)
 
 opts = parser.parse_args()
 
@@ -131,7 +146,7 @@ def HEM_Eta_Vs_Phi(opts):
   # define the filters here, 1:2mu, 2:1e1m, 3:2ele
   TTBARfilters="OPS_region==3 && OPS_2P0F && OPS_z_mass>20 && (OPS_z_mass<76 || OPS_z_mass>106) && n_tight_jet>1 && n_bjet_DeepB>0 && OPS_l1_pt>30 && OPS_l2_pt>20 && OPS_drll>0.3 && Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_eeBadScFilter && Flag_ecalBadCalibFilter && nHad_tau==0"
   
-  print ("1")
+  print ("File opens")
   df_SingleEle_deno_tree = ROOT.RDataFrame("Events", singleEle_names)
   print(' '.join(map(str, singleEle_names)))
   
@@ -139,28 +154,35 @@ def HEM_Eta_Vs_Phi(opts):
   df_SingleEle_deno_tree = df_SingleEle_deno_tree.Define("jet1_eta","Jet_eta[0]")
   df_SingleEle_deno_tree = df_SingleEle_deno_tree.Define("jet1_phi","Jet_phi[0]")
   
+  print ("Filter applied\n")
   df_SingleEle_deno = df_SingleEle_deno_tree.Filter(TTBARfilters)
-  print ("3")
-  df_SingleEle_deno_trigger = for_singleele_trigger_eechannel(df_SingleEle_deno)
-  print ("4")
-  df_SingleEle_deno_histo = df_SingleEle_deno_trigger.Histo2D(h2_deno_model,"jet1_eta","jet1_phi")
-  print ("5")
-  # sys.exit(1)
-  #print "6"
-  h_SingleEle_deno=df_SingleEle_deno_histo.GetValue()
-  print ("7")
+  print (TTBARfilters)
   
+  print ("\ntrigger")
+  df_SingleEle_deno_trigger = for_singleele_trigger_eechannel(df_SingleEle_deno)
+  
+  # df_SingleEle_deno_histo = df_SingleEle_deno_trigger.Histo2D(h2_deno_model,"jet1_eta","jet1_phi")
 
+  # checking for leading lepton lepton 2D plots
+  df_SingleEle_deno_histo = df_SingleEle_deno_trigger.Histo2D(h2_deno_model,"OPS_l1_eta","OPS_l1_phi") #gkole-fixme
+  # df_SingleEle_deno_histo = df_SingleEle_deno.Histo2D(h2_deno_model,"OPS_l1_eta","OPS_l1_phi") #gkole-fixme(w/o trigger)
+  
+  print ("\nhistogram GetValue")
+  h_SingleEle_deno=df_SingleEle_deno_histo.GetValue()
+  print ("plotting")
+  
+  
   c1 = ROOT.TCanvas() #'','',800,600)
   pad = ROOT.TPad()
   pad.Draw()
   print ("cavas draw")
   # h_SingleEle_deno.SetTitle('t#bar{t} region: 2018 '+opts.period+' data') # not working
-  h_SingleEle_deno.GetXaxis().SetTitle("#eta")
-  h_SingleEle_deno.GetYaxis().SetTitle("#phi")
+  h_SingleEle_deno.GetXaxis().SetTitle("leading lepton #eta")
+  h_SingleEle_deno.GetYaxis().SetTitle("leading lepton #phi")
   
-  
+  print ("histo draw on canvas")
   h_SingleEle_deno.Draw("colz")
+  
   cms_label = ROOT.TLatex()
   cms_label.SetTextSize(0.04)
   cms_label.DrawLatexNDC(0.16, 0.96, "#bf{CMS Preliminary}")
@@ -169,14 +191,22 @@ def HEM_Eta_Vs_Phi(opts):
   hdrstring = '#sqrt{s} = 13 TeV,  2018 '+opts.period+' data'
   header.DrawLatexNDC(0.63, 0.96, hdrstring)
   
-  print ("histo draw on canvas")
-  c1.SaveAs('TTbar_HEM_'+opts.period+'.pdf')
-  print ("save the canvas")
+  if opts.saveDir == None:
+    opts.saveDir = "/eos/user/g/gkole/www/public/TTC/"+datetime.datetime.now().strftime("%d%b%YT%H%M")
+
+  if not os.path.exists(opts.saveDir):
+    print ("save direcotry does not exits! so creating", opts.saveDir)
+    os.mkdir(opts.saveDir)
+
+  # c1.SaveAs(opts.saveDir+'/DY_preVSpostHEM'+histospreHEM[ij].GetName()+'_'+opts.period+'.pdf')
+  c1.SaveAs(opts.saveDir+'/TTbar_HEM_'+opts.period+'.pdf')
+
+  print ("saved the canvas")
   
   # return c1
   #pad.Close()
   
-
+#---------------------------------------------------------------------------
 
 # Draw the pt, eta, phi of the leading jet(in HEM and outside HEM region)
 hists_name = ['jet1_pt','jet1_eta','jet1_phi']
@@ -337,17 +367,27 @@ def TTC_Analysis():
     del histos[:]
  
 if __name__ == "__main__":
-  #start = time.time()
-  #start1 = time.clock() 
+  start = time.time()
+  start1 = time.process_time()
 
+  if opts.plottype == "HEM_Eta_Vs_Phi":
+    HEM_Eta_Vs_Phi(opts)
+    print ("HEM 2D plots are done!")
 
-  # HEM_Eta_Vs_Phi(opts)
-  # print ("HEM 2D plots are done!")
+  elif opts.plottype == "HEM_1D_plots":
+    HEM_1D_plots(opts)
+    print ("HEM 1D plots are done!")
 
-  HEM_1D_plots(opts)
+  elif opts.plottype == "PreHEM_PostHEM":
+    PreHEM_PostHEM(opts)
+    print ("PreHEM_PostHEM plots done!")
+    
+  else:
+    raise Exception ("select correct era!")
+
   print ("back in main()")
 
-  #end = time.time()
-  #end1 = time.clock()
-  #print "wall time:", end-start
-  #print "process time:", end1-start1
+  end = time.time()
+  end1 = time.process_time()
+  print ("wall time:    ", end-start)
+  print ("process time: ", end1-start1)
