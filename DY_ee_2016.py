@@ -62,6 +62,7 @@ def get_mcEventnumber(filename):
 def MC_histos_book(flist, filters, hists_name, histos_bins, histos_bins_low, histos_bins_high):
   df_xyz_tree = ROOT.RDataFrame("Events",flist)
   df_xyz_tree = df_xyz_tree.Define("trigger_SF","trigger_sf_ee(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
+  df_xyz_tree = df_xyz_tree.Define("eeID_SF","eleID_sf_ee(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)") #fixme gkole
   df_xyz_tree = df_xyz_tree.Define("genweight","puWeight*PrefireWeight*genWeight/abs(genWeight)")
   df_xyz = df_xyz_tree.Filter(filters)
   df_xyz_trigger = all_trigger(df_xyz)
