@@ -10,7 +10,7 @@ import os
 import sys
 import math
 from math import sqrt
-import plot_DYregion
+import plot_DYregion_2016
 
 ROOT.gROOT.SetBatch(True) # no flashing canvases   
 
@@ -931,7 +931,7 @@ def TTC_Analysis(opts):
     for i in range(0,11): # fixme-gkole
       histos[i]=overunder_flowbin(histos[i])
 
-    c1 = plot_DYregion.draw_plots(opts, histos, 1, hists_name[ij], 0, False)
+    c1 = plot_DYregion_2016.draw_plots(opts, histos, 1, hists_name[ij], 0, False)
     del histos[:]
  
 if __name__ == "__main__":

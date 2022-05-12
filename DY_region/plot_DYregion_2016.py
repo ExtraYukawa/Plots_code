@@ -7,7 +7,7 @@ import os
 
 import CMSTDRStyle
 CMSTDRStyle.setTDRStyle().cd()
-import CMSstyle
+import CMSstyle_2016
 from array import array
 
 def set_axis(the_histo, coordinate, title, is_energy):
