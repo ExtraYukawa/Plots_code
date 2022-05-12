@@ -256,7 +256,7 @@ def draw_plots(opts, hist_array =[], draw_data=0, x_name='', isem=0, drawNORM=Fa
 	
 	set_axis(h_stack,'y', 'Event/Bin', False)
 
-	CMSstyle.SetStyle(pad1, opts.subEra) 
+	CMSstyle_2016.SetStyle(pad1, opts.subEra) 
 
 	##legend
 	leg1 = ROOT.TLegend(0.66, 0.75, 0.94, 0.88)
