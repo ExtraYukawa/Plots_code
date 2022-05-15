@@ -1,0 +1,2 @@
+1. python prepare_condor.py
+2. cd the directory, then "condor_submit sub.jdl"
