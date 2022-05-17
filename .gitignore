@@ -1,0 +1,11 @@
+# Editors temp files
+*.swp
+*~
+
+# SCRAM business
+__init__.py
+*.pyc
+
+# Ignore png, pdf
+*.png 
+*.pdf
