@@ -1,6 +1,8 @@
 import ROOT
 import numpy as np
 from ROOT import kFALSE
+import datetime
+import os
 
 import CMSTDRStyle
 CMSTDRStyle.setTDRStyle().cd()
@@ -32,15 +34,33 @@ def set_axis(the_histo, coordinate, title, is_energy):
 	else:
 		axis.SetTitle(title) 
 
-def draw_plots(hist_array =[], draw_data=0, x_name='', isem=0):
+def draw_plots(opts, hist_array =[], draw_data=0, x_name='', isem=0):
+        # save all output inside a directory
+        if opts.saveDir == None:
+                opts.saveDir = datetime.datetime.now().strftime("%d%b%YT%H%M")
 
-	fileout = ROOT.TFile(x_name+'.root', 'RECREATE')
+        if not os.path.exists(opts.saveDir):
+                print ("save direcotry does not exits! so creating", opts.saveDir)
+                os.mkdir(opts.saveDir)
+        
+	fileout = ROOT.TFile(opts.saveDir+'/'+x_name+'.root', 'RECREATE')
 	fileout.cd()
 	for i in range(0,len(hist_array)):
 		hist_array[i].Write()
 	fileout.Close()
 
-	lumi=41480.
+        if opts.era == "2016APV":
+                print ("2016 APV")
+                lumi=19500. 
+        elif opts.era == "2016postAPV":
+                print ("2016 postAPV")
+                lumi=16810.
+        elif opts.era == "2017":
+                print ("2017")
+                lumi=41480
+        else:
+                raise Exception ("select correct era!")
+        # lumi=41480.
 	DY = hist_array[0].Clone()
 	DY.SetFillColor(ROOT.kRed)
 	DY.Scale(lumi)
@@ -274,7 +294,7 @@ def draw_plots(hist_array =[], draw_data=0, x_name='', isem=0):
 	
 	set_axis(h_stack,'y', 'Event/Bin', False)
 
-	CMSstyle.SetStyle(pad1)
+	CMSstyle.SetStyle(pad1, opts.era)
 
 	##legend
 	leg1 = ROOT.TLegend(0.66, 0.75, 0.94, 0.88)
@@ -328,8 +348,8 @@ def draw_plots(hist_array =[], draw_data=0, x_name='', isem=0):
         gr_pad2.Draw("SAME 2")
 
 	c.Update()
-	c.SaveAs(x_name+'.pdf')
-	c.SaveAs(x_name+'.png')
+	c.SaveAs(opts.saveDir+'/'+x_name+'.pdf')
+	c.SaveAs(opts.saveDir+'/'+x_name+'.png')
 	return c
 	pad1.Close()
 	pad2.Close()
