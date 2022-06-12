@@ -1,6 +1,8 @@
-# Last used
+#==============
+# Last used:
 # python ttc_mumu.py --era 2017 --saveDir 2017_mm
-##########
+#==============
+
 import ROOT
 import time
 import os
@@ -124,119 +126,6 @@ ttZZ_list = get_filelist(path, ['ttZZ.root'])
 tzq_list = get_filelist(path, ['tzq.root'])
 TTTo2L_list = get_filelist(path, ['TTTo2L.root'])
 
-#histograms name
-hists_name = ['ttc_l1_pt','ttc_l1_eta','ttc_l1_phi','ttc_l2_pt','ttc_l2_eta','ttc_l2_phi','ttc_mll','ttc_drll','ttc_dphill','ttc_met','ttc_met_phi','j1_pt','j1_eta','j1_phi','j1_mass','j2_pt','j2_eta','j2_phi','j2_mass','j3_pt','j3_eta','j3_phi','j3_mass','n_tight_jet','ttc_mllj1','ttc_mllj2','ttc_mllj3','ttc_dr_l1j1','ttc_dr_l1j2','ttc_dr_l1j3','ttc_dr_l2j1','ttc_dr_l2j2','ttc_dr_l2j3']
-
-#histograms bins
-histos_bins = {
-hists_name[0]:14,
-hists_name[1]:12,
-hists_name[2]:10,
-hists_name[3]:10,
-hists_name[4]:12,
-hists_name[5]:10,
-hists_name[6]:14,
-hists_name[7]:12,
-hists_name[8]:10,
-hists_name[9]:10,
-hists_name[10]:10,
-hists_name[11]:12,
-hists_name[12]:10,
-hists_name[13]:10,
-hists_name[14]:10,
-hists_name[15]:8,
-hists_name[16]:10,
-hists_name[17]:10,
-hists_name[18]:10,
-hists_name[19]:8,
-hists_name[20]:10,
-hists_name[21]:10,
-hists_name[22]:10,
-hists_name[23]:10,
-hists_name[24]:10,
-hists_name[25]:10,
-hists_name[26]:10,
-hists_name[27]:10,
-hists_name[28]:10,
-hists_name[29]:10,
-hists_name[30]:10,
-hists_name[31]:10,
-hists_name[32]:10,
-}
-
-#low edge
-histos_bins_low = {
-hists_name[0]:0,
-hists_name[1]:-3,
-hists_name[2]:-4,
-hists_name[3]:0,
-hists_name[4]:-3,
-hists_name[5]:-4,
-hists_name[6]:0,
-hists_name[7]:0,
-hists_name[8]:-4,
-hists_name[9]:0,
-hists_name[10]:-4,
-hists_name[11]:0,
-hists_name[12]:-3,
-hists_name[13]:-4,
-hists_name[14]:0,
-hists_name[15]:0,
-hists_name[16]:-3,
-hists_name[17]:-4,
-hists_name[18]:0,
-hists_name[19]:0,
-hists_name[20]:-3,
-hists_name[21]:-4,
-hists_name[22]:0,
-hists_name[23]:0,
-hists_name[24]:0,
-hists_name[25]:0,
-hists_name[26]:0,
-hists_name[27]:0,
-hists_name[28]:0,
-hists_name[29]:0,
-hists_name[30]:0,
-hists_name[31]:0,
-hists_name[32]:0,
-}
-
-#high edge
-histos_bins_high = {
-hists_name[0]:210,
-hists_name[1]:3,
-hists_name[2]:4,
-hists_name[3]:100,
-hists_name[4]:3,
-hists_name[5]:4,
-hists_name[6]:280,
-hists_name[7]:3.6,
-hists_name[8]:4,
-hists_name[9]:300,
-hists_name[10]:4,
-hists_name[11]:360,
-hists_name[12]:3,
-hists_name[13]:4,
-hists_name[14]:50,
-hists_name[15]:240,
-hists_name[16]:3,
-hists_name[17]:4,
-hists_name[18]:50,
-hists_name[19]:240,
-hists_name[20]:3,
-hists_name[21]:4,
-hists_name[22]:50,
-hists_name[23]:10,
-hists_name[24]:800,
-hists_name[25]:500,
-hists_name[26]:500,
-hists_name[27]:4,
-hists_name[28]:4,
-hists_name[29]:4,
-hists_name[30]:4,
-hists_name[31]:4,
-hists_name[32]:4,
-}
 
 def TTC_Analysis(opts):
 
