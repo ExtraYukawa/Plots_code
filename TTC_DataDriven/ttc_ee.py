@@ -44,7 +44,7 @@ def get_filelist(path, flist=[]):
     f_list.push_back(path+f)
   return f_list
 
-def histos_book(flist, filters, hists_name, histos_bins, histos_bins_low, histos_bins_high, isData = "False", isFake = "False"):
+def histos_book(flist, filters, variables, isData = "False", isFake = "False"):
   # print ("flist: ", str(flist[0]).split('/')[-1])
   df_xyz_tree = ROOT.RDataFrame("Events",flist)
 
@@ -52,13 +52,13 @@ def histos_book(flist, filters, hists_name, histos_bins, histos_bins_low, histos
     df_xyz_tree = df_xyz_tree.Define("trigger_SF","trigger_sf_ee(ttc_l1_pt,ttc_l2_pt,ttc_l1_eta,ttc_l2_eta)")
     # check if the events are fake or not
     if isFake:
-      df_xyz_tree = df_xyz_tree.Define("fakelep_weight","fakelepweight_ee_mc(ttc_1P1F,ttc_0P2F,ttc_lep1_faketag,electron_conePt[ttc_l1_id],ttc_l1_eta,electron_conePt[ttc_l2_id],ttc_l2_eta)")
+      df_xyz_tree = df_xyz_tree.Define("fakelep_weight","fakelepweight_ee_"+opts.era+"(ttc_1P1F,ttc_0P2F,ttc_lep1_faketag,electron_conePt[ttc_l1_id],ttc_l1_eta,electron_conePt[ttc_l2_id],ttc_l2_eta, "+str(isData).lower()+")")
       df_xyz_tree = df_xyz_tree.Define("genweight","puWeight*PrefireWeight*fakelep_weight*genWeight/abs(genWeight)")
     else:
       df_xyz_tree = df_xyz_tree.Define("genweight","puWeight*PrefireWeight*Electron_RECO_SF[ttc_l1_id]*Electron_RECO_SF[ttc_l2_id]*genWeight/abs(genWeight)")
   else:
     if isFake:
-      df_xyz_tree = df_xyz_tree.Define("fakelep_weight","fakelepweight_ee_data(ttc_1P1F,ttc_0P2F,ttc_lep1_faketag,electron_conePt[ttc_l1_id],ttc_l1_eta,electron_conePt[ttc_l2_id],ttc_l2_eta)")
+      df_xyz_tree = df_xyz_tree.Define("fakelep_weight","fakelepweight_ee_"+opts.era+"(ttc_1P1F,ttc_0P2F,ttc_lep1_faketag,electron_conePt[ttc_l1_id],ttc_l1_eta,electron_conePt[ttc_l2_id],ttc_l2_eta, "+str(isData).lower()+")")
 
   # common for data/MC
   df_xyz = df_xyz_tree.Filter(filters)
@@ -75,14 +75,14 @@ def histos_book(flist, filters, hists_name, histos_bins, histos_bins_low, histos
       print ("choose correct trigger function")
   # put histos in a list
   df_xyz_histos = []
-  for i in hists_name:
+  for variable in variables:
     if not isData:
-      df_xyz_histo = df_xyz_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'genweight')
+      df_xyz_histo = df_xyz_trigger.Histo1D((variable,'',ranges[variable][0], ranges[variable][1], ranges[variable][2]), variable,'genweight')
     else:
       if isFake:
-        df_xyz_histo = df_xyz_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'fakelep_weight')
+        df_xyz_histo = df_xyz_trigger.Histo1D((variable,'',ranges[variable][0], ranges[variable][1], ranges[variable][2]), variable,'fakelep_weight')
       else:
-        df_xyz_histo = df_xyz_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i)
+        df_xyz_histo = df_xyz_trigger.Histo1D((variable,'',ranges[variable][0], ranges[variable][1], ranges[variable][2]), variable)
     h = df_xyz_histo.GetValue()
     h.SetDirectory(0)
     df_xyz_histos.append(h.Clone())
@@ -132,8 +132,10 @@ def TTC_Analysis(opts):
 
   histos = []
 
-  lumi = 41480.
-
+  variables = ranges.keys()
+  for ij in range(0,len(variables)):
+    print (variables[ij])
+  
   # define the filters here, 1:2mu, 2:1e1m, 3:2ele
   filters_mc="ttc_jets && ttc_region==3 && ttc_l1_pt>30 && ttc_met>30 && ttc_mll>20 && ttc_drll>0.3 && Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_eeBadScFilter && Flag_ecalBadCalibFilter && lhe_nlepton>1 && nHad_tau==0 && ttc_2P0F && (ttc_mll<75 || ttc_mll>105)"
   filters_mc_fake="ttc_jets && ttc_region==3 && ttc_l1_pt>30 && ttc_met>30 && ttc_mll>20 && ttc_drll>0.3 && Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_eeBadScFilter && Flag_ecalBadCalibFilter && lhe_nlepton>1 && nHad_tau==0 && (ttc_1P1F || ttc_0P2F) && (ttc_mll<75 || ttc_mll>105)"
@@ -143,8 +145,8 @@ def TTC_Analysis(opts):
   ##############
   ## DY samples
   ##############
-  df_DY_histos = histos_book(DY_list, filters_mc, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, False) #isData, isFake
-  df_Fake_DY_histos = histos_book(DY_list, filters_mc_fake, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, True) #isData, isFake
+  df_DY_histos = histos_book(DY_list, filters_mc, variables, False, False) #isData, isFake
+  df_Fake_DY_histos = histos_book(DY_list, filters_mc_fake, variables, False, True) #isData, isFake
   print ("DY both genuine and fake histo loading complete!")
   # print ("df_Fake_DY_histos[0] integral", df_Fake_DY_histos[0].Integral())
   # sys.exit(1)
@@ -152,223 +154,223 @@ def TTC_Analysis(opts):
   ##############
   ## osWW samples
   ##############
-  df_osWW_histos = histos_book(osWW_list, filters_mc, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, False) #isData, isFake
-  df_Fake_osWW_histos = histos_book(osWW_list, filters_mc_fake, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, True) #isData, isFake
+  df_osWW_histos = histos_book(osWW_list, filters_mc, variables, False, False) #isData, isFake
+  df_Fake_osWW_histos = histos_book(osWW_list, filters_mc_fake, variables, False, True) #isData, isFake
   print ("osWW both genuine and fake histo loading complete!")
   
   ##############
   ## ssWW samples
   ##############
-  df_ssWW_histos = histos_book(ssWW_list, filters_mc, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, False) #isData, isFake
-  df_Fake_ssWW_histos = histos_book(ssWW_list, filters_mc_fake, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, True) #isData, isFake
+  df_ssWW_histos = histos_book(ssWW_list, filters_mc, variables, False, False) #isData, isFake
+  df_Fake_ssWW_histos = histos_book(ssWW_list, filters_mc_fake, variables, False, True) #isData, isFake
   print ("ssWW both genuine and fake histo loading complete!")
   
   ##############
   ## WWdps samples
   ##############
-  df_WWdps_histos = histos_book(WWdps_list, filters_mc, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, False) #isData, isFake 
-  df_Fake_WWdps_histos = histos_book(WWdps_list, filters_mc_fake, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, True) #isData, isFake 
+  df_WWdps_histos = histos_book(WWdps_list, filters_mc, variables, False, False) #isData, isFake 
+  df_Fake_WWdps_histos = histos_book(WWdps_list, filters_mc_fake, variables, False, True) #isData, isFake 
   print ("WWdps both genuine and fake histo loading complete!")
   
   ##############
   ## WZew samples
   ##############
-  df_WZew_histos = histos_book(WZew_list, filters_mc, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, False) #isData, isFake
-  df_Fake_WZew_histos = histos_book(WZew_list, filters_mc_fake, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, True) #isData, isFake
+  df_WZew_histos = histos_book(WZew_list, filters_mc, variables, False, False) #isData, isFake
+  df_Fake_WZew_histos = histos_book(WZew_list, filters_mc_fake, variables, False, True) #isData, isFake
   print ("WWew both genuine and fake histo loading complete!")
   
   ##############
   ## WZqcd samples
   ##############
-  df_WZqcd_histos = histos_book(WZqcd_list, filters_mc, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, False) #isData, isFake 
-  df_Fake_WZqcd_histos = histos_book(WZqcd_list, filters_mc_fake, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, True) #isData, isFake
+  df_WZqcd_histos = histos_book(WZqcd_list, filters_mc, variables, False, False) #isData, isFake 
+  df_Fake_WZqcd_histos = histos_book(WZqcd_list, filters_mc_fake, variables, False, True) #isData, isFake
   print ("WZqcd both genuine and fake histo loading complete!")
   
   ##############
   ## ZZ samples
   ##############
-  df_ZZ_histos = histos_book(ZZ_list, filters_mc, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, False) #isData, isFake
-  df_Fake_ZZ_histos = histos_book(ZZ_list, filters_mc_fake, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, True) #isData, isFake
+  df_ZZ_histos = histos_book(ZZ_list, filters_mc, variables, False, False) #isData, isFake
+  df_Fake_ZZ_histos = histos_book(ZZ_list, filters_mc_fake, variables, False, True) #isData, isFake
   print ("zz both genuine and fake histo loading complete!")
   
   ##############
   ## ZG samples
   ##############
-  df_ZG_histos = histos_book(ZG_list, filters_mc, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, False) #isData, isFake
-  df_Fake_ZG_histos = histos_book(ZG_list, filters_mc_fake, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, True) #isData, isFake
+  df_ZG_histos = histos_book(ZG_list, filters_mc, variables, False, False) #isData, isFake
+  df_Fake_ZG_histos = histos_book(ZG_list, filters_mc_fake, variables, False, True) #isData, isFake
   print ("ZG both genuine and fake histo loading complete!")
   
   ##############
   ## WWW samples
   ##############
-  df_WWW_histos = histos_book(WWW_list, filters_mc, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, False) #isData, isFake
-  df_Fake_WWW_histos = histos_book(WWW_list, filters_mc_fake, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, True) #isData, isFake
+  df_WWW_histos = histos_book(WWW_list, filters_mc, variables, False, False) #isData, isFake
+  df_Fake_WWW_histos = histos_book(WWW_list, filters_mc_fake, variables, False, True) #isData, isFake
   print ("WWW both genuine and fake histo loading complete!")
   
   ##############
   ## WWZ samples
   ##############
-  df_WWZ_histos = histos_book(WWZ_list, filters_mc, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, False) #isData, isFake 
-  df_Fake_WWZ_histos = histos_book(WWZ_list, filters_mc_fake, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, True) #isData, isFake
+  df_WWZ_histos = histos_book(WWZ_list, filters_mc, variables, False, False) #isData, isFake 
+  df_Fake_WWZ_histos = histos_book(WWZ_list, filters_mc_fake, variables, False, True) #isData, isFake
   print ("WWZ both genuine and fake histo loading complete!")
   
   ##############
   ## WZZ samples
   ##############
-  df_WZZ_histos = histos_book(WZZ_list, filters_mc, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, False) #isData, isFake
-  df_Fake_WZZ_histos = histos_book(WZZ_list, filters_mc_fake, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, True) #isData, isFake
+  df_WZZ_histos = histos_book(WZZ_list, filters_mc, variables, False, False) #isData, isFake
+  df_Fake_WZZ_histos = histos_book(WZZ_list, filters_mc_fake, variables, False, True) #isData, isFake
   print ("WZZ both genuine and fake histo loading complete!")
   
   ##############
   ## ZZZ samples
   ##############
-  df_ZZZ_histos = histos_book(ZZZ_list, filters_mc, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, False) #isData, isFake
-  df_Fake_ZZZ_histos = histos_book(ZZZ_list, filters_mc_fake, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, True) #isData, isFake
+  df_ZZZ_histos = histos_book(ZZZ_list, filters_mc, variables, False, False) #isData, isFake
+  df_Fake_ZZZ_histos = histos_book(ZZZ_list, filters_mc_fake, variables, False, True) #isData, isFake
   print ("ZZZ both genuine and fake histo loading complete!")
   
   ##############
   ## tW samples
   ##############
-  df_tW_histos = histos_book(tW_list, filters_mc, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, False) #isData, isFake 
-  df_Fake_tW_histos = histos_book(tW_list, filters_mc_fake, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, True) #isData, isFake
+  df_tW_histos = histos_book(tW_list, filters_mc, variables, False, False) #isData, isFake 
+  df_Fake_tW_histos = histos_book(tW_list, filters_mc_fake, variables, False, True) #isData, isFake
   print ("tW both genuine and fake histo loading complete!")
   
   ##############
   ## tbarW samples
   ##############
-  df_tbarW_histos = histos_book(tbarW_list, filters_mc, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, False) #isData, isFake
-  df_Fake_tbarW_histos = histos_book(tbarW_list, filters_mc_fake, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, True) #isData, isFake
+  df_tbarW_histos = histos_book(tbarW_list, filters_mc, variables, False, False) #isData, isFake
+  df_Fake_tbarW_histos = histos_book(tbarW_list, filters_mc_fake, variables, False, True) #isData, isFake
   print ("tbarW both genuine and fake histo loading complete!")
   
   ##############
   ## ttWtoLNu samples
   ##############
-  df_ttWtoLNu_histos = histos_book(ttWtoLNu_list, filters_mc, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, False) #isData, isFake
-  df_Fake_ttWtoLNu_histos = histos_book(ttWtoLNu_list, filters_mc_fake, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, True) #isData, isFake
+  df_ttWtoLNu_histos = histos_book(ttWtoLNu_list, filters_mc, variables, False, False) #isData, isFake
+  df_Fake_ttWtoLNu_histos = histos_book(ttWtoLNu_list, filters_mc_fake, variables, False, True) #isData, isFake
   print ("ttWtoLNu both genuine and fake histo loading complete!")
   
   ##############
   ## ttWtoQQ samples
   ##############
-  df_ttWtoQQ_histos = histos_book(ttWtoQQ_list, filters_mc, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, False) #isData, isFake
-  df_Fake_ttWtoQQ_histos = histos_book(ttWtoQQ_list, filters_mc_fake, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, True) #isData, isFake 
+  df_ttWtoQQ_histos = histos_book(ttWtoQQ_list, filters_mc, variables, False, False) #isData, isFake
+  df_Fake_ttWtoQQ_histos = histos_book(ttWtoQQ_list, filters_mc_fake, variables, False, True) #isData, isFake 
   print ("ttWtoQQ both genuine and fake histo loading complete!")
   
   ##############
   ## ttZ samples
   ##############
-  df_ttZ_histos = histos_book(ttZ_list, filters_mc, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, False) #isData, isFake
-  df_Fake_ttZ_histos = histos_book(ttZ_list, filters_mc_fake, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, True) #isData, isFake
+  df_ttZ_histos = histos_book(ttZ_list, filters_mc, variables, False, False) #isData, isFake
+  df_Fake_ttZ_histos = histos_book(ttZ_list, filters_mc_fake, variables, False, True) #isData, isFake
   print ("ttZ both genuine and fake histo loading complete!")
   
   ##############
   ## ttZtoQQ samples
   ##############
-  df_ttZtoQQ_histos = histos_book(ttZtoQQ_list, filters_mc, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, False) #isData, isFake
-  df_Fake_ttZtoQQ_histos = histos_book(ttZtoQQ_list, filters_mc_fake, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, True) #isData, isFake
+  df_ttZtoQQ_histos = histos_book(ttZtoQQ_list, filters_mc, variables, False, False) #isData, isFake
+  df_Fake_ttZtoQQ_histos = histos_book(ttZtoQQ_list, filters_mc_fake, variables, False, True) #isData, isFake
   print ("ttZtoQQ both genuine and fake histo loading complete!")
   
   ##############
   ## ttH samples
   ##############
-  df_ttH_histos = histos_book(ttH_list, filters_mc, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, False) #isData, isFake
-  df_Fake_ttH_histos = histos_book(ttH_list, filters_mc_fake, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, True) #isData, isFake 
+  df_ttH_histos = histos_book(ttH_list, filters_mc, variables, False, False) #isData, isFake
+  df_Fake_ttH_histos = histos_book(ttH_list, filters_mc_fake, variables, False, True) #isData, isFake 
   print ("ttH both genuine and fake histo loading complete!")
   
   ##############
   ## tttW samples
   ##############
-  df_tttW_histos = histos_book(tttW_list, filters_mc, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, False) #isData, isFake
-  df_Fake_tttW_histos = histos_book(tttW_list, filters_mc_fake, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, True) #isData, isFake
+  df_tttW_histos = histos_book(tttW_list, filters_mc, variables, False, False) #isData, isFake
+  df_Fake_tttW_histos = histos_book(tttW_list, filters_mc_fake, variables, False, True) #isData, isFake
   print ("tttW both genuine and fake histo loading complete!")
   
   ##############
   ## tttJ samples
   ##############
-  df_tttJ_histos = histos_book(tttJ_list, filters_mc, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, False) #isData, isFake
-  df_Fake_tttJ_histos = histos_book(tttJ_list, filters_mc_fake, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, True) #isData, isFake
+  df_tttJ_histos = histos_book(tttJ_list, filters_mc, variables, False, False) #isData, isFake
+  df_Fake_tttJ_histos = histos_book(tttJ_list, filters_mc_fake, variables, False, True) #isData, isFake
   print ("tttJ both genuine and fake histo loading complete!")
   
   ##############
   ## ttG samples
   ##############
-  df_ttG_histos = histos_book(ttG_list, filters_mc, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, False) #isData, isFake
-  df_Fake_ttG_histos = histos_book(ttG_list, filters_mc_fake, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, True) #isData, isFake
+  df_ttG_histos = histos_book(ttG_list, filters_mc, variables, False, False) #isData, isFake
+  df_Fake_ttG_histos = histos_book(ttG_list, filters_mc_fake, variables, False, True) #isData, isFake
   print ("ttG both genuine and fake histo loading complete!")
   
   ##############
   ## ttWH samples
   ##############
-  df_ttWH_histos = histos_book(ttWH_list, filters_mc, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, False) #isData, isFake
-  df_Fake_ttWH_histos = histos_book(ttWH_list, filters_mc_fake, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, True) #isData, isFake
+  df_ttWH_histos = histos_book(ttWH_list, filters_mc, variables, False, False) #isData, isFake
+  df_Fake_ttWH_histos = histos_book(ttWH_list, filters_mc_fake, variables, False, True) #isData, isFake
   print ("ttWH both genuine and fake histo loading complete!")
   
   ##############
   ## ttZH samples
   ##############
-  df_ttZH_histos = histos_book(ttZH_list, filters_mc, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, False) #isData, isFake
-  df_Fake_ttZH_histos = histos_book(ttZH_list, filters_mc_fake, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, True) #isData, isFake
+  df_ttZH_histos = histos_book(ttZH_list, filters_mc, variables, False, False) #isData, isFake
+  df_Fake_ttZH_histos = histos_book(ttZH_list, filters_mc_fake, variables, False, True) #isData, isFake
   print ("ttZH both genuine and fake histo loading complete!")
   
   ##############
   ## tttt samples
   ##############
-  df_tttt_histos = histos_book(tttt_list, filters_mc, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, False) #isData, isFake 
-  df_Fake_tttt_histos = histos_book(tttt_list, filters_mc_fake, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, True) #isData, isFake
+  df_tttt_histos = histos_book(tttt_list, filters_mc, variables, False, False) #isData, isFake 
+  df_Fake_tttt_histos = histos_book(tttt_list, filters_mc_fake, variables, False, True) #isData, isFake
   print ("tttt both genuine and fake histo loading complete!")
   
   ##############
   ## ttWW samples
   ##############
-  df_ttWW_histos = histos_book(ttWW_list, filters_mc, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, False) #isData, isFake
-  df_Fake_ttWW_histos = histos_book(ttWW_list, filters_mc_fake, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, True) #isData, isFake
+  df_ttWW_histos = histos_book(ttWW_list, filters_mc, variables, False, False) #isData, isFake
+  df_Fake_ttWW_histos = histos_book(ttWW_list, filters_mc_fake, variables, False, True) #isData, isFake
   print ("ttWW both genuine and fake histo loading complete!")
   
   ##############
   ## ttWZ samples
   ##############
-  df_ttWZ_histos = histos_book(ttWZ_list, filters_mc, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, False) #isData, isFake
-  df_Fake_ttWZ_histos = histos_book(ttWZ_list, filters_mc_fake, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, True) #isData, isFake
+  df_ttWZ_histos = histos_book(ttWZ_list, filters_mc, variables, False, False) #isData, isFake
+  df_Fake_ttWZ_histos = histos_book(ttWZ_list, filters_mc_fake, variables, False, True) #isData, isFake
   print ("ttWZ both genuine and fake histo loading complete!")
   
   ##############
   ## ttZZ samples
   ##############
-  df_ttZZ_histos = histos_book(ttZZ_list, filters_mc, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, False) #isData, isFake
-  df_Fake_ttZZ_histos = histos_book(ttZZ_list, filters_mc_fake, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, True) #isData, isFake
+  df_ttZZ_histos = histos_book(ttZZ_list, filters_mc, variables, False, False) #isData, isFake
+  df_Fake_ttZZ_histos = histos_book(ttZZ_list, filters_mc_fake, variables, False, True) #isData, isFake
   print ("ttZZ both genuine and fake histo loading complete!")
   
   ##############
   ## tzq samples
   ##############
-  df_tzq_histos = histos_book(tzq_list, filters_mc, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, False) #isData, isFake 
-  df_Fake_tzq_histos = histos_book(tzq_list, filters_mc_fake, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, True) #isData, isFake
+  df_tzq_histos = histos_book(tzq_list, filters_mc, variables, False, False) #isData, isFake 
+  df_Fake_tzq_histos = histos_book(tzq_list, filters_mc_fake, variables, False, True) #isData, isFake
   print ("tzq both genuine and fake histo loading complete!")
   
   ##############
   ## TTTo2L samples
   ##############
-  df_TTTo2L_histos = histos_book(TTTo2L_list, filters_mc, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, False) #isData, isFake 
-  df_Fake_TTTo2L_histos = histos_book(TTTo2L_list, filters_mc_fake, hists_name, histos_bins, histos_bins_low, histos_bins_high, False, True) #isData, isFake
+  df_TTTo2L_histos = histos_book(TTTo2L_list, filters_mc, variables, False, False) #isData, isFake 
+  df_Fake_TTTo2L_histos = histos_book(TTTo2L_list, filters_mc_fake, variables, False, True) #isData, isFake
   print ("TTTo2L both genuine and fake histo loading complete!")
 
   
   ##############
   ## DoubleEle samples
   ##############
-  df_DoubleEle_histos = histos_book(doubleEle_names, filters_data, hists_name, histos_bins, histos_bins_low, histos_bins_high, True, False) #isData, isFake
-  df_FakeLep_DoubleEle_histos = histos_book(doubleEle_names, filters_data_fake, hists_name, histos_bins, histos_bins_low, histos_bins_high, True, True) #isData, isFake, what is data fake?
+  df_DoubleEle_histos = histos_book(doubleEle_names, filters_data, variables, True, False) #isData, isFake
+  df_FakeLep_DoubleEle_histos = histos_book(doubleEle_names, filters_data_fake, variables, True, True) #isData, isFake, what is data fake?
   print ("DoubleEle both genuine and fake histo loading complete!")
   
   ##############
   ## SingleEle samples
   ##############
-  df_SingleEle_histos = histos_book(singleEle_names, filters_data, hists_name, histos_bins, histos_bins_low, histos_bins_high, True, False) #isData, isFake
-  df_FakeLep_SingleEle_histos = histos_book(singleEle_names, filters_data_fake, hists_name, histos_bins, histos_bins_low, histos_bins_high, True, True) #isData, isFake
+  df_SingleEle_histos = histos_book(singleEle_names, filters_data, variables, True, False) #isData, isFake
+  df_FakeLep_SingleEle_histos = histos_book(singleEle_names, filters_data_fake, variables, True, True) #isData, isFake
   print ("SingleEle both genuine and fake histo loading complete!")
 
   
-  for ij in range(0,len(hists_name)):
+  for ij in range(0,len(variables)):
   
 # ROOT version 6.14 don;t have function "ROOT.RDF.RunGraphs"
 #  ROOT.RDF.RunGraphs({df_ZZG_histo, df_ZZ_histo, df_ggZZ_4e_histo,df_ggZZ_4mu_histo, df_ggZZ_4tau_histo, df_ggZZ_2e2mu_histo,df_ggZZ_2e2tau_histo, df_ggZZ_2mu2tau_histo, df_TTZ_histo,df_TTG_histo, df_WWZ_histo, df_WZG_histo,df_WZZ_histo, df_ZZZ_histo, df_WZTo3L_histo,df_WZTo2L_histo, df_ZG_histo})
@@ -571,7 +573,7 @@ def TTC_Analysis(opts):
     for i in range(0,64):
       histos[i]=overunder_flowbin(histos[i])
 
-    c1 = plot.draw_plots(opts, histos, 1, hists_name[ij], 0)
+    c1 = plot.draw_plots(opts, histos, 1, variables[ij], 0)
     del histos[:]
  
 if __name__ == "__main__":
