@@ -27,11 +27,16 @@ TFile*f_e_2016postAPV=TFile::Open("data/fr_data_ele_2016postAPV.root");
 TH2D*h_m_2016postAPV=(TH2D*)f_m_2016postAPV->Get("fakerate");
 TH2D*h_e_2016postAPV=(TH2D*)f_e_2016postAPV->Get("fakerate");
 
-
-TFile*f_m=TFile::Open("fr_data_mu_2017.root"); //Mu_Fake_Rate_2D.root");
-TFile*f_e=TFile::Open("fr_data_ele_2017.root"); //Ele_Fake_Rate_2D.root");
+TFile*f_m=TFile::Open("fr_data_mu_2017.root"); 
+TFile*f_e=TFile::Open("fr_data_ele_2017.root"); 
 TH2D*h_m=(TH2D*)f_m->Get("fakerate");
 TH2D*h_e=(TH2D*)f_e->Get("fakerate");
+
+TFile*f_m_2018=TFile::Open("data/fr_data_mu_2018.root"); 
+TFile*f_e_2018=TFile::Open("data/fr_data_ele_2018.root");
+TH2D*h_m_2018=(TH2D*)f_m_2018->Get("fakerate");
+TH2D*h_e_2018=(TH2D*)f_e_2018->Get("fakerate");
+
 
 float trigger_sf_ee(float l1_pt, float l2_pt, float l1_eta, float l2_eta){
 	if(l1_pt>200) l1_pt=199;
@@ -57,7 +62,7 @@ float trigger_sf_em(float l1_pt, float l2_pt, float l1_eta, float l2_eta){
 	return sf_l1*sf_l2;
 }
 
-float fakelepweight_ee_data(bool ttc_1P1F, bool ttc_0P2F, bool ttc_lep1_faketag, float l1_pt, float l1_eta, float l2_pt, float l2_eta){
+float fakelepweight_ee_2017(bool ttc_1P1F, bool ttc_0P2F, bool ttc_lep1_faketag, float l1_pt, float l1_eta, float l2_pt, float l2_eta, bool isData){
         float w_temp=1.0;
         float fakerate1=1.0;
         float fakerate2=1.0;
@@ -78,7 +83,12 @@ float fakelepweight_ee_data(bool ttc_1P1F, bool ttc_0P2F, bool ttc_lep1_faketag,
                 if (BinY > h_e->GetNbinsY()) BinY = h_e->GetNbinsY();
                 fakerate1=h_e->GetBinContent(BinX, BinY);
             }
-            w_temp=fakerate1/(1-fakerate1);
+	    if(isData){
+              w_temp=fakerate1/(1-fakerate1);
+            }else{
+              w_temp=-1*fakerate1/(1-fakerate1);
+            }
+	    
         }
         if(ttc_0P2F){
             BinX = h_e->GetXaxis()->FindBin(fabs(l1_eta));
@@ -92,14 +102,66 @@ float fakelepweight_ee_data(bool ttc_1P1F, bool ttc_0P2F, bool ttc_lep1_faketag,
             if (BinX > h_e->GetNbinsX()) BinX = h_e->GetNbinsX();
             if (BinY > h_e->GetNbinsY()) BinY = h_e->GetNbinsY();
             fakerate2=h_e->GetBinContent(BinX, BinY);
+	    if(isData){
+              w_temp=-1.0*fakerate1*fakerate2/((1-fakerate1)*(1-fakerate2));
+            }else{
+              w_temp=fakerate1*fakerate2/((1-fakerate1)*(1-fakerate2));
+            }
+        }
+        return w_temp;
+}
 
-            w_temp=-1*fakerate1*fakerate2/((1-fakerate1)*(1-fakerate2));
+float fakelepweight_ee_2018(bool ttc_1P1F, bool ttc_0P2F, bool ttc_lep1_faketag, float l1_pt, float l1_eta, float l2_pt, float l2_eta, bool isData){
+        float w_temp=1.0;
+        float fakerate1=1.0;
+        float fakerate2=1.0;
+        int BinX = 0;
+        int BinY = 0;
+        if(ttc_1P1F){
+            if(ttc_lep1_faketag){
+                BinX = h_e_2018->GetXaxis()->FindBin(fabs(l1_eta));
+                BinY = h_e_2018->GetYaxis()->FindBin(l1_pt);
+                if (BinX > h_e_2018->GetNbinsX()) BinX = h_e_2018->GetNbinsX();
+                if (BinY > h_e_2018->GetNbinsY()) BinY = h_e_2018->GetNbinsY();
+                fakerate1=h_e_2018->GetBinContent(BinX, BinY);
+            }
+            else {
+                BinX = h_e_2018->GetXaxis()->FindBin(fabs(l2_eta));
+                BinY = h_e_2018->GetYaxis()->FindBin(l2_pt);
+                if (BinX > h_e_2018->GetNbinsX()) BinX = h_e_2018->GetNbinsX();
+                if (BinY > h_e_2018->GetNbinsY()) BinY = h_e_2018->GetNbinsY();
+                fakerate1=h_e_2018->GetBinContent(BinX, BinY);
+            }
+	    if(isData){
+              w_temp=fakerate1/(1-fakerate1);
+            }else{
+              w_temp=-1*fakerate1/(1-fakerate1);
+            }
+	    
+        }
+        if(ttc_0P2F){
+            BinX = h_e_2018->GetXaxis()->FindBin(fabs(l1_eta));
+            BinY = h_e_2018->GetYaxis()->FindBin(l1_pt);
+            if (BinX > h_e_2018->GetNbinsX()) BinX = h_e_2018->GetNbinsX();
+            if (BinY > h_e_2018->GetNbinsY()) BinY = h_e_2018->GetNbinsY();
+            fakerate1=h_e_2018->GetBinContent(BinX, BinY);
+
+            BinX = h_e_2018->GetXaxis()->FindBin(fabs(l2_eta));
+            BinY = h_e_2018->GetYaxis()->FindBin(l2_pt);
+            if (BinX > h_e_2018->GetNbinsX()) BinX = h_e_2018->GetNbinsX();
+            if (BinY > h_e_2018->GetNbinsY()) BinY = h_e_2018->GetNbinsY();
+            fakerate2=h_e_2018->GetBinContent(BinX, BinY);
+	    if(isData){
+              w_temp=-1.0*fakerate1*fakerate2/((1-fakerate1)*(1-fakerate2));
+            }else{
+              w_temp=fakerate1*fakerate2/((1-fakerate1)*(1-fakerate2));
+            }
         }
         return w_temp;
 }
 
 
-float fakelepweight_em_data(bool ttc_1P1F, bool ttc_0P2F, bool ttc_lep1_faketag, float l1_pt, float l1_eta, float l2_pt, float l2_eta){
+float fakelepweight_em_2017(bool ttc_1P1F, bool ttc_0P2F, bool ttc_lep1_faketag, float l1_pt, float l1_eta, float l2_pt, float l2_eta, bool isData){
         float w_temp=1.0;
         float fakerate1=1.0;
         float fakerate2=1.0;
@@ -120,7 +182,12 @@ float fakelepweight_em_data(bool ttc_1P1F, bool ttc_0P2F, bool ttc_lep1_faketag,
                 if (BinY > h_e->GetNbinsY()) BinY = h_e->GetNbinsY();
                 fakerate1=h_e->GetBinContent(BinX, BinY);
             }
-            w_temp=fakerate1/(1-fakerate1);
+	    if(isData){
+              w_temp=fakerate1/(1-fakerate1);
+            }else{
+              w_temp=-1*fakerate1/(1-fakerate1);
+            }
+
         }
         if(ttc_0P2F){
             BinX = h_m->GetXaxis()->FindBin(fabs(l1_eta));
@@ -134,13 +201,17 @@ float fakelepweight_em_data(bool ttc_1P1F, bool ttc_0P2F, bool ttc_lep1_faketag,
             if (BinX > h_e->GetNbinsX()) BinX = h_e->GetNbinsX();
             if (BinY > h_e->GetNbinsY()) BinY = h_e->GetNbinsY();
             fakerate2=h_e->GetBinContent(BinX, BinY);
+	    if(isData){
+              w_temp=-1.0*fakerate1*fakerate2/((1-fakerate1)*(1-fakerate2));
+            }else{
+              w_temp=fakerate1*fakerate2/((1-fakerate1)*(1-fakerate2));
+            }
 
-            w_temp=-1*fakerate1*fakerate2/((1-fakerate1)*(1-fakerate2));
         }
         return w_temp;
 }
 
-float fakelepweight_mm_data(bool ttc_1P1F, bool ttc_0P2F, bool ttc_lep1_faketag, float l1_pt, float l1_eta, float l2_pt, float l2_eta){
+float fakelepweight_mm_2017(bool ttc_1P1F, bool ttc_0P2F, bool ttc_lep1_faketag, float l1_pt, float l1_eta, float l2_pt, float l2_eta, bool isData){
         float w_temp=1.0;
         float fakerate1=1.0;
         float fakerate2=1.0;
@@ -161,7 +232,11 @@ float fakelepweight_mm_data(bool ttc_1P1F, bool ttc_0P2F, bool ttc_lep1_faketag,
                 if (BinY > h_m->GetNbinsY()) BinY = h_m->GetNbinsY();
                 fakerate1=h_m->GetBinContent(BinX, BinY);
             }
-            w_temp=fakerate1/(1-fakerate1);
+	    if(isData){
+              w_temp=fakerate1/(1-fakerate1);
+            }else{
+              w_temp=-1*fakerate1/(1-fakerate1);
+            }
         }
         if(ttc_0P2F){
             BinX = h_m->GetXaxis()->FindBin(fabs(l1_eta));
@@ -175,52 +250,15 @@ float fakelepweight_mm_data(bool ttc_1P1F, bool ttc_0P2F, bool ttc_lep1_faketag,
             if (BinX > h_m->GetNbinsX()) BinX = h_m->GetNbinsX();
             if (BinY > h_m->GetNbinsY()) BinY = h_m->GetNbinsY();
             fakerate2=h_m->GetBinContent(BinX, BinY);
-
-            w_temp=-1*fakerate1*fakerate2/((1-fakerate1)*(1-fakerate2));
+	    if(isData){
+              w_temp=-1.0*fakerate1*fakerate2/((1-fakerate1)*(1-fakerate2));
+            }else{
+              w_temp=fakerate1*fakerate2/((1-fakerate1)*(1-fakerate2));
+            }
         }
         return w_temp;
 }
 
-float fakelepweight_ee_mc(bool ttc_1P1F, bool ttc_0P2F, bool ttc_lep1_faketag, float l1_pt, float l1_eta, float l2_pt, float l2_eta){
-        float w_temp=1.0;
-        float fakerate1=1.0;
-        float fakerate2=1.0;
-        int BinX = 0;
-        int BinY = 0;
-        if(ttc_1P1F){
-            if(ttc_lep1_faketag){
-                BinX = h_e->GetXaxis()->FindBin(fabs(l1_eta));
-                BinY = h_e->GetYaxis()->FindBin(l1_pt);
-                if (BinX > h_e->GetNbinsX()) BinX = h_e->GetNbinsX();
-                if (BinY > h_e->GetNbinsY()) BinY = h_e->GetNbinsY();
-                fakerate1=h_e->GetBinContent(BinX, BinY);
-            }
-            else {
-                BinX = h_e->GetXaxis()->FindBin(fabs(l2_eta));
-                BinY = h_e->GetYaxis()->FindBin(l2_pt);
-                if (BinX > h_e->GetNbinsX()) BinX = h_e->GetNbinsX();
-                if (BinY > h_e->GetNbinsY()) BinY = h_e->GetNbinsY();
-                fakerate1=h_e->GetBinContent(BinX, BinY);
-            }
-            w_temp=-1*fakerate1/(1-fakerate1);
-        }
-        if(ttc_0P2F){
-            BinX = h_e->GetXaxis()->FindBin(fabs(l1_eta));
-            BinY = h_e->GetYaxis()->FindBin(l1_pt);
-            if (BinX > h_e->GetNbinsX()) BinX = h_e->GetNbinsX();
-            if (BinY > h_e->GetNbinsY()) BinY = h_e->GetNbinsY();
-            fakerate1=h_e->GetBinContent(BinX, BinY);
-
-            BinX = h_e->GetXaxis()->FindBin(fabs(l2_eta));
-            BinY = h_e->GetYaxis()->FindBin(l2_pt);
-            if (BinX > h_e->GetNbinsX()) BinX = h_e->GetNbinsX();
-            if (BinY > h_e->GetNbinsY()) BinY = h_e->GetNbinsY();
-            fakerate2=h_e->GetBinContent(BinX, BinY);
-
-            w_temp=fakerate1*fakerate2/((1-fakerate1)*(1-fakerate2));
-        }
-        return w_temp;
-}
 
 float fakelepweight_ee_2016APV(bool ttc_1P1F, bool ttc_0P2F, bool ttc_lep1_faketag, float l1_pt, float l1_eta, float l2_pt, float l2_eta, bool isData){
         float w_temp=1.0;
@@ -275,84 +313,55 @@ float fakelepweight_ee_2016APV(bool ttc_1P1F, bool ttc_0P2F, bool ttc_lep1_faket
 }
 
 
-float fakelepweight_em_mc(bool ttc_1P1F, bool ttc_0P2F, bool ttc_lep1_faketag, float l1_pt, float l1_eta, float l2_pt, float l2_eta){
+float fakelepweight_ee_2016postAPV(bool ttc_1P1F, bool ttc_0P2F, bool ttc_lep1_faketag, float l1_pt, float l1_eta, float l2_pt, float l2_eta, bool isData){
         float w_temp=1.0;
         float fakerate1=1.0;
         float fakerate2=1.0;
         int BinX = 0;
+	//std::cout << "isData" << isData << std::endl;
+	//return w_temp;
+	//bool myBool = Convert.ToBoolean(sample);
         int BinY = 0;
         if(ttc_1P1F){
             if(ttc_lep1_faketag){
-                BinX = h_m->GetXaxis()->FindBin(fabs(l1_eta));
-                BinY = h_m->GetYaxis()->FindBin(l1_pt);
-                if (BinX > h_m->GetNbinsX()) BinX = h_m->GetNbinsX();
-                if (BinY > h_m->GetNbinsY()) BinY = h_m->GetNbinsY();
-                fakerate1=h_m->GetBinContent(BinX, BinY);
+                BinX = h_e_2016postAPV->GetXaxis()->FindBin(fabs(l1_eta));
+                BinY = h_e_2016postAPV->GetYaxis()->FindBin(l1_pt);
+                if (BinX > h_e_2016postAPV->GetNbinsX()) BinX = h_e_2016postAPV->GetNbinsX();
+                if (BinY > h_e_2016postAPV->GetNbinsY()) BinY = h_e_2016postAPV->GetNbinsY();
+                fakerate1=h_e_2016postAPV->GetBinContent(BinX, BinY);
             }
             else {
-                BinX = h_e->GetXaxis()->FindBin(fabs(l2_eta));
-                BinY = h_e->GetYaxis()->FindBin(l2_pt);
-                if (BinX > h_e->GetNbinsX()) BinX = h_e->GetNbinsX();
-                if (BinY > h_e->GetNbinsY()) BinY = h_e->GetNbinsY();
-                fakerate1=h_e->GetBinContent(BinX, BinY);
+                BinX = h_e_2016postAPV->GetXaxis()->FindBin(fabs(l2_eta));
+                BinY = h_e_2016postAPV->GetYaxis()->FindBin(l2_pt);
+                if (BinX > h_e_2016postAPV->GetNbinsX()) BinX = h_e_2016postAPV->GetNbinsX();
+                if (BinY > h_e_2016postAPV->GetNbinsY()) BinY = h_e_2016postAPV->GetNbinsY();
+                fakerate1=h_e_2016postAPV->GetBinContent(BinX, BinY);
             }
-            w_temp=-1*fakerate1/(1-fakerate1);
+	    if(isData){
+	      w_temp=fakerate1/(1-fakerate1);
+	    }else{
+	      w_temp=-1*fakerate1/(1-fakerate1);
+	    }
         }
         if(ttc_0P2F){
-            BinX = h_m->GetXaxis()->FindBin(fabs(l1_eta));
-            BinY = h_m->GetYaxis()->FindBin(l1_pt);
-            if (BinX > h_m->GetNbinsX()) BinX = h_m->GetNbinsX();
-            if (BinY > h_m->GetNbinsY()) BinY = h_m->GetNbinsY();
-            fakerate1=h_m->GetBinContent(BinX, BinY);
+            BinX = h_e_2016postAPV->GetXaxis()->FindBin(fabs(l1_eta));
+            BinY = h_e_2016postAPV->GetYaxis()->FindBin(l1_pt);
+            if (BinX > h_e_2016postAPV->GetNbinsX()) BinX = h_e_2016postAPV->GetNbinsX();
+            if (BinY > h_e_2016postAPV->GetNbinsY()) BinY = h_e_2016postAPV->GetNbinsY();
+            fakerate1=h_e_2016postAPV->GetBinContent(BinX, BinY);
 
-            BinX = h_e->GetXaxis()->FindBin(fabs(l2_eta));
-            BinY = h_e->GetYaxis()->FindBin(l2_pt);
-            if (BinX > h_e->GetNbinsX()) BinX = h_e->GetNbinsX();
-            if (BinY > h_e->GetNbinsY()) BinY = h_e->GetNbinsY();
-            fakerate2=h_e->GetBinContent(BinX, BinY);
-
-            w_temp=fakerate1*fakerate2/((1-fakerate1)*(1-fakerate2));
+            BinX = h_e_2016postAPV->GetXaxis()->FindBin(fabs(l2_eta));
+            BinY = h_e_2016postAPV->GetYaxis()->FindBin(l2_pt);
+            if (BinX > h_e_2016postAPV->GetNbinsX()) BinX = h_e_2016postAPV->GetNbinsX();
+            if (BinY > h_e_2016postAPV->GetNbinsY()) BinY = h_e_2016postAPV->GetNbinsY();
+            fakerate2=h_e_2016postAPV->GetBinContent(BinX, BinY);
+	    if(isData){
+	      w_temp=-1.0*fakerate1*fakerate2/((1-fakerate1)*(1-fakerate2));
+	    }else{
+	      w_temp=fakerate1*fakerate2/((1-fakerate1)*(1-fakerate2));
+	    }
         }
         return w_temp;
+
 }
 
-float fakelepweight_mm_mc(bool ttc_1P1F, bool ttc_0P2F, bool ttc_lep1_faketag, float l1_pt, float l1_eta, float l2_pt, float l2_eta){
-        float w_temp=1.0;
-        float fakerate1=1.0;
-        float fakerate2=1.0;
-        int BinX = 0;
-        int BinY = 0;
-        if(ttc_1P1F){
-            if(ttc_lep1_faketag){
-                BinX = h_m->GetXaxis()->FindBin(fabs(l1_eta));
-                BinY = h_m->GetYaxis()->FindBin(l1_pt);
-                if (BinX > h_m->GetNbinsX()) BinX = h_m->GetNbinsX();
-                if (BinY > h_m->GetNbinsY()) BinY = h_m->GetNbinsY();
-                fakerate1=h_m->GetBinContent(BinX, BinY);
-            }
-            else {
-                BinX = h_m->GetXaxis()->FindBin(fabs(l2_eta));
-                BinY = h_m->GetYaxis()->FindBin(l2_pt);
-                if (BinX > h_m->GetNbinsX()) BinX = h_m->GetNbinsX();
-                if (BinY > h_m->GetNbinsY()) BinY = h_m->GetNbinsY();
-                fakerate1=h_m->GetBinContent(BinX, BinY);
-            }
-            w_temp=-1*fakerate1/(1-fakerate1);
-        }
-        if(ttc_0P2F){
-            BinX = h_m->GetXaxis()->FindBin(fabs(l1_eta));
-            BinY = h_m->GetYaxis()->FindBin(l1_pt);
-            if (BinX > h_m->GetNbinsX()) BinX = h_m->GetNbinsX();
-            if (BinY > h_m->GetNbinsY()) BinY = h_m->GetNbinsY();
-            fakerate1=h_m->GetBinContent(BinX, BinY);
-
-            BinX = h_m->GetXaxis()->FindBin(fabs(l2_eta));
-            BinY = h_m->GetYaxis()->FindBin(l2_pt);
-            if (BinX > h_m->GetNbinsX()) BinX = h_m->GetNbinsX();
-            if (BinY > h_m->GetNbinsY()) BinY = h_m->GetNbinsY();
-            fakerate2=h_m->GetBinContent(BinX, BinY);
-
-            w_temp=fakerate1*fakerate2/((1-fakerate1)*(1-fakerate2));
-        }
-        return w_temp;
-}
