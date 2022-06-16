@@ -50,14 +50,17 @@ def draw_plots(opts, hist_array =[], draw_data=0, x_name='', isem=0):
 	fileout.Close()
 
         if opts.era == "2016APV":
-                print ("2016 APV")
+                print ("year: 2016 APV")
                 lumi=19500. 
         elif opts.era == "2016postAPV":
-                print ("2016 postAPV")
+                print ("year: 2016 postAPV")
                 lumi=16810.
         elif opts.era == "2017":
-                print ("2017")
+                print ("year: 2017")
                 lumi=41480
+        elif opts.era == "2018":
+                print ("year: 2018")
+                lumi=59830
         else:
                 raise Exception ("select correct era!")
         # lumi=41480.

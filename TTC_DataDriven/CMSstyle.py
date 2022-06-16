@@ -23,7 +23,9 @@ def SetStyle(gPad, era='2016APV'):
         if era == "2016postAPV":
                 extraText = "  Preliminary 2016(postAPV)";
         if era == "2017":
-                 extraText = "  Preliminary 2017";
+                extraText = "  Preliminary 2017";
+        if era == "2018":
+                extraText = "  Preliminary 2018";
 	#extraText = "";
 	extraOverCmsTextSize = 0.76;
 	extraTextFont = 52
@@ -35,7 +37,8 @@ def SetStyle(gPad, era='2016APV'):
                 lumiText = "16.8 fb^{-1} (13 TeV)";
         if era == "2017":
                 lumiText = "41.5 fb^{-1} (13 TeV)";
-        
+        if era == "2018":
+                lumiText = "59.8 fb^{-1} (13 TeV)";
 	lumiTextSize = 0.5;
 	lumiTextOffset = 0.2;
 	relExtraDY = 1.2;
