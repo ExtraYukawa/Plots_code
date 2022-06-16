@@ -1,6 +1,7 @@
 #==============
 # Last used:
 # python ttc_ee.py --era 2017 --saveDir 2017_ee_l1pt30
+# python ttc_ee.py --era 2018 --saveDir 2018_ee_v0
 #==============
 
 import ROOT
@@ -53,9 +54,15 @@ def histos_book(flist, filters, variables, isData = "False", isFake = "False"):
     # check if the events are fake or not
     if isFake:
       df_xyz_tree = df_xyz_tree.Define("fakelep_weight","fakelepweight_ee_"+opts.era+"(ttc_1P1F,ttc_0P2F,ttc_lep1_faketag,electron_conePt[ttc_l1_id],ttc_l1_eta,electron_conePt[ttc_l2_id],ttc_l2_eta, "+str(isData).lower()+")")
-      df_xyz_tree = df_xyz_tree.Define("genweight","puWeight*PrefireWeight*fakelep_weight*genWeight/abs(genWeight)")
+      if opts.era == "2017":
+        df_xyz_tree = df_xyz_tree.Define("genweight","puWeight*PrefireWeight*fakelep_weight*genWeight/abs(genWeight)")
+      else:
+        df_xyz_tree = df_xyz_tree.Define("genweight","puWeight*fakelep_weight*genWeight/abs(genWeight)")
     else:
-      df_xyz_tree = df_xyz_tree.Define("genweight","puWeight*PrefireWeight*Electron_RECO_SF[ttc_l1_id]*Electron_RECO_SF[ttc_l2_id]*genWeight/abs(genWeight)")
+      if opts.era == "2017":
+        df_xyz_tree = df_xyz_tree.Define("genweight","puWeight*PrefireWeight*Electron_RECO_SF[ttc_l1_id]*Electron_RECO_SF[ttc_l2_id]*genWeight/abs(genWeight)")
+      else:
+        df_xyz_tree = df_xyz_tree.Define("genweight","puWeight*Electron_RECO_SF[ttc_l1_id]*Electron_RECO_SF[ttc_l2_id]*genWeight/abs(genWeight)")
   else:
     if isFake:
       df_xyz_tree = df_xyz_tree.Define("fakelep_weight","fakelepweight_ee_"+opts.era+"(ttc_1P1F,ttc_0P2F,ttc_lep1_faketag,electron_conePt[ttc_l1_id],ttc_l1_eta,electron_conePt[ttc_l2_id],ttc_l2_eta, "+str(isData).lower()+")")
@@ -70,6 +77,9 @@ def histos_book(flist, filters, variables, isData = "False", isFake = "False"):
       df_xyz_trigger = for_diele_trigger(df_xyz, opts.era)
     elif "singleeg" in str(flist[0]).split('/')[-1].lower():
       print ("singleEle")
+      df_xyz_trigger = for_singleele_trigger_eechannel(df_xyz, opts.era)
+    elif "egamma" in str(flist[0]).split('/')[-1].lower():
+      print ("Egamma")
       df_xyz_trigger = for_singleele_trigger_eechannel(df_xyz, opts.era)
     else:
       print ("choose correct trigger function")
@@ -91,10 +101,18 @@ def histos_book(flist, filters, variables, isData = "False", isFake = "False"):
   return df_xyz_histos
 
 # Data paths
-path='/eos/cms/store/group/phys_top/ExtraYukawa/TTC_version9/'
+# Data paths
+if opts.era == "2017":
+  path='/eos/cms/store/group/phys_top/ExtraYukawa/TTC_version9/'
+elif opts.era == "2018":
+  path='/eos/cms/store/group/phys_top/ExtraYukawa/2018/'
+else:
+  raise Exception ("select correct era!")
 
 singleEle_names = get_filelist(path, ["SingleEGB.root","SingleEGC.root","SingleEGD.root","SingleEGE.root","SingleEGF.root"])
 doubleEle_names = get_filelist(path, ["DoubleEGB.root","DoubleEGC.root","DoubleEGD.root","DoubleEGE.root","DoubleEGF.root"])
+
+egamma_names = get_filelist(path, ["EGammaA.root","EGammaB.root","EGammaC.root","EGammaD_0.root","EGammaD_1.root"])
 
 DY_list = get_filelist(path, ['DY.root'])
 osWW_list = get_filelist(path, ['osWW.root'])
@@ -294,10 +312,22 @@ def TTC_Analysis(opts):
   ##############
   ## ttG samples
   ##############
-  df_ttG_histos = histos_book(ttG_list, filters_mc, variables, False, False) #isData, isFake
-  df_Fake_ttG_histos = histos_book(ttG_list, filters_mc_fake, variables, False, True) #isData, isFake
-  print ("ttG both genuine and fake histo loading complete!")
-  
+  if opts.era == "2017":
+    df_ttG_histos = histos_book(ttG_list, filters_mc, variables, False, False) #isData, isFake
+    df_Fake_ttG_histos = histos_book(ttG_list, filters_mc_fake, variables, False, True) #isData, isFake
+    print ("ttG both genuine and fake histo loading complete!")
+  else:
+    print ("ttG histos are taken from tttJ, but Reset to 0!")
+    df_ttG_histos = []
+    df_Fake_ttG_histos = []
+    for ii in range(0,len(variables)):
+      h1 = df_tttJ_histos[ii].Clone()
+      h1.Reset()
+      df_ttG_histos.append(h1.Clone())
+      h2 = df_Fake_tttJ_histos[ii].Clone()
+      h2.Reset()
+      df_Fake_ttG_histos.append(h2.Clone())
+      
   ##############
   ## ttWH samples
   ##############
@@ -358,22 +388,42 @@ def TTC_Analysis(opts):
   ##############
   ## DoubleEle samples
   ##############
-  df_DoubleEle_histos = histos_book(doubleEle_names, filters_data, variables, True, False) #isData, isFake
-  df_FakeLep_DoubleEle_histos = histos_book(doubleEle_names, filters_data_fake, variables, True, True) #isData, isFake, what is data fake?
-  print ("DoubleEle both genuine and fake histo loading complete!")
-  
+  if opts.era == "2017":
+    df_DoubleEle_histos = histos_book(doubleEle_names, filters_data, variables, True, False) #isData, isFake
+    df_FakeLep_DoubleEle_histos = histos_book(doubleEle_names, filters_data_fake, variables, True, True) #isData, isFake, what is data fake?
+    print ("DoubleEle both genuine and fake histo loading complete!")
+  else:
+    print ("NOTE: We are taking EGamma PD for 2018")
+    df_DoubleEle_histos = histos_book(egamma_names, filters_data, variables, True, False) #isData, isFake
+    df_FakeLep_DoubleEle_histos = histos_book(egamma_names, filters_data_fake, variables, True, True) #isData, isFake, what is data fake?
+    print ("Egamma both genuine and fake histo loading complete!")
+
+
   ##############
   ## SingleEle samples
   ##############
-  df_SingleEle_histos = histos_book(singleEle_names, filters_data, variables, True, False) #isData, isFake
-  df_FakeLep_SingleEle_histos = histos_book(singleEle_names, filters_data_fake, variables, True, True) #isData, isFake
-  print ("SingleEle both genuine and fake histo loading complete!")
+  if opts.era == "2017":
+    df_SingleEle_histos = histos_book(singleEle_names, filters_data, variables, True, False) #isData, isFake
+    df_FakeLep_SingleEle_histos = histos_book(singleEle_names, filters_data_fake, variables, True, True) #isData, isFake
+    print ("SingleEle both genuine and fake histo loading complete!")
+  else:
+    print ("SingleEG are not presnet for 2018 so to keep framework running, histos are taken from Egamma, but Reset to 0!")
+    df_SingleEle_histos = []
+    df_FakeLep_SingleEle_histos = []
+    for ii in range(0,len(variables)):
+      h1 = df_DoubleEle_histos[ii].Clone()
+      h1.Reset()
+      df_SingleEle_histos.append(h1.Clone())
+      h2 = df_FakeLep_DoubleEle_histos[ii].Clone()
+      h2.Reset()
+      df_FakeLep_SingleEle_histos.append(h2.Clone())
 
-  
+
+  # Loop over histograms  
   for ij in range(0,len(variables)):
   
-# ROOT version 6.14 don;t have function "ROOT.RDF.RunGraphs"
-#  ROOT.RDF.RunGraphs({df_ZZG_histo, df_ZZ_histo, df_ggZZ_4e_histo,df_ggZZ_4mu_histo, df_ggZZ_4tau_histo, df_ggZZ_2e2mu_histo,df_ggZZ_2e2tau_histo, df_ggZZ_2mu2tau_histo, df_TTZ_histo,df_TTG_histo, df_WWZ_histo, df_WZG_histo,df_WZZ_histo, df_ZZZ_histo, df_WZTo3L_histo,df_WZTo2L_histo, df_ZG_histo})
+    # ROOT version 6.14 don;t have function "ROOT.RDF.RunGraphs"
+    #  ROOT.RDF.RunGraphs({df_ZZG_histo, df_ZZ_histo, df_ggZZ_4e_histo,df_ggZZ_4mu_histo, df_ggZZ_4tau_histo, df_ggZZ_2e2mu_histo,df_ggZZ_2e2tau_histo, df_ggZZ_2mu2tau_histo, df_TTZ_histo,df_TTG_histo, df_WWZ_histo, df_WZG_histo,df_WZZ_histo, df_ZZZ_histo, df_WZTo3L_histo,df_WZTo2L_histo, df_ZG_histo})
 
     print ("Now get values")
     h_DY = df_DY_histos[ij].Clone()
@@ -462,7 +512,10 @@ def TTC_Analysis(opts):
     h_ttZ.Scale(xsec['TTZ']/get_mcEventnumber(ttZ_list))
     h_ttZtoQQ.Scale(xsec['TTZtoQQ']/get_mcEventnumber(ttZtoQQ_list))
     h_ttH.Scale(xsec['TTH']/get_mcEventnumber(ttH_list))
-    h_ttG.Scale(xsec['TTG']/get_mcEventnumber(ttG_list))
+    if opts.era == "2017":
+      h_ttG.Scale(xsec['TTG']/get_mcEventnumber(ttG_list))
+    else:
+      h_ttG.Scale(0.0)
     h_tttW.Scale(xsec['TTTW']/get_mcEventnumber(tttW_list))
     h_tttJ.Scale(xsec['TTTJ']/get_mcEventnumber(tttJ_list))
     h_tttt.Scale(xsec['TTTT']/get_mcEventnumber(tttt_list))
@@ -493,7 +546,10 @@ def TTC_Analysis(opts):
     h_fake_ttZ.Scale(xsec['TTZ']/get_mcEventnumber(ttZ_list))
     h_fake_ttZtoQQ.Scale(xsec['TTZtoQQ']/get_mcEventnumber(ttZtoQQ_list))
     h_fake_ttH.Scale(xsec['TTH']/get_mcEventnumber(ttH_list))
-    h_fake_ttG.Scale(xsec['TTG']/get_mcEventnumber(ttG_list))
+    if opts.era == "2017":
+      h_fake_ttG.Scale(xsec['TTG']/get_mcEventnumber(ttG_list))
+    else:
+      h_fake_ttG.Scale(0.0)
     h_fake_tttW.Scale(xsec['TTTW']/get_mcEventnumber(tttW_list))
     h_fake_tttJ.Scale(xsec['TTTJ']/get_mcEventnumber(tttJ_list))
     h_fake_tttt.Scale(xsec['TTTT']/get_mcEventnumber(tttt_list))
