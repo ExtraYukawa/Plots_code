@@ -180,8 +180,7 @@ def TTC_Analysis(opts):
   df_osWW_histos = histos_book(osWW_list, filters_mc, variables, False, False) #isData, isFake
   df_Fake_osWW_histos = histos_book(osWW_list, filters_mc_fake, variables, False, True) #isData, isFake
   print ("osWW both genuine and fake histo loading complete!")
-  # print ("df_osWW_histos[0]", df_osWW_histos[0].Integral())
-  # print ("df_Fake_osWW_histos[0]", df_Fake_osWW_histos[0].Integral())
+  
   
   ##############
   ## ssWW samples(NOT present in 2016)
@@ -199,9 +198,6 @@ def TTC_Analysis(opts):
     h2.Reset()
     df_Fake_ssWW_histos.append(h2.Clone())
   
-  #print ("df_ssWW_histos[0]", df_ssWW_histos[0].Integral())
-  #print ("df_Fake_ssWW_histos[0]", df_Fake_ssWW_histos[0].Integral())
-  #sys.exit(1)
   
   ##############
   ## WWdps samples
