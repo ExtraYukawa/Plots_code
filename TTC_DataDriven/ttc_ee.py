@@ -100,7 +100,7 @@ def histos_book(flist, filters, variables, isData = "False", isFake = "False"):
 
   return df_xyz_histos
 
-# Data paths
+
 # Data paths
 if opts.era == "2017":
   path='/eos/cms/store/group/phys_top/ExtraYukawa/TTC_version9/'

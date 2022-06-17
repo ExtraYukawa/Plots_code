@@ -97,7 +97,7 @@ if opts.era == "2016APV":
 elif opts.era == "2016postAPV":
   path='/eos/cms/store/group/phys_top/ExtraYukawa/2016postapvMerged/'
 else:
-  raise Exception ("select correct era!")
+  raise Exception ("select correct subEra!")
 
 if opts.era == "2016APV":
   print ("Reading 2016 APV files \n")
@@ -147,12 +147,6 @@ def TTC_Analysis(opts):
   histos = []
 
   variables = ranges.keys()
-
-  print ("len(variables)", len(variables))
-  for variable in variables:
-    print ("variable", variable)
-    print ("range", ranges[variable])
-    print ("1st", ranges[variable][0])
 
   for ij in range(0,len(variables)):
     print (variables[ij])
@@ -295,9 +289,6 @@ def TTC_Analysis(opts):
   df_tW_histos = histos_book(tW_list, filters_mc, variables, False, False) #isData, isFake 
   df_Fake_tW_histos = histos_book(tW_list, filters_mc_fake, variables, False, True) #isData, isFake
   print ("tW both genuine and fake histo loading complete!")
-  # print ("df_tW_histos[0]: ", df_tW_histos[0].Integral())
-  # print ("df_Fake_tW_histos[0]: ", df_Fake_tW_histos[0].Integral())
-  
 
   ##############
   ## tbarW samples
