@@ -59,11 +59,21 @@ def for_singleele_trigger_emuchannel(df, year="2017"):
   return sin_ele_trigger
 
 def for_dimuon_trigger(df, year="2017"):
-  ditri_mu_trigger = df.Filter("(HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8)")
+  if year == "2016APV":
+    ditri_mu_trigger = df.Filter("(HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ)")
+  elif year == "2016postAPV":
+    ditri_mu_trigger = df.Filter("(HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ)")
+  else:
+    ditri_mu_trigger = df.Filter("(HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8)")
   return ditri_mu_trigger
 
 def for_singlemuon_trigger_mumuchannel(df, year="2017"):
-  single_mu_trigger = df.Filter("!(HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8) && HLT_IsoMu27")
+  if year == "2016APV":
+    single_mu_trigger = df.Filter("!(HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ) && HLT_IsoMu27")
+  elif year == "2016postAPV":
+    single_mu_trigger = df.Filter("!(HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ) && HLT_IsoMu27")
+  else:
+    single_mu_trigger = df.Filter("!(HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8) && HLT_IsoMu27")
   return single_mu_trigger
 
 def for_singlemuon_trigger_emuchannel(df, year="2017"):
