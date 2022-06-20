@@ -114,6 +114,7 @@ doubleEle_names = get_filelist(path, ["DoubleEGB.root","DoubleEGC.root","DoubleE
 
 egamma_names = get_filelist(path, ["EGammaA.root","EGammaB.root","EGammaC.root","EGammaD_0.root","EGammaD_1.root"])
 
+# MC Location 
 DY_list = get_filelist(path, ['DY.root'])
 osWW_list = get_filelist(path, ['osWW.root'])
 ssWW_list = get_filelist(path, ['ssWW.root'])
