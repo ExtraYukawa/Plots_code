@@ -1,6 +1,7 @@
 #==============
 # Last used:
 # python ttc_mumu.py --era 2017 --saveDir 2017_mm
+# python ttc_mumu.py --era 2018 --saveDir 2018_mm
 #==============
 
 import ROOT
@@ -49,13 +50,19 @@ def histos_book(flist, filters, variables, isData = "False", isFake = "False"):
   df_xyz_tree = ROOT.RDataFrame("Events",flist)
 
   if not isData:
-    df_xyz_tree = df_xyz_tree.Define("trigger_SF","trigger_sf_mm(ttc_l1_pt,ttc_l2_pt,ttc_l1_eta,ttc_l2_eta)")
+    df_xyz_tree = df_xyz_tree.Define("trigger_SF","trigger_sf_mm_"+opts.era+"(ttc_l1_pt,ttc_l2_pt,ttc_l1_eta,ttc_l2_eta)")
     # check if the events are fake or not
     if isFake:
       df_xyz_tree = df_xyz_tree.Define("fakelep_weight","fakelepweight_mm_"+opts.era+"(ttc_1P1F,ttc_0P2F,ttc_lep1_faketag,muon_conePt[ttc_l1_id],ttc_l1_eta,muon_conePt[ttc_l2_id],ttc_l2_eta, "+str(isData).lower()+")")
-      df_xyz_tree = df_xyz_tree.Define("genweight","puWeight*PrefireWeight*fakelep_weight*genWeight/abs(genWeight)")
+      if opts.era == "2017":
+        df_xyz_tree = df_xyz_tree.Define("genweight","puWeight*PrefireWeight*fakelep_weight*genWeight/abs(genWeight)")
+      else:
+        df_xyz_tree = df_xyz_tree.Define("genweight","puWeight*fakelep_weight*genWeight/abs(genWeight)")
     else:
-      df_xyz_tree = df_xyz_tree.Define("genweight","puWeight*PrefireWeight*Muon_CutBased_LooseID_SF[ttc_l1_id]*Muon_CutBased_LooseID_SF[ttc_l2_id]*genWeight/abs(genWeight)")
+      if opts.era == "2017":
+        df_xyz_tree = df_xyz_tree.Define("genweight","puWeight*PrefireWeight*trigger_SF*Muon_CutBased_LooseID_SF[ttc_l1_id]*Muon_CutBased_LooseID_SF[ttc_l2_id]*genWeight/abs(genWeight)")
+      else:
+        df_xyz_tree = df_xyz_tree.Define("genweight","puWeight*trigger_SF*Muon_CutBased_LooseID_SF[ttc_l1_id]*Muon_CutBased_LooseID_SF[ttc_l2_id]*genWeight/abs(genWeight)")
   else:
     if isFake:
       df_xyz_tree = df_xyz_tree.Define("fakelep_weight","fakelepweight_mm_"+opts.era+"(ttc_1P1F,ttc_0P2F,ttc_lep1_faketag,muon_conePt[ttc_l1_id],ttc_l1_eta,muon_conePt[ttc_l2_id],ttc_l2_eta, "+str(isData).lower()+")")
@@ -90,11 +97,27 @@ def histos_book(flist, filters, variables, isData = "False", isFake = "False"):
 
   return df_xyz_histos
 
-# Data paths 
-path='/eos/cms/store/group/phys_top/ExtraYukawa/TTC_version9/'
+# Ntuple paths
+if opts.era == "2017":
+  path='/eos/cms/store/group/phys_top/ExtraYukawa/TTC_version9/'
+elif opts.era == "2018":
+  path='/eos/cms/store/group/phys_top/ExtraYukawa/2018/'
+else:
+  raise Exception ("select correct era!")
 
-doubleMu_names = get_filelist(path, ["DoubleMuonB.root","DoubleMuonC.root","DoubleMuonD.root","DoubleMuonE.root","DoubleMuonF.root"])
-singleMu_names = get_filelist(path, ["SingleMuonB.root","SingleMuonC.root","SingleMuonD.root","SingleMuonE.root","SingleMuonF.root"])
+# Data Location
+if opts.era == "2017":
+  print ("Reading 2017 files \n")
+  doubleMu_names = get_filelist(path, ["DoubleMuonB.root","DoubleMuonC.root","DoubleMuonD.root","DoubleMuonE.root","DoubleMuonF.root"])
+  singleMu_names = get_filelist(path, ["SingleMuonB.root","SingleMuonC.root","SingleMuonD.root","SingleMuonE.root","SingleMuonF.root"])
+elif opts.era == "2018":
+  print ("Reading 2018 files \n")
+  doubleMu_names = get_filelist(path, ["DoubleMuonA.root","DoubleMuonB.root","DoubleMuonC.root","DoubleMuonD_0.root","DoubleMuonD_1.root"])
+  singleMu_names = get_filelist(path, ["SingleMuonA.root","SingleMuonB.root","SingleMuonC.root","SingleMuonD_0.root","SingleMuonD_1.root"])
+else:
+  raise Exception ("select correct era!")
+
+# MC Location
 DY_list = get_filelist(path, ['DY.root'])
 osWW_list = get_filelist(path, ['osWW.root'])
 ssWW_list = get_filelist(path, ['ssWW.root'])
@@ -294,10 +317,22 @@ def TTC_Analysis(opts):
   ##############
   ## ttG samples
   ##############
-  df_ttG_histos = histos_book(ttG_list, filters_mc, variables, False, False) #isData, isFake
-  df_Fake_ttG_histos = histos_book(ttG_list, filters_mc_fake, variables, False, True) #isData, isFake
-  print ("ttG both genuine and fake histo loading complete!")
-  
+  if opts.era == "2017":
+    df_ttG_histos = histos_book(ttG_list, filters_mc, variables, False, False) #isData, isFake
+    df_Fake_ttG_histos = histos_book(ttG_list, filters_mc_fake, variables, False, True) #isData, isFake
+    print ("ttG both genuine and fake histo loading complete!")
+  else:
+    print ("ttG histos are taken from tttJ, but Reset to 0!")
+    df_ttG_histos = []
+    df_Fake_ttG_histos = []
+    for ii in range(0,len(variables)):
+      h1 = df_tttJ_histos[ii].Clone()
+      h1.Reset()
+      df_ttG_histos.append(h1.Clone())
+      h2 = df_Fake_tttJ_histos[ii].Clone()
+      h2.Reset()
+      df_Fake_ttG_histos.append(h2.Clone())
+
   ##############
   ## ttWH samples
   ##############
@@ -353,19 +388,25 @@ def TTC_Analysis(opts):
   df_TTTo2L_histos = histos_book(TTTo2L_list, filters_mc, variables, False, False) #isData, isFake 
   df_Fake_TTTo2L_histos = histos_book(TTTo2L_list, filters_mc_fake, variables, False, True) #isData, isFake
   print ("TTTo2L both genuine and fake histo loading complete!")
-
+  
+  ##############
+  ## DoubleMu samples
+  ##############
   df_DoubleMu_histos = histos_book(doubleMu_names, filters_data, variables, True, False) #isData, isFake 
   df_FakeLep_DoubleMu_histos = histos_book(doubleMu_names, filters_data_fake, variables, True, True) #isData, isFake, what is data fake? 
   print ("DoubleMu both genuine and fake histo loading complete!")
 
+  ##############
+  ## SingleMu samples 
+  ##############
   df_SingleMu_histos = histos_book(singleMu_names, filters_data, variables, True, False) #isData, isFake
   df_FakeLep_SingleMu_histos = histos_book(singleMu_names, filters_data_fake, variables, True, True) #isData, isFake
   print ("SingleEle both genuine and fake histo loading complete!")
 
   for ij in range(0,len(variables)):
   
-# ROOT version 6.14 don;t have function "ROOT.RDF.RunGraphs"
-#  ROOT.RDF.RunGraphs({df_ZZG_histo, df_ZZ_histo, df_ggZZ_4e_histo,df_ggZZ_4mu_histo, df_ggZZ_4tau_histo, df_ggZZ_2e2mu_histo,df_ggZZ_2e2tau_histo, df_ggZZ_2mu2tau_histo, df_TTZ_histo,df_TTG_histo, df_WWZ_histo, df_WZG_histo,df_WZZ_histo, df_ZZZ_histo, df_WZTo3L_histo,df_WZTo2L_histo, df_ZG_histo})
+    # ROOT version 6.14 don;t have function "ROOT.RDF.RunGraphs"
+    #  ROOT.RDF.RunGraphs({df_ZZG_histo, df_ZZ_histo, df_ggZZ_4e_histo,df_ggZZ_4mu_histo, df_ggZZ_4tau_histo, df_ggZZ_2e2mu_histo,df_ggZZ_2e2tau_histo, df_ggZZ_2mu2tau_histo, df_TTZ_histo,df_TTG_histo, df_WWZ_histo, df_WZG_histo,df_WZZ_histo, df_ZZZ_histo, df_WZTo3L_histo,df_WZTo2L_histo, df_ZG_histo})
 
     h_DY = df_DY_histos[ij].Clone()
     h_osWW = df_osWW_histos[ij].Clone()
@@ -451,7 +492,10 @@ def TTC_Analysis(opts):
     h_ttZ.Scale(xsec['TTZ']/get_mcEventnumber(ttZ_list))
     h_ttZtoQQ.Scale(xsec['TTZtoQQ']/get_mcEventnumber(ttZtoQQ_list))
     h_ttH.Scale(xsec['TTH']/get_mcEventnumber(ttH_list))
-    h_ttG.Scale(xsec['TTG']/get_mcEventnumber(ttG_list))
+    if opts.era == "2017":
+      h_ttG.Scale(xsec['TTG']/get_mcEventnumber(ttG_list))
+    else:
+      h_ttG.Scale(0.0)
     h_tttW.Scale(xsec['TTTW']/get_mcEventnumber(tttW_list))
     h_tttJ.Scale(xsec['TTTJ']/get_mcEventnumber(tttJ_list))
     h_tttt.Scale(xsec['TTTT']/get_mcEventnumber(tttt_list))
@@ -482,7 +526,10 @@ def TTC_Analysis(opts):
     h_fake_ttZ.Scale(xsec['TTZ']/get_mcEventnumber(ttZ_list))
     h_fake_ttZtoQQ.Scale(xsec['TTZtoQQ']/get_mcEventnumber(ttZtoQQ_list))
     h_fake_ttH.Scale(xsec['TTH']/get_mcEventnumber(ttH_list))
-    h_fake_ttG.Scale(xsec['TTG']/get_mcEventnumber(ttG_list))
+    if opts.era == "2017":
+      h_fake_ttG.Scale(xsec['TTG']/get_mcEventnumber(ttG_list))
+    else:
+      h_fake_ttG.Scale(0.0)
     h_fake_tttW.Scale(xsec['TTTW']/get_mcEventnumber(tttW_list))
     h_fake_tttJ.Scale(xsec['TTTJ']/get_mcEventnumber(tttJ_list))
     h_fake_tttt.Scale(xsec['TTTT']/get_mcEventnumber(tttt_list))
