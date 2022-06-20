@@ -344,7 +344,6 @@ def TTC_Analysis(opts):
       h2.Reset()
       df_Fake_ttG_histos.append(h2.Clone())
   
-  
   ##############
   ## ttWH samples
   ##############
