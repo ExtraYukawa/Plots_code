@@ -609,6 +609,53 @@ float fakelepweight_mm_2017(bool ttc_1P1F, bool ttc_0P2F, bool ttc_lep1_faketag,
         return w_temp;
 }
 
+float fakelepweight_mm_2018(bool ttc_1P1F, bool ttc_0P2F, bool ttc_lep1_faketag, float l1_pt, float l1_eta, float l2_pt, float l2_eta, bool isData){
+        float w_temp=1.0;
+        float fakerate1=1.0;
+        float fakerate2=1.0;
+        int BinX = 0;
+        int BinY = 0;
+        if(ttc_1P1F){
+            if(ttc_lep1_faketag){
+                BinX = h_m_2018->GetXaxis()->FindBin(fabs(l1_eta));
+                BinY = h_m_2018->GetYaxis()->FindBin(l1_pt);
+                if (BinX > h_m_2018->GetNbinsX()) BinX = h_m_2018->GetNbinsX();
+                if (BinY > h_m_2018->GetNbinsY()) BinY = h_m_2018->GetNbinsY();
+                fakerate1=h_m_2018->GetBinContent(BinX, BinY);
+            }
+            else {
+                BinX = h_m_2018->GetXaxis()->FindBin(fabs(l2_eta));
+                BinY = h_m_2018->GetYaxis()->FindBin(l2_pt);
+                if (BinX > h_m_2018->GetNbinsX()) BinX = h_m_2018->GetNbinsX();
+                if (BinY > h_m_2018->GetNbinsY()) BinY = h_m_2018->GetNbinsY();
+                fakerate1=h_m_2018->GetBinContent(BinX, BinY);
+            }
+	    if(isData){
+              w_temp=fakerate1/(1-fakerate1);
+            }else{
+              w_temp=-1*fakerate1/(1-fakerate1);
+            }
+        }
+        if(ttc_0P2F){
+            BinX = h_m_2018->GetXaxis()->FindBin(fabs(l1_eta));
+            BinY = h_m_2018->GetYaxis()->FindBin(l1_pt);
+            if (BinX > h_m_2018->GetNbinsX()) BinX = h_m_2018->GetNbinsX();
+            if (BinY > h_m_2018->GetNbinsY()) BinY = h_m_2018->GetNbinsY();
+            fakerate1=h_m_2018->GetBinContent(BinX, BinY);
+
+            BinX = h_m_2018->GetXaxis()->FindBin(fabs(l2_eta));
+            BinY = h_m_2018->GetYaxis()->FindBin(l2_pt);
+            if (BinX > h_m_2018->GetNbinsX()) BinX = h_m_2018->GetNbinsX();
+            if (BinY > h_m_2018->GetNbinsY()) BinY = h_m_2018->GetNbinsY();
+            fakerate2=h_m_2018->GetBinContent(BinX, BinY);
+	    if(isData){
+              w_temp=-1.0*fakerate1*fakerate2/((1-fakerate1)*(1-fakerate2));
+            }else{
+              w_temp=fakerate1*fakerate2/((1-fakerate1)*(1-fakerate2));
+            }
+        }
+        return w_temp;
+}
 
 float fakelepweight_ee_2016APV(bool ttc_1P1F, bool ttc_0P2F, bool ttc_lep1_faketag, float l1_pt, float l1_eta, float l2_pt, float l2_eta, bool isData){
         float w_temp=1.0;
