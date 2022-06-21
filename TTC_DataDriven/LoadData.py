@@ -4,6 +4,40 @@ from math import sqrt
 
 lumi = 1.0
 
+xsec = {}
+
+xsec['DY'] = 6077.22
+xsec['osWW'] = 11.09
+xsec['ssWW'] = 0.04932
+xsec['WWdps'] = 1.62
+xsec['WZew'] = 0.0163
+xsec['WZqcd'] = 5.213
+xsec['ZZ'] = 0.0086 
+xsec['ZG'] = 0.1097 
+xsec['WWW'] = 0.2086 
+xsec['WWZ'] = 0.1707 
+xsec['WZZ'] = 0.05709 
+xsec['ZZZ'] = 0.01476 
+xsec['TTTo2L'] = 88.3419
+xsec['TTH'] = 0.213
+xsec['TTTT'] = 0.008213 
+xsec['TTTW'] = 0.0007314 
+xsec['TTTJ'] = 0.0003974 
+xsec['TTG'] = 3.757
+xsec['TTWH'] = 0.001141 
+xsec['TTZH'] = 0.00113
+xsec['TTWtoLNu'] = 0.1792
+xsec['TTWtoQQ'] = 0.3708
+xsec['TTZ'] = 0.2589
+xsec['TTZtoQQ'] = 0.6012
+xsec['TTWW'] = 0.007003
+xsec['TTWZ'] = 0.002453
+xsec['TTZZ'] = 0.001386
+xsec['tZq'] = 0.07561
+xsec['tW'] = 35.85
+xsec['tbarW'] = 35.85
+
+
 def selections(analtype="ee"):
   if analtype == "ee":
     # define the filters here, 1:2mu, 2:1e1m, 3:2ele
@@ -48,6 +82,9 @@ def get_mcEventnumber(filename):
     htemp=ftemp.Get('nEventsGenWeighted')
     nevent_temp=nevent_temp+htemp.GetBinContent(1)
   return nevent_temp
+
+# Trigger are updated as per 
+# https://github.com/ExtraYukawa/TriggerScaleFactor/blob/a864ff3cff31d2daa0257027b1e86078c8dd8d13/Trigger_SF/GenTriggers.py
 
 def all_trigger(df, year="2017"):
   if year == "2016APV":
@@ -271,38 +308,6 @@ Nevents['QCD_350'] = 34080630.
 '''
 
 ######################################################
-xsec = {}
-
-xsec['DY'] = 6077.22
-xsec['osWW'] = 11.09
-xsec['ssWW'] = 0.04932
-xsec['WWdps'] = 1.62
-xsec['WZew'] = 0.0163
-xsec['WZqcd'] = 5.213
-xsec['ZZ'] = 0.0086 
-xsec['ZG'] = 0.1097 
-xsec['WWW'] = 0.2086 
-xsec['WWZ'] = 0.1707 
-xsec['WZZ'] = 0.05709 
-xsec['ZZZ'] = 0.01476 
-xsec['TTTo2L'] = 88.3419
-xsec['TTH'] = 0.213
-xsec['TTTT'] = 0.008213 
-xsec['TTTW'] = 0.0007314 
-xsec['TTTJ'] = 0.0003974 
-xsec['TTG'] = 3.757
-xsec['TTWH'] = 0.001141 
-xsec['TTZH'] = 0.00113
-xsec['TTWtoLNu'] = 0.1792
-xsec['TTWtoQQ'] = 0.3708
-xsec['TTZ'] = 0.2589
-xsec['TTZtoQQ'] = 0.6012
-xsec['TTWW'] = 0.007003
-xsec['TTWZ'] = 0.002453
-xsec['TTZZ'] = 0.001386
-xsec['tZq'] = 0.07561
-xsec['tW'] = 35.85
-xsec['tbarW'] = 35.85
 
 '''
 xsec['WJets'] = 6077.22
