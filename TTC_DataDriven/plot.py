@@ -46,7 +46,7 @@ def draw_plots(opts, hist_array =[], draw_data=0, x_name='', isem=0):
 	fileout = ROOT.TFile(opts.saveDir+'/'+x_name+'.root', 'RECREATE')
 	fileout.cd()
 	for i in range(0,len(hist_array)):
-		hist_array[i].Write()
+		hist_array[i].Write() #try to rename while save
 	fileout.Close()
 
         if opts.era == "2016APV":
@@ -61,6 +61,9 @@ def draw_plots(opts, hist_array =[], draw_data=0, x_name='', isem=0):
         elif opts.era == "2018":
                 print ("year: 2018")
                 lumi=59830
+        elif opts.era == "2016merged":
+                print ("year: 2016")
+                lumi=1.
         else:
                 raise Exception ("select correct era!")
         # lumi=41480.
