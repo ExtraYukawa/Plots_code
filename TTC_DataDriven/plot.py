@@ -48,10 +48,11 @@ def draw_plots(opts, hist_array =[], draw_data=0, x_name='', isem=0):
 	for i in range(0,len(hist_array)):
 		hist_array[i].Write() #try to rename while save
 	fileout.Close()
-
+        
+        # https://twiki.cern.ch/twiki/bin/viewauth/CMS/TopSystematics#Luminosity
         if opts.era == "2016APV":
                 print ("year: 2016 APV")
-                lumi=19500. 
+                lumi=19520. 
         elif opts.era == "2016postAPV":
                 print ("year: 2016 postAPV")
                 lumi=16810.
