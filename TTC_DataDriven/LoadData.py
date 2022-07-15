@@ -6,36 +6,36 @@ lumi = 1.0
 
 xsec = {}
 
-xsec['DY'] = 6077.22
-xsec['osWW'] = 11.09
-xsec['ssWW'] = 0.04932
-xsec['WWdps'] = 1.62
-xsec['WZew'] = 0.0163
-xsec['WZqcd'] = 5.213
-xsec['ZZ'] = 0.0086 
-xsec['ZG'] = 0.1097 
-xsec['WWW'] = 0.2086 
-xsec['WWZ'] = 0.1707 
-xsec['WZZ'] = 0.05709 
-xsec['ZZZ'] = 0.01476 
+xsec['DY']     = 6077.22
+xsec['osWW']   = 11.09
+xsec['ssWW']   = 0.04932
+xsec['WWdps']  = 1.62
+xsec['WZew']   = 0.0163
+xsec['WZqcd']  = 5.213
+xsec['ZZ']     = 0.0086 
+xsec['ZG']     = 0.1097 
+xsec['WWW']    = 0.2086 
+xsec['WWZ']    = 0.1707 
+xsec['WZZ']    = 0.05709 
+xsec['ZZZ']    = 0.01476 
 xsec['TTTo2L'] = 88.3419
-xsec['TTH'] = 0.213 #https://twiki.cern.ch/twiki/bin/viewauth/CMS/SummaryTable1G25ns#HTT
-xsec['TTTT'] = 0.008213 
-xsec['TTTW'] = 0.0007314 
-xsec['TTTJ'] = 0.0003974 
-xsec['TTG'] = 3.757
-xsec['TTWH'] = 0.001141 
-xsec['TTZH'] = 0.00113
+xsec['TTH']    = 0.213 #https://twiki.cern.ch/twiki/bin/viewauth/CMS/SummaryTable1G25ns#HTT
+xsec['TTTT']   = 0.008213 
+xsec['TTTW']   = 0.0007314 
+xsec['TTTJ']   = 0.0003974 
+xsec['TTG']    = 3.757
+xsec['TTWH']   = 0.001141 
+xsec['TTZH']   = 0.00113
 xsec['TTWtoLNu'] = 0.1792
 xsec['TTWtoQQ'] = 0.3708
-xsec['TTZ'] = 0.2589
+xsec['TTZ']    = 0.2589
 xsec['TTZtoQQ'] = 0.6012
-xsec['TTWW'] = 0.007003
-xsec['TTWZ'] = 0.002453
-xsec['TTZZ'] = 0.001386
-xsec['tZq'] = 0.07561
-xsec['tW'] = 35.85
-xsec['tbarW'] = 35.85
+xsec['TTWW']   = 0.007003
+xsec['TTWZ']   = 0.002453
+xsec['TTZZ']   = 0.001386
+xsec['tZq']    = 0.07561
+xsec['tW']     = 35.85
+xsec['tbarW']  = 35.85
 
 
 def selections(analtype="ee"):
@@ -277,25 +277,6 @@ Nevents['DiphotonBox_Pt_250toInf']     = 500352.0
 Nevents['DiphotonBox_Pt_25to250'] = 500050.0
 
 
-Nevents['PJets_15to30']     = 1970745.0
-Nevents['PJets_30to50']     = 1993325.0
-Nevents['PJets_50to80']     = 1995062.0
-Nevents['PJets_80to120']    = 1992627.0
-Nevents['PJets_120to170']   = 2000043.0
-Nevents['PJets_170to300']   = 2000069.0
-Nevents['PJets_300to470']   = 2000130.0
-Nevents['PJets_470to800']   = 1975231.0
-Nevents['PJets_800to1400']  = 1973504.0
-Nevents['PJets_1400to1800'] = 1984890.0
-Nevents['PJets_1800']       = 1939122.0
-
-
-Nevents['DiPhotonJets']     = 1156284.0
-Nevents['W2lnuEl']      = 4883504.0
-Nevents['WtoLNuTau']     = 5000722.0
-Nevents['WtoLNuMu']      = 4769214.0
-Nevents['QCD_20to30']   = 35040638.0
-Nevents['QCD_30to80']   = 33088822.0
 
 #forgot to run on a file
 Nevents['QCD_80to170']  = 22639900#34542672.0
