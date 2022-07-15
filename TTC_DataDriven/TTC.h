@@ -9,6 +9,34 @@
 using namespace ROOT::VecOps;
 using rvec_f = const RVec<float> &;
 
+// CFlip input for 2016APV
+TFile*f_chargeflip_2016APV=TFile::Open("data/ChargeFlipSFs/ChargeFlipProbability_2016apv_MLE.root");
+TH2D*Prob_data_2016APV=(TH2D*)f_chargeflip_2016APV->Get("data_CFRate");
+TH2D*Prob_mc_2016APV=(TH2D*)f_chargeflip_2016APV->Get("MC_CFRate");
+TH1D*Chaflip_unc_2016APV=(TH1D*)f_chargeflip_2016APV->Get("overall_sys");
+float Chaflip_unc_num_2016APV=Chaflip_unc_2016APV->GetBinContent(1);
+
+// CFlip input for 2016postAPV
+TFile*f_chargeflip_2016postAPV=TFile::Open("data/ChargeFlipSFs/ChargeFlipProbability_2016postapv_MLE.root");
+TH2D*Prob_data_2016postAPV=(TH2D*)f_chargeflip_2016postAPV->Get("data_CFRate");
+TH2D*Prob_mc_2016postAPV=(TH2D*)f_chargeflip_2016postAPV->Get("MC_CFRate");
+TH1D*Chaflip_unc_2016postAPV=(TH1D*)f_chargeflip_2016postAPV->Get("overall_sys");
+float Chaflip_unc_num_2016postAPV=Chaflip_unc_2016postAPV->GetBinContent(1);
+
+// CFlip input for 2017
+TFile*f_chargeflip=TFile::Open("data/ChargeFlipSFs/ChargeFlipProbability_2017_MLE.root");
+TH2D*Prob_data=(TH2D*)f_chargeflip->Get("data_CFRate");
+TH2D*Prob_mc=(TH2D*)f_chargeflip->Get("MC_CFRate");
+TH1D*Chaflip_unc=(TH1D*)f_chargeflip->Get("overall_sys");
+float Chaflip_unc_num=Chaflip_unc->GetBinContent(1);
+
+// CFlip input for 2018
+TFile*f_chargeflip_2018=TFile::Open("data/ChargeFlipSFs/ChargeFlipProbability_2018_MLE.root");
+TH2D*Prob_data_2018=(TH2D*)f_chargeflip_2018->Get("data_CFRate");
+TH2D*Prob_mc_2018=(TH2D*)f_chargeflip_2018->Get("MC_CFRate");
+TH1D*Chaflip_unc_2018=(TH1D*)f_chargeflip_2018->Get("overall_sys");
+float Chaflip_unc_num_2018=Chaflip_unc_2018->GetBinContent(1);
+
 // 2016APV TriggerSF
 TFile*f_2016APV=TFile::Open("data/TriggerSF/TriggerSF_2016apvUL.root");
 TH2D*h1_ee_2016APV=(TH2D*)f_2016APV->Get("h2D_SF_ee_SF_l1pteta");
@@ -762,3 +790,103 @@ float fakelepweight_ee_2016postAPV(bool ttc_1P1F, bool ttc_0P2F, bool ttc_lep1_f
 
 }
 
+float chargeflip_SF_2016APV(float lep1_pt, float lep1_eta, float lep2_pt, float lep2_eta, int channel, int iw){
+  float sf=1.;
+  if(lep1_pt>300.) lep1_pt=200.;
+  if(lep2_pt>300.) lep2_pt=200.;
+  if(abs(lep1_eta)>2.5) lep1_eta=2.0;
+  if(abs(lep2_eta)>2.5) lep2_eta=2.0;
+  if(channel==3){
+    float prob1_data=Prob_data_2016APV->GetBinContent(Prob_data_2016APV->FindBin(lep1_pt,abs(lep1_eta)));
+    float prob2_data=Prob_data_2016APV->GetBinContent(Prob_data_2016APV->FindBin(lep2_pt,abs(lep2_eta)));
+    float prob1_mc=Prob_mc_2016APV->GetBinContent(Prob_mc_2016APV->FindBin(lep1_pt,abs(lep1_eta)));
+    float prob2_mc=Prob_mc_2016APV->GetBinContent(Prob_mc_2016APV->FindBin(lep2_pt,abs(lep2_eta)));
+    // computing sf from probability:
+    sf=(prob1_data+prob2_data-2*prob1_data*prob2_data)/(prob1_mc+prob2_mc-2*prob1_mc*prob2_mc);
+    //std::cout << "sf: " << sf << std::endl;
+    if(iw==0) return sf;
+    if(iw==1) return (sf+Chaflip_unc_num_2016APV);
+    if(iw==2) return (sf-Chaflip_unc_num_2016APV);
+  }
+  else {
+    sf = 1.0;
+  }
+  //std::cout << "sf: " << sf << std::endl;
+  return sf;
+}
+
+float chargeflip_SF_2016postAPV(float lep1_pt, float lep1_eta, float lep2_pt, float lep2_eta, int channel, int iw){
+  float sf=1.;
+  if(lep1_pt>300.) lep1_pt=200.;
+  if(lep2_pt>300.) lep2_pt=200.;
+  if(abs(lep1_eta)>2.5) lep1_eta=2.0;
+  if(abs(lep2_eta)>2.5) lep2_eta=2.0;
+  if(channel==3){
+    float prob1_data=Prob_data_2016postAPV->GetBinContent(Prob_data_2016postAPV->FindBin(lep1_pt,abs(lep1_eta)));
+    float prob2_data=Prob_data_2016postAPV->GetBinContent(Prob_data_2016postAPV->FindBin(lep2_pt,abs(lep2_eta)));
+    float prob1_mc=Prob_mc_2016postAPV->GetBinContent(Prob_mc_2016postAPV->FindBin(lep1_pt,abs(lep1_eta)));
+    float prob2_mc=Prob_mc_2016postAPV->GetBinContent(Prob_mc_2016postAPV->FindBin(lep2_pt,abs(lep2_eta)));
+    // computing sf from probability:
+    sf=(prob1_data+prob2_data-2*prob1_data*prob2_data)/(prob1_mc+prob2_mc-2*prob1_mc*prob2_mc);
+    //std::cout << "sf: " << sf << std::endl;
+    if(iw==0) return sf;
+    if(iw==1) return (sf+Chaflip_unc_num_2016postAPV);
+    if(iw==2) return (sf-Chaflip_unc_num_2016postAPV);
+  }
+  else {
+    sf = 1.0;
+  }
+  //std::cout << "sf: " << sf << std::endl;
+  return sf;
+}
+
+
+float chargeflip_SF_2017(float lep1_pt, float lep1_eta, float lep2_pt, float lep2_eta, int channel, int iw){
+  float sf=1.;
+  if(lep1_pt>300.) lep1_pt=200.;
+  if(lep2_pt>300.) lep2_pt=200.;
+  if(abs(lep1_eta)>2.5) lep1_eta=2.0;
+  if(abs(lep2_eta)>2.5) lep2_eta=2.0;
+  if(channel==3){
+    float prob1_data=Prob_data->GetBinContent(Prob_data->FindBin(lep1_pt,abs(lep1_eta)));
+    float prob2_data=Prob_data->GetBinContent(Prob_data->FindBin(lep2_pt,abs(lep2_eta)));
+    float prob1_mc=Prob_mc->GetBinContent(Prob_mc->FindBin(lep1_pt,abs(lep1_eta)));
+    float prob2_mc=Prob_mc->GetBinContent(Prob_mc->FindBin(lep2_pt,abs(lep2_eta)));
+    // computing sf from probability:
+    sf=(prob1_data+prob2_data-2*prob1_data*prob2_data)/(prob1_mc+prob2_mc-2*prob1_mc*prob2_mc);
+    // std::cout << "sf: " << sf << std::endl;
+    if(iw==0) return sf;
+    if(iw==1) return (sf+Chaflip_unc_num);
+    if(iw==2) return (sf-Chaflip_unc_num);
+  }
+  else {
+    sf = 1.0;
+  }
+  // std::cout << "sf: " << sf << std::endl;
+  return sf;
+}
+
+float chargeflip_SF_2018(float lep1_pt, float lep1_eta, float lep2_pt, float lep2_eta, int channel, int iw){
+  float sf=1.;
+  if(lep1_pt>300.) lep1_pt=200.;
+  if(lep2_pt>300.) lep2_pt=200.;
+  if(abs(lep1_eta)>2.5) lep1_eta=2.0;
+  if(abs(lep2_eta)>2.5) lep2_eta=2.0;
+  if(channel==3){
+    float prob1_data=Prob_data_2018->GetBinContent(Prob_data_2018->FindBin(lep1_pt,abs(lep1_eta)));
+    float prob2_data=Prob_data_2018->GetBinContent(Prob_data_2018->FindBin(lep2_pt,abs(lep2_eta)));
+    float prob1_mc=Prob_mc_2018->GetBinContent(Prob_mc_2018->FindBin(lep1_pt,abs(lep1_eta)));
+    float prob2_mc=Prob_mc_2018->GetBinContent(Prob_mc_2018->FindBin(lep2_pt,abs(lep2_eta)));
+    // computing sf from probability:
+    sf=(prob1_data+prob2_data-2*prob1_data*prob2_data)/(prob1_mc+prob2_mc-2*prob1_mc*prob2_mc);
+    //std::cout << "sf: " << sf << std::endl;
+    if(iw==0) return sf;
+    if(iw==1) return (sf+Chaflip_unc_num_2018);
+    if(iw==2) return (sf-Chaflip_unc_num_2018);
+  }
+  else {
+    sf = 1.0;
+  }
+  //std::cout << "sf: " << sf << std::endl;
+  return sf;
+}

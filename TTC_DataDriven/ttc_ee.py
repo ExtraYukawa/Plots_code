@@ -51,6 +51,8 @@ def histos_book(flist, filters, variables, isData = "False", isFake = "False"):
 
   if not isData:
     df_xyz_tree = df_xyz_tree.Define("trigger_SF","trigger_sf_ee_"+opts.era+"(ttc_l1_pt,ttc_l2_pt,ttc_l1_eta,ttc_l2_eta)")
+    df_xyz_tree = df_xyz_tree.Define("CFlip_SF","chargeflip_SF_"+opts.era+"(ttc_l1_pt,ttc_l1_eta,ttc_l2_pt,ttc_l2_eta, "+str(3)+", "+str(0)+")") 
+    
     # check if the events are fake or not
     if isFake:
       df_xyz_tree = df_xyz_tree.Define("fakelep_weight","fakelepweight_ee_"+opts.era+"(ttc_1P1F,ttc_0P2F,ttc_lep1_faketag,electron_conePt[ttc_l1_id],ttc_l1_eta,electron_conePt[ttc_l2_id],ttc_l2_eta, "+str(isData).lower()+")")
@@ -60,9 +62,9 @@ def histos_book(flist, filters, variables, isData = "False", isFake = "False"):
         df_xyz_tree = df_xyz_tree.Define("genweight","puWeight*fakelep_weight*genWeight/abs(genWeight)")
     else:
       if opts.era == "2017":
-        df_xyz_tree = df_xyz_tree.Define("genweight","puWeight*PrefireWeight*trigger_SF*Electron_RECO_SF[ttc_l1_id]*Electron_RECO_SF[ttc_l2_id]*genWeight/abs(genWeight)")
+        df_xyz_tree = df_xyz_tree.Define("genweight","puWeight*PrefireWeight*trigger_SF*CFlip_SF*Electron_RECO_SF[ttc_l1_id]*Electron_RECO_SF[ttc_l2_id]*genWeight/abs(genWeight)")
       else:
-        df_xyz_tree = df_xyz_tree.Define("genweight","puWeight*trigger_SF*Electron_RECO_SF[ttc_l1_id]*Electron_RECO_SF[ttc_l2_id]*genWeight/abs(genWeight)")
+        df_xyz_tree = df_xyz_tree.Define("genweight","puWeight*trigger_SF*CFlip_SF*Electron_RECO_SF[ttc_l1_id]*Electron_RECO_SF[ttc_l2_id]*genWeight/abs(genWeight)")
   else:
     if isFake:
       df_xyz_tree = df_xyz_tree.Define("fakelep_weight","fakelepweight_ee_"+opts.era+"(ttc_1P1F,ttc_0P2F,ttc_lep1_faketag,electron_conePt[ttc_l1_id],ttc_l1_eta,electron_conePt[ttc_l2_id],ttc_l2_eta, "+str(isData).lower()+")")
@@ -115,7 +117,7 @@ doubleEle_names = get_filelist(path, ["DoubleEGB.root","DoubleEGC.root","DoubleE
 egamma_names = get_filelist(path, ["EGammaA.root","EGammaB.root","EGammaC.root","EGammaD_0.root","EGammaD_1.root"])
 
 # MC Location 
-DY_list = get_filelist(path, ['DY.root'])
+DY_list = get_filelist(path, ['DYnlo.root']) #after discussion with Meng on 14Jul2022
 osWW_list = get_filelist(path, ['osWW.root'])
 ssWW_list = get_filelist(path, ['ssWW.root'])
 WWdps_list = get_filelist(path, ['WWdps.root'])
@@ -162,12 +164,14 @@ def TTC_Analysis(opts):
   print ("filters_data:      ", filters_data)
   print ("filters_data_fake: ", filters_data_fake)
 
+  
   ##############
   ## DY samples
   ##############
   df_DY_histos = histos_book(DY_list, filters_mc, variables, False, False) #isData, isFake
   df_Fake_DY_histos = histos_book(DY_list, filters_mc_fake, variables, False, True) #isData, isFake
   print ("DY both genuine and fake histo loading complete!")
+  # print ("df_DY_histos[0] integral", df_DY_histos[0].Integral())
   # print ("df_Fake_DY_histos[0] integral", df_Fake_DY_histos[0].Integral())
   # sys.exit(1)
   
@@ -385,7 +389,6 @@ def TTC_Analysis(opts):
   df_TTTo2L_histos = histos_book(TTTo2L_list, filters_mc, variables, False, False) #isData, isFake 
   df_Fake_TTTo2L_histos = histos_book(TTTo2L_list, filters_mc_fake, variables, False, True) #isData, isFake
   print ("TTTo2L both genuine and fake histo loading complete!")
-
   
   ##############
   ## DoubleEle samples
@@ -400,7 +403,8 @@ def TTC_Analysis(opts):
     df_FakeLep_DoubleEle_histos = histos_book(egamma_names, filters_data_fake, variables, True, True) #isData, isFake, what is data fake?
     print ("Egamma both genuine and fake histo loading complete!")
 
-
+  # print ("df_FakeLep_DoubleEle_histos[0] integral: ", df_FakeLep_DoubleEle_histos[0].Integral())
+  
   ##############
   ## SingleEle samples
   ##############
@@ -420,7 +424,8 @@ def TTC_Analysis(opts):
       h2.Reset()
       df_FakeLep_SingleEle_histos.append(h2.Clone())
 
-
+  # print ("df_FakeLep_SingleEle_histos[0] integral: ", df_FakeLep_SingleEle_histos[0].Integral())
+  
   # Loop over histograms  
   for ij in range(0,len(variables)):
   
