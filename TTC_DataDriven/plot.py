@@ -151,8 +151,8 @@ def draw_plots(opts, hist_array =[], draw_data=0, x_name='', isem=0):
 	FakeLep_mc.Add(hist_array[59])
 	FakeLep_mc.Scale(lumi)
 
-	FakeLep = hist_array[60].Clone()
-	FakeLep.Add(hist_array[61])
+	FakeLep = hist_array[60].Clone() #this is data-fake
+	FakeLep.Add(hist_array[61])      #this is data-fake
 	if isem==1:
 		FakeLep.Add(hist_array[64])#if emu channel
 	FakeLep.Add(FakeLep_mc.Clone())
