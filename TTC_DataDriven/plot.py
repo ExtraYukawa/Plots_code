@@ -34,7 +34,7 @@ def set_axis(the_histo, coordinate, title, is_energy):
 	else:
 		axis.SetTitle(title) 
 
-def draw_plots(opts, hist_array =[], draw_data=0, x_name='', isem=0):
+def draw_plots(opts, hist_array =[], x_name='', isem=0):
         # save all output inside a directory
         if opts.saveDir == None:
                 opts.saveDir = datetime.datetime.now().strftime("%d%b%YT%H%M")
@@ -162,7 +162,7 @@ def draw_plots(opts, hist_array =[], draw_data=0, x_name='', isem=0):
 	Data.Add(hist_array[63])
 	if isem==1:
 		Data.Add(hist_array[65])#if emu channel
-	if not draw_data: Data.Reset('ICE')
+	if not opts.draw_data: Data.Reset('ICE')
 	Data.SetMarkerStyle(20)
 	Data.SetMarkerSize(0.85)
 	Data.SetMarkerColor(1)
