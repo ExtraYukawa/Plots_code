@@ -33,6 +33,9 @@ parser.add_argument("-s", "--saveFormats", dest="saveFormats", default = SAVEFOR
 parser.add_argument("--saveDir", dest="saveDir", default=SAVEDIR, 
                       help="Directory where all pltos will be saved [default: %s]" % SAVEDIR)
 
+parser.add_argument("-draw_data", "--draw_data", action="store_true", dest="draw_data", default=False,
+                    help="make it to True if you want to draw_data on MC stacks")
+
 opts = parser.parse_args()
 
 # the EnableImplicitMT option should only use in cluster, at lxplus, it will make the code slower(my experience)
@@ -648,7 +651,7 @@ def TTC_Analysis(opts):
     for i in range(0,64):
       histos[i]=overunder_flowbin(histos[i])
 
-    c1 = plot.draw_plots(opts, histos, 1, variables[ij], 0)
+    c1 = plot.draw_plots(opts, histos, variables[ij], 0)
     del histos[:]
  
 if __name__ == "__main__":
