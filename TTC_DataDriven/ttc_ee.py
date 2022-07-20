@@ -1,7 +1,9 @@
 #==============
 # Last used:
 # python ttc_ee.py --era 2017 --saveDir 2017_ee
+# python ttc_ee.py --era 2017 --saveDir 2017_ee --draw_data
 # python ttc_ee.py --era 2018 --saveDir 2018_ee
+# python ttc_ee.py --era 2018 --saveDir 2018_ee --draw_data
 #==============
 
 import ROOT
@@ -54,7 +56,12 @@ def histos_book(flist, filters, variables, isData = "False", isFake = "False"):
 
   if not isData:
     df_xyz_tree = df_xyz_tree.Define("trigger_SF","trigger_sf_ee_"+opts.era+"(ttc_l1_pt,ttc_l2_pt,ttc_l1_eta,ttc_l2_eta)")
-    df_xyz_tree = df_xyz_tree.Define("CFlip_SF","chargeflip_SF_"+opts.era+"(ttc_l1_pt,ttc_l1_eta,ttc_l2_pt,ttc_l2_eta, "+str(3)+", "+str(0)+")") 
+    if  "dy" in str(flist[0]).split('/')[-1].lower() or "ttto2l" in str(flist[0]).split('/')[-1].lower():
+      print ("input: ", str(flist[0]).split('/')[-1])
+      df_xyz_tree = df_xyz_tree.Define("CFlip_SF","chargeflip_SF_"+opts.era+"("+str(1)+", ttc_l1_pt, ttc_l1_eta, ttc_l1_phi, ttc_l2_pt, ttc_l2_eta, ttc_l2_phi, "+str(3)+", "+str(0)+", GenDressedLepton_eta, GenDressedLepton_phi, GenDressedLepton_pdgId)")
+    else:
+      print ("input: ", str(flist[0]).split('/')[-1])
+      df_xyz_tree = df_xyz_tree.Define("CFlip_SF","chargeflip_SF_"+opts.era+"("+str(0)+", ttc_l1_pt, ttc_l1_eta, ttc_l1_phi, ttc_l2_pt, ttc_l2_eta, ttc_l2_phi, "+str(3)+", "+str(0)+", GenDressedLepton_eta, GenDressedLepton_phi, GenDressedLepton_pdgId)")
     
     # check if the events are fake or not
     if isFake:
@@ -167,7 +174,6 @@ def TTC_Analysis(opts):
   print ("filters_data:      ", filters_data)
   print ("filters_data_fake: ", filters_data_fake)
 
-  
   ##############
   ## DY samples
   ##############
