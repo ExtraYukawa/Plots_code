@@ -30,6 +30,9 @@ parser.add_argument("-s", "--saveFormats", dest="saveFormats", default = SAVEFOR
 parser.add_argument("--saveDir", dest="saveDir", default=SAVEDIR, 
                       help="Directory where all pltos will be saved [default: %s]" % SAVEDIR)
 
+parser.add_argument("-draw_data", "--draw_data", action="store_true", dest="draw_data", default=False,
+                    help="make it to True if you want to draw_data on MC stacks")
+
 opts = parser.parse_args()
 
 TTC_header_path = os.path.join("TTC.h")
@@ -51,12 +54,20 @@ def histos_book(flist, filters, variables, isData = "False", isFake = "False"):
   # print ("test: ", str(isData).lower())
   if not isData:
     df_xyz_tree = df_xyz_tree.Define("trigger_SF","trigger_sf_ee_"+opts.era+"(ttc_l1_pt,ttc_l2_pt,ttc_l1_eta,ttc_l2_eta)")
+    # CFlip Study
+    if  "dy" in str(flist[0]).split('/')[-1].lower() or "ttto2l" in str(flist[0]).split('/')[-1].lower():
+      print (" for (DY and TTTo2L) input: ", str(flist[0]).split('/')[-1])
+      df_xyz_tree = df_xyz_tree.Define("CFlip_SF","chargeflip_SF_"+opts.era+"("+str(1)+", ttc_l1_pt, ttc_l1_eta, ttc_l1_phi, ttc_l2_pt, ttc_l2_eta, ttc_l2_phi, "+str(3)+", "+str(0)+", GenDressedLepton_eta, GenDressedLepton_phi, GenDressedLepton_pdgId)")
+    else:
+      print ("input: ", str(flist[0]).split('/')[-1])
+      df_xyz_tree = df_xyz_tree.Define("CFlip_SF","chargeflip_SF_"+opts.era+"("+str(0)+", ttc_l1_pt, ttc_l1_eta, ttc_l1_phi, ttc_l2_pt, ttc_l2_eta, ttc_l2_phi, "+str(3)+", "+str(0)+", GenDressedLepton_eta, GenDressedLepton_phi, GenDressedLepton_pdgId)")
+
     # check if the events are fake or not
     if isFake:
       df_xyz_tree = df_xyz_tree.Define("fakelep_weight","fakelepweight_ee_"+opts.era+"(ttc_1P1F,ttc_0P2F,ttc_lep1_faketag,electron_conePt[ttc_l1_id],ttc_l1_eta,electron_conePt[ttc_l2_id],ttc_l2_eta, "+str(isData).lower()+")")
-      df_xyz_tree = df_xyz_tree.Define("genweight","puWeight*PrefireWeight*fakelep_weight*genWeight/abs(genWeight)")
+      df_xyz_tree = df_xyz_tree.Define("genweight","puWeight*fakelep_weight*genWeight/abs(genWeight)")
     else:
-      df_xyz_tree = df_xyz_tree.Define("genweight","puWeight*PrefireWeight*trigger_SF*Electron_RECO_SF[ttc_l1_id]*Electron_RECO_SF[ttc_l2_id]*genWeight/abs(genWeight)")
+      df_xyz_tree = df_xyz_tree.Define("genweight","puWeight*trigger_SF*CFlip_SF*Electron_RECO_SF[ttc_l1_id]*Electron_RECO_SF[ttc_l2_id]*genWeight/abs(genWeight)")
   else:
     if isFake:
       df_xyz_tree = df_xyz_tree.Define("fakelep_weight","fakelepweight_ee_"+opts.era+"(ttc_1P1F,ttc_0P2F,ttc_lep1_faketag,electron_conePt[ttc_l1_id],ttc_l1_eta,electron_conePt[ttc_l2_id],ttc_l2_eta, "+str(isData).lower()+")")
@@ -655,7 +666,7 @@ def TTC_Analysis(opts):
     for i in range(0,64):
       histos[i]=overunder_flowbin(histos[i])
 
-    c1 = plot.draw_plots(opts, histos, 1, variables[ij], 0)
+    c1 = plot.draw_plots(opts, histos, variables[ij], 0)
     del histos[:]
  
 if __name__ == "__main__":
