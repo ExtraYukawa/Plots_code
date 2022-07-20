@@ -58,10 +58,10 @@ def draw_plots(opts, hist_array =[], x_name='', isem=0):
                 lumi=16810.
         elif opts.era == "2017":
                 print ("year: 2017")
-                lumi=41480
+                lumi=41480.
         elif opts.era == "2018":
                 print ("year: 2018")
-                lumi=59830
+                lumi=59830.
         elif opts.era == "2016merged":
                 print ("year: 2016")
                 lumi=1.
