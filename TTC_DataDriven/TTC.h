@@ -47,37 +47,49 @@ float Chaflip_unc_num_2018=Chaflip_unc_2018->GetBinContent(1);
 TFile*f_2016APV=TFile::Open("data/TriggerSF/TriggerSF_2016apvUL.root");
 TH2D*h1_ee_2016APV=(TH2D*)f_2016APV->Get("h2D_SF_ee_SF_l1pteta");
 TH2D*h2_ee_2016APV=(TH2D*)f_2016APV->Get("h2D_SF_ee_SF_l2pteta");
+TH2D*h3_ee_2016APV=(TH2D*)f_2016APV->Get("h2D_SF_ee_SF_l1l2pt");
 TH2D*h1_mm_2016APV=(TH2D*)f_2016APV->Get("h2D_SF_mumu_SF_l1pteta");
 TH2D*h2_mm_2016APV=(TH2D*)f_2016APV->Get("h2D_SF_mumu_SF_l2pteta");
+TH2D*h3_mm_2016APV=(TH2D*)f_2016APV->Get("h2D_SF_mumu_SF_l1l2pt");
 TH2D*h1_em_2016APV=(TH2D*)f_2016APV->Get("h2D_SF_emu_SF_l1pteta");
 TH2D*h2_em_2016APV=(TH2D*)f_2016APV->Get("h2D_SF_emu_SF_l2pteta");
+TH2D*h3_em_2016APV=(TH2D*)f_2016APV->Get("h2D_SF_emu_SF_l1l2pt");
 
 // 2016postAPV TriggerSF
 TFile*f_2016postAPV=TFile::Open("data/TriggerSF/TriggerSF_2016postapvUL.root");
 TH2D*h1_ee_2016postAPV=(TH2D*)f_2016postAPV->Get("h2D_SF_ee_SF_l1pteta");
 TH2D*h2_ee_2016postAPV=(TH2D*)f_2016postAPV->Get("h2D_SF_ee_SF_l2pteta");
+TH2D*h3_ee_2016postAPV=(TH2D*)f_2016postAPV->Get("h2D_SF_ee_SF_l1l2pt");
 TH2D*h1_mm_2016postAPV=(TH2D*)f_2016postAPV->Get("h2D_SF_mumu_SF_l1pteta");
 TH2D*h2_mm_2016postAPV=(TH2D*)f_2016postAPV->Get("h2D_SF_mumu_SF_l2pteta");
+TH2D*h3_mm_2016postAPV=(TH2D*)f_2016postAPV->Get("h2D_SF_mumu_SF_l1l2pt");
 TH2D*h1_em_2016postAPV=(TH2D*)f_2016postAPV->Get("h2D_SF_emu_SF_l1pteta");
 TH2D*h2_em_2016postAPV=(TH2D*)f_2016postAPV->Get("h2D_SF_emu_SF_l2pteta");
+TH2D*h3_em_2016postAPV=(TH2D*)f_2016postAPV->Get("h2D_SF_emu_SF_l1l2pt");
 
 // 2017 TriggerSF
 TFile*f=TFile::Open("data/TriggerSF/TriggerSF_2017UL.root");
 TH2D*h1_ee=(TH2D*)f->Get("h2D_SF_ee_SF_l1pteta");
 TH2D*h2_ee=(TH2D*)f->Get("h2D_SF_ee_SF_l2pteta");
+TH2D*h3_ee=(TH2D*)f->Get("h2D_SF_ee_SF_l1l2pt");
 TH2D*h1_mm=(TH2D*)f->Get("h2D_SF_mumu_SF_l1pteta");
 TH2D*h2_mm=(TH2D*)f->Get("h2D_SF_mumu_SF_l2pteta");
+TH2D*h3_mm=(TH2D*)f->Get("h2D_SF_mumu_SF_l1l2pt");
 TH2D*h1_em=(TH2D*)f->Get("h2D_SF_emu_SF_l1pteta");
 TH2D*h2_em=(TH2D*)f->Get("h2D_SF_emu_SF_l2pteta");
+TH2D*h3_em=(TH2D*)f->Get("h2D_SF_emu_SF_l1l2pt");
 
 // 2018 TriggerSF
 TFile*f_2018=TFile::Open("data/TriggerSF/TriggerSF_2018UL.root");
 TH2D*h1_ee_2018=(TH2D*)f_2018->Get("h2D_SF_ee_SF_l1pteta");
 TH2D*h2_ee_2018=(TH2D*)f_2018->Get("h2D_SF_ee_SF_l2pteta");
+TH2D*h3_ee_2018=(TH2D*)f_2018->Get("h2D_SF_ee_SF_l1l2pt");
 TH2D*h1_mm_2018=(TH2D*)f_2018->Get("h2D_SF_mumu_SF_l1pteta");
 TH2D*h2_mm_2018=(TH2D*)f_2018->Get("h2D_SF_mumu_SF_l2pteta");
+TH2D*h3_mm_2018=(TH2D*)f_2018->Get("h2D_SF_mumu_SF_l1l2pt");
 TH2D*h1_em_2018=(TH2D*)f_2018->Get("h2D_SF_emu_SF_l1pteta");
 TH2D*h2_em_2018=(TH2D*)f_2018->Get("h2D_SF_emu_SF_l2pteta");
+TH2D*h3_em_2018=(TH2D*)f_2018->Get("h2D_SF_emu_SF_l1l2pt");
 
 // 2016APV Fakerare
 TFile*f_m_2016APV=TFile::Open("data/fr_data_mu_2016APV.root"); 
@@ -104,100 +116,76 @@ TH2D*h_m_2018=(TH2D*)f_m_2018->Get("fakerate");
 TH2D*h_e_2018=(TH2D*)f_e_2018->Get("fakerate");
 
 
-float trigger_sf_ee_2016postAPV(float l1_pt, float l2_pt, float l1_eta, float l2_eta){
-	if(l1_pt>200) l1_pt=199;
-	if(l2_pt>200) l2_pt=199;
-	float sf_l1=h1_ee_2016postAPV->GetBinContent(h1_ee_2016postAPV->FindBin(l1_pt,fabs(l1_eta)));
-	float sf_l2=h2_ee_2016postAPV->GetBinContent(h2_ee_2016postAPV->FindBin(l2_pt,fabs(l2_eta)));
-	return sf_l1*sf_l2;
+float trigger_sf_ee_2016postAPV(float l1_pt, float l2_pt){
+  if(l1_pt>200) l1_pt=199;
+  if(l2_pt>200) l2_pt=199;
+  return h3_ee_2016postAPV->GetBinContent(h3_ee_2016postAPV->FindBin(l1_pt,l2_pt));
 }
 
-float trigger_sf_ee_2016APV(float l1_pt, float l2_pt, float l1_eta, float l2_eta){
-	if(l1_pt>200) l1_pt=199;
-	if(l2_pt>200) l2_pt=199;
-	float sf_l1=h1_ee_2016APV->GetBinContent(h1_ee_2016APV->FindBin(l1_pt,fabs(l1_eta)));
-	float sf_l2=h2_ee_2016APV->GetBinContent(h2_ee_2016APV->FindBin(l2_pt,fabs(l2_eta)));
-	return sf_l1*sf_l2;
+float trigger_sf_ee_2016APV(float l1_pt, float l2_pt){
+  if(l1_pt>200) l1_pt=199;
+  if(l2_pt>200) l2_pt=199;
+  return h3_ee_2016APV->GetBinContent(h3_ee_2016APV->FindBin(l1_pt,l2_pt));
 }
 
-float trigger_sf_ee_2017(float l1_pt, float l2_pt, float l1_eta, float l2_eta){
-	if(l1_pt>200) l1_pt=199;
-	if(l2_pt>200) l2_pt=199;
-	float sf_l1=h1_ee->GetBinContent(h1_ee->FindBin(l1_pt,fabs(l1_eta)));
-	float sf_l2=h2_ee->GetBinContent(h2_ee->FindBin(l2_pt,fabs(l2_eta)));
-	return sf_l1*sf_l2;
+float trigger_sf_ee_2017(float l1_pt, float l2_pt){
+  if(l1_pt>200) l1_pt=199;
+  if(l2_pt>200) l2_pt=199;
+  return h3_ee->GetBinContent(h3_ee->FindBin(l1_pt,l2_pt));
 }
 
-float trigger_sf_ee_2018(float l1_pt, float l2_pt, float l1_eta, float l2_eta){
-	if(l1_pt>200) l1_pt=199;
-	if(l2_pt>200) l2_pt=199;
-	float sf_l1=h1_ee_2018->GetBinContent(h1_ee_2018->FindBin(l1_pt,fabs(l1_eta)));
-	float sf_l2=h2_ee_2018->GetBinContent(h2_ee_2018->FindBin(l2_pt,fabs(l2_eta)));
-	return sf_l1*sf_l2;
+float trigger_sf_ee_2018(float l1_pt, float l2_pt){
+  if(l1_pt>200) l1_pt=199;
+  if(l2_pt>200) l2_pt=199;
+  return h3_ee_2018->GetBinContent(h3_ee_2018->FindBin(l1_pt,l2_pt));
 }
 
-float trigger_sf_mm_2016APV(float l1_pt, float l2_pt, float l1_eta, float l2_eta){
-	if(l1_pt>200) l1_pt=199;
-	if(l2_pt>200) l2_pt=199;
-	float sf_l1=h1_mm_2016APV->GetBinContent(h1_mm_2016APV->FindBin(l1_pt,fabs(l1_eta)));
-	float sf_l2=h2_mm_2016APV->GetBinContent(h2_mm_2016APV->FindBin(l2_pt,fabs(l2_eta)));
-	return sf_l1*sf_l2;
+float trigger_sf_mm_2016APV(float l1_pt, float l2_pt){
+  if(l1_pt>200) l1_pt=199;
+  if(l2_pt>200) l2_pt=199;
+  return h3_mm_2016APV->GetBinContent(h3_mm_2016APV->FindBin(l1_pt,l2_pt));
 }
 
-float trigger_sf_mm_2016postAPV(float l1_pt, float l2_pt, float l1_eta, float l2_eta){
-	if(l1_pt>200) l1_pt=199;
-	if(l2_pt>200) l2_pt=199;
-	float sf_l1=h1_mm_2016postAPV->GetBinContent(h1_mm_2016postAPV->FindBin(l1_pt,fabs(l1_eta)));
-	float sf_l2=h2_mm_2016postAPV->GetBinContent(h2_mm_2016postAPV->FindBin(l2_pt,fabs(l2_eta)));
-	return sf_l1*sf_l2;
+float trigger_sf_mm_2016postAPV(float l1_pt, float l2_pt){
+  if(l1_pt>200) l1_pt=199;
+  if(l2_pt>200) l2_pt=199;
+  return h3_mm_2016postAPV->GetBinContent(h3_mm_2016postAPV->FindBin(l1_pt,l2_pt));
 }
 
-float trigger_sf_mm_2017(float l1_pt, float l2_pt, float l1_eta, float l2_eta){
-	if(l1_pt>200) l1_pt=199;
-	if(l2_pt>200) l2_pt=199;
-	float sf_l1=h1_mm->GetBinContent(h1_mm->FindBin(l1_pt,fabs(l1_eta)));
-	float sf_l2=h2_mm->GetBinContent(h2_mm->FindBin(l2_pt,fabs(l2_eta)));
-	return sf_l1*sf_l2;
+float trigger_sf_mm_2017(float l1_pt, float l2_pt){
+  if(l1_pt>200) l1_pt=199;
+  if(l2_pt>200) l2_pt=199;
+  return h3_mm->GetBinContent(h3_mm->FindBin(l1_pt,l2_pt));
 }
 
-float trigger_sf_mm_2018(float l1_pt, float l2_pt, float l1_eta, float l2_eta){
-	if(l1_pt>200) l1_pt=199;
-	if(l2_pt>200) l2_pt=199;
-	float sf_l1=h1_mm_2018->GetBinContent(h1_mm_2018->FindBin(l1_pt,fabs(l1_eta)));
-	float sf_l2=h2_mm_2018->GetBinContent(h2_mm_2018->FindBin(l2_pt,fabs(l2_eta)));
-	return sf_l1*sf_l2;
+float trigger_sf_mm_2018(float l1_pt, float l2_pt){
+  if(l1_pt>200) l1_pt=199;
+  if(l2_pt>200) l2_pt=199;
+  return h3_mm_2018->GetBinContent(h3_mm_2018->FindBin(l1_pt,l2_pt));
 }
 
-float trigger_sf_em_2016APV(float l1_pt, float l2_pt, float l1_eta, float l2_eta){
-	if(l1_pt>200) l1_pt=199;
-	if(l2_pt>200) l2_pt=199;
-	float sf_l1=h1_em_2016APV->GetBinContent(h1_em_2016APV->FindBin(l1_pt,fabs(l1_eta)));
-	float sf_l2=h2_em_2016APV->GetBinContent(h2_em_2016APV->FindBin(l2_pt,fabs(l2_eta)));
-	return sf_l1*sf_l2;
+float trigger_sf_em_2016APV(float l1_pt, float l2_pt){
+  if(l1_pt>200) l1_pt=199;
+  if(l2_pt>200) l2_pt=199;
+  return h3_em_2016APV->GetBinContent(h3_em_2016APV->FindBin(l1_pt,l2_pt));
 }
 
-float trigger_sf_em_2016postAPV(float l1_pt, float l2_pt, float l1_eta, float l2_eta){
-	if(l1_pt>200) l1_pt=199;
-	if(l2_pt>200) l2_pt=199;
-	float sf_l1=h1_em_2016postAPV->GetBinContent(h1_em_2016postAPV->FindBin(l1_pt,fabs(l1_eta)));
-	float sf_l2=h2_em_2016postAPV->GetBinContent(h2_em_2016postAPV->FindBin(l2_pt,fabs(l2_eta)));
-	return sf_l1*sf_l2;
+float trigger_sf_em_2016postAPV(float l1_pt, float l2_pt){
+  if(l1_pt>200) l1_pt=199;
+  if(l2_pt>200) l2_pt=199;
+  return h3_em_2016postAPV->GetBinContent(h3_em_2016postAPV->FindBin(l1_pt,l2_pt));
 }
 
-float trigger_sf_em_2017(float l1_pt, float l2_pt, float l1_eta, float l2_eta){
-	if(l1_pt>200) l1_pt=199;
-	if(l2_pt>200) l2_pt=199;
-	float sf_l1=h1_em->GetBinContent(h1_em->FindBin(l1_pt,fabs(l1_eta)));
-	float sf_l2=h2_em->GetBinContent(h2_em->FindBin(l2_pt,fabs(l2_eta)));
-	return sf_l1*sf_l2;
+float trigger_sf_em_2017(float l1_pt, float l2_pt){
+  if(l1_pt>200) l1_pt=199;
+  if(l2_pt>200) l2_pt=199;
+  return h3_em->GetBinContent(h3_em->FindBin(l1_pt,l2_pt));
 }
 
-float trigger_sf_em_2018(float l1_pt, float l2_pt, float l1_eta, float l2_eta){
-	if(l1_pt>200) l1_pt=199;
-	if(l2_pt>200) l2_pt=199;
-	float sf_l1=h1_em_2018->GetBinContent(h1_em_2018->FindBin(l1_pt,fabs(l1_eta)));
-	float sf_l2=h2_em_2018->GetBinContent(h2_em_2018->FindBin(l2_pt,fabs(l2_eta)));
-	return sf_l1*sf_l2;
+float trigger_sf_em_2018(float l1_pt, float l2_pt){
+  if(l1_pt>200) l1_pt=199;
+  if(l2_pt>200) l2_pt=199;
+  return h3_em_2018->GetBinContent(h3_em_2018->FindBin(l1_pt,l2_pt));
 }
 
 float fakelepweight_ee_2017(bool ttc_1P1F, bool ttc_0P2F, bool ttc_lep1_faketag, float l1_pt, float l1_eta, float l2_pt, float l2_eta, bool isData){
