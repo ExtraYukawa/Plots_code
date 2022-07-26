@@ -57,10 +57,10 @@ def histos_book(flist, filters, variables, isData = "False", isFake = "False"):
   if not isData:
     df_xyz_tree = df_xyz_tree.Define("trigger_SF","trigger_sf_ee_"+opts.era+"(ttc_l1_pt,ttc_l2_pt)")
     if  "dy" in str(flist[0]).split('/')[-1].lower() or "ttto2l" in str(flist[0]).split('/')[-1].lower():
-      print ("Input for Ctag (DY and TTTo2L): ", str(flist[0]).split('/')[-1])
+      print ("Input for CFlip (DY and TTTo2L): ", str(flist[0]).split('/')[-1])
       df_xyz_tree = df_xyz_tree.Define("CFlip_SF","chargeflip_SF_"+opts.era+"("+str(1)+", ttc_l1_pt, ttc_l1_eta, ttc_l1_phi, ttc_l2_pt, ttc_l2_eta, ttc_l2_phi, "+str(3)+", "+str(0)+", GenDressedLepton_eta, GenDressedLepton_phi, GenDressedLepton_pdgId)")
     else:
-      print ("Input for Ctag: ", str(flist[0]).split('/')[-1])
+      print ("Input for CFlip: ", str(flist[0]).split('/')[-1])
       df_xyz_tree = df_xyz_tree.Define("CFlip_SF","chargeflip_SF_"+opts.era+"("+str(0)+", ttc_l1_pt, ttc_l1_eta, ttc_l1_phi, ttc_l2_pt, ttc_l2_eta, ttc_l2_phi, "+str(3)+", "+str(0)+", GenDressedLepton_eta, GenDressedLepton_phi, GenDressedLepton_pdgId)")
     
     # check if the events are fake or not
