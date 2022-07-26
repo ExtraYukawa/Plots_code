@@ -55,12 +55,12 @@ def histos_book(flist, filters, variables, isData = "False", isFake = "False"):
   df_xyz_tree = ROOT.RDataFrame("Events",flist)
 
   if not isData:
-    df_xyz_tree = df_xyz_tree.Define("trigger_SF","trigger_sf_ee_"+opts.era+"(ttc_l1_pt,ttc_l2_pt,ttc_l1_eta,ttc_l2_eta)")
+    df_xyz_tree = df_xyz_tree.Define("trigger_SF","trigger_sf_ee_"+opts.era+"(ttc_l1_pt,ttc_l2_pt)")
     if  "dy" in str(flist[0]).split('/')[-1].lower() or "ttto2l" in str(flist[0]).split('/')[-1].lower():
-      print ("input: ", str(flist[0]).split('/')[-1])
+      print ("Input for Ctag (DY and TTTo2L): ", str(flist[0]).split('/')[-1])
       df_xyz_tree = df_xyz_tree.Define("CFlip_SF","chargeflip_SF_"+opts.era+"("+str(1)+", ttc_l1_pt, ttc_l1_eta, ttc_l1_phi, ttc_l2_pt, ttc_l2_eta, ttc_l2_phi, "+str(3)+", "+str(0)+", GenDressedLepton_eta, GenDressedLepton_phi, GenDressedLepton_pdgId)")
     else:
-      print ("input: ", str(flist[0]).split('/')[-1])
+      print ("Input for Ctag: ", str(flist[0]).split('/')[-1])
       df_xyz_tree = df_xyz_tree.Define("CFlip_SF","chargeflip_SF_"+opts.era+"("+str(0)+", ttc_l1_pt, ttc_l1_eta, ttc_l1_phi, ttc_l2_pt, ttc_l2_eta, ttc_l2_phi, "+str(3)+", "+str(0)+", GenDressedLepton_eta, GenDressedLepton_phi, GenDressedLepton_pdgId)")
     
     # check if the events are fake or not
@@ -78,9 +78,10 @@ def histos_book(flist, filters, variables, isData = "False", isFake = "False"):
   else:
     if isFake:
       df_xyz_tree = df_xyz_tree.Define("fakelep_weight","fakelepweight_ee_"+opts.era+"(ttc_1P1F,ttc_0P2F,ttc_lep1_faketag,electron_conePt[ttc_l1_id],ttc_l1_eta,electron_conePt[ttc_l2_id],ttc_l2_eta, "+str(isData).lower()+")")
-
+  
   # common for data/MC
   df_xyz = df_xyz_tree.Filter(filters)
+  
   if not isData:
     df_xyz_trigger = all_trigger(df_xyz, opts.era)
   else:
@@ -106,6 +107,11 @@ def histos_book(flist, filters, variables, isData = "False", isFake = "False"):
       else:
         df_xyz_histo = df_xyz_trigger.Histo1D((variable,'',ranges[variable][0], ranges[variable][1], ranges[variable][2]), variable)
     h = df_xyz_histo.GetValue()
+    # print ("1="*50)
+    # df_hh = df_xyz.Histo1D(("ttc_l1_pt",'',14,0,210), "ttc_l1_pt",'genweight')
+    # hh = df_hh.GetValue()
+    # print ("h Mean: ", h.GetMean())
+    # sys.exit(1)
     h.SetDirectory(0)
     df_xyz_histos.append(h.Clone())
     ROOT.TH1.AddDirectory(0)
@@ -115,8 +121,10 @@ def histos_book(flist, filters, variables, isData = "False", isFake = "False"):
 
 # Data paths
 if opts.era == "2017":
+  print ("Reading 2017 files")
   path='/eos/cms/store/group/phys_top/ExtraYukawa/TTC_version9/'
 elif opts.era == "2018":
+  print ("Reading 2018 files")
   path='/eos/cms/store/group/phys_top/ExtraYukawa/2018/'
 else:
   raise Exception ("select correct era!")
@@ -173,7 +181,7 @@ def TTC_Analysis(opts):
   print ("filters_mc_fake:   ", filters_mc_fake)
   print ("filters_data:      ", filters_data)
   print ("filters_data_fake: ", filters_data_fake)
-
+  
   ##############
   ## DY samples
   ##############
