@@ -69,13 +69,13 @@ def histos_book(flist, filters, variables, isData = "False", isFake = "False", e
   df_xyz_tree = ROOT.RDataFrame("Events",flist)
   # print ("test: ", str(isData).lower())
   if not isData:
-    df_xyz_tree = df_xyz_tree.Define("trigger_SF","trigger_sf_ee_"+era+"(ttc_l1_pt,ttc_l2_pt,ttc_l1_eta,ttc_l2_eta)")
+    df_xyz_tree = df_xyz_tree.Define("trigger_SF","trigger_sf_ee_"+era+"(ttc_l1_pt,ttc_l2_pt)")
     # CFlip Study
     if  "dy" in str(flist[0]).split('/')[-1].lower() or "ttto2l" in str(flist[0]).split('/')[-1].lower():
-      print (" for (DY and TTTo2L) input: ", str(flist[0]).split('/')[-1])
+      print ("Input for CFlip (DY and TTTo2L): ", str(flist[0]).split('/')[-1])
       df_xyz_tree = df_xyz_tree.Define("CFlip_SF","chargeflip_SF_"+era+"("+str(1)+", ttc_l1_pt, ttc_l1_eta, ttc_l1_phi, ttc_l2_pt, ttc_l2_eta, ttc_l2_phi, "+str(3)+", "+str(0)+", GenDressedLepton_eta, GenDressedLepton_phi, GenDressedLepton_pdgId)")
     else:
-      print ("input: ", str(flist[0]).split('/')[-1])
+      print ("Input for CFlip: ", str(flist[0]).split('/')[-1])
       df_xyz_tree = df_xyz_tree.Define("CFlip_SF","chargeflip_SF_"+era+"("+str(0)+", ttc_l1_pt, ttc_l1_eta, ttc_l1_phi, ttc_l2_pt, ttc_l2_eta, ttc_l2_phi, "+str(3)+", "+str(0)+", GenDressedLepton_eta, GenDressedLepton_phi, GenDressedLepton_pdgId)")
       
     # check if the events are fake or not
@@ -112,6 +112,8 @@ def histos_book(flist, filters, variables, isData = "False", isFake = "False", e
       else:
         df_xyz_histo = df_xyz_trigger.Histo1D((variable,'',ranges[variable][0], ranges[variable][1], ranges[variable][2]), variable)
     h = df_xyz_histo.GetValue()
+    # print ("h Mean: ", h.GetMean())
+    # sys.exit(1)
     h.SetDirectory(0)
     df_xyz_histos.append(h.Clone())
     ROOT.TH1.AddDirectory(0)
