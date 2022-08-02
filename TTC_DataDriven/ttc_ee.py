@@ -99,18 +99,25 @@ def histos_book(flist, filters, variables, isData = "False", isFake = "False"):
   # put histos in a list
   df_xyz_histos = []
   for variable in variables:
+    
     if not isData:
-      df_xyz_histo = df_xyz_trigger.Histo1D((variable,'',ranges[variable][0], ranges[variable][1], ranges[variable][2]), variable,'genweight')
+      #df_xyz_histo = df_xyz_trigger.Histo1D((variable,'',ranges[variable][0], ranges[variable][1], ranges[variable][2]), variable,'genweight')
+      # df_xyz_histo = df_xyz_trigger.Histo1D((variable,'',len(binning)-1 , binning), variable,'genweight')
+      # print ("test1: ", ranges[variable])
+      df_xyz_histo = df_xyz_trigger.Histo1D((variable,'',len(ranges[variable])-1, ranges[variable]), variable,'genweight')
     else:
       if isFake:
-        df_xyz_histo = df_xyz_trigger.Histo1D((variable,'',ranges[variable][0], ranges[variable][1], ranges[variable][2]), variable,'fakelep_weight')
+        df_xyz_histo = df_xyz_trigger.Histo1D((variable,'',len(ranges[variable])-1 , ranges[variable]), variable,'fakelep_weight')
       else:
-        df_xyz_histo = df_xyz_trigger.Histo1D((variable,'',ranges[variable][0], ranges[variable][1], ranges[variable][2]), variable)
+        df_xyz_histo = df_xyz_trigger.Histo1D((variable,'',len(ranges[variable])-1 , ranges[variable]), variable)
     h = df_xyz_histo.GetValue()
+    
     # print ("1="*50)
+    # print ("binning: ", binning)
     # df_hh = df_xyz.Histo1D(("ttc_l1_pt",'',14,0,210), "ttc_l1_pt",'genweight')
+    # df_hh = df_xyz.Histo1D(("ttc_l1_pt",'',len(binning)-1 , binning), "ttc_l1_pt",'genweight')
     # hh = df_hh.GetValue()
-    # print ("h Mean: ", h.GetMean())
+    # print ("hh Mean: ", hh.GetMean())
     # sys.exit(1)
     h.SetDirectory(0)
     df_xyz_histos.append(h.Clone())

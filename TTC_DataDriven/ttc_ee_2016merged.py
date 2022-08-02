@@ -105,12 +105,12 @@ def histos_book(flist, filters, variables, isData = "False", isFake = "False", e
   df_xyz_histos = []
   for variable in variables:
     if not isData:
-      df_xyz_histo = df_xyz_trigger.Histo1D((variable,'',ranges[variable][0], ranges[variable][1], ranges[variable][2]), variable,'genweight')
+      df_xyz_histo = df_xyz_trigger.Histo1D((variable,'',len(ranges[variable])-1, ranges[variable]), variable,'genweight')
     else:
       if isFake:
-        df_xyz_histo = df_xyz_trigger.Histo1D((variable,'',ranges[variable][0], ranges[variable][1], ranges[variable][2]), variable,'fakelep_weight')
+        df_xyz_histo = df_xyz_trigger.Histo1D((variable,'',len(ranges[variable])-1, ranges[variable]), variable,'fakelep_weight')
       else:
-        df_xyz_histo = df_xyz_trigger.Histo1D((variable,'',ranges[variable][0], ranges[variable][1], ranges[variable][2]), variable)
+        df_xyz_histo = df_xyz_trigger.Histo1D((variable,'',len(ranges[variable])-1, ranges[variable]), variable)
     h = df_xyz_histo.GetValue()
     # print ("h Mean: ", h.GetMean())
     # sys.exit(1)
@@ -934,8 +934,9 @@ def TTC_Analysis(opts):
     # print ("h_DY_APV:     ", h_DY_APV.Integral())
     # print ("h_DY_postAPV: ", h_DY_postAPV.Integral())
     h_DY_APV.Add(h_DY_postAPV)
+    check_histo(h_DY_APV) #make -ve entries to zero if present
     histos.append(h_DY_APV.Clone())
-    # print ("histos[0].Integral(): ",histos[0].Integral())
+
     h_osWW_APV.Add(h_osWW_postAPV)
     histos.append(h_osWW_APV.Clone())
     
@@ -1022,7 +1023,7 @@ def TTC_Analysis(opts):
 
     h_TTTo2L_APV.Add(h_TTTo2L_postAPV)
     histos.append(h_TTTo2L_APV.Clone())
-    print ("h_TTTo2L_APV integral: ", h_TTTo2L_APV.Integral())
+    
     
     h_fake_DY_APV.Add(h_fake_DY_postAPV)
     histos.append(h_fake_DY_APV.Clone())
