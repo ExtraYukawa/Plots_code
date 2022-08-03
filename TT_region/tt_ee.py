@@ -1,3 +1,7 @@
+#==============
+# Last used:
+# python tt_ee.py --era 2017 --saveDir 2017_ee
+#==============
 import ROOT
 import time
 import os
@@ -5,7 +9,29 @@ import math
 from math import sqrt
 import plot_DYregion
 
-TTC_header_path = os.path.join("TTC.h")
+ROOT.gROOT.SetBatch(True)
+
+SAVEFORMATS  = "png" #pdf,png,C"
+SAVEDIR      = None
+
+from argparse import ArgumentParser
+parser = ArgumentParser()
+
+parser.add_argument("--era", dest="era", default="2016APV",
+                    help="When making the plots, read the files with this era(years), default: 2016APV")
+
+parser.add_argument("-s", "--saveFormats", dest="saveFormats", default = SAVEFORMATS,
+                      help="Save formats for all plots [default: %s]" % SAVEFORMATS)
+
+parser.add_argument("--saveDir", dest="saveDir", default=SAVEDIR, 
+                      help="Directory where all pltos will be saved [default: %s]" % SAVEDIR)
+
+parser.add_argument("-draw_data", "--draw_data", action="store_true", dest="draw_data", default=False,
+                    help="make it to True if you want to draw_data on MC stacks")
+
+opts = parser.parse_args()
+
+TTC_header_path = os.path.join("../TTC.h")
 ROOT.gInterpreter.Declare('#include "{}"'.format(TTC_header_path))
 
 
@@ -220,111 +246,92 @@ TTTT_list = ROOT.std.vector('string')()
 for f in ['tttt.root']:
   TTTT_list.push_back(path+f)
 
-#QCD50to80_list = ROOT.std.vector('string')()
-#for f in ['QCD50to80.root']:
-#  QCD50to80_list.push_back(path+f)
-#
-#QCD80to120_list = ROOT.std.vector('string')()
-#for f in ['QCD80to120.root']:
-#  QCD80to120_list.push_back(path+f)
-#
-#QCD120to170_list = ROOT.std.vector('string')()
-#for f in ['QCD120to170.root']:
-#  QCD120to170_list.push_back(path+f)
-#
-#QCD170to300_list = ROOT.std.vector('string')()
-#for f in ['QCD170to300.root']:
-#  QCD170to300_list.push_back(path+f)
-#
-#QCD300toinf_list = ROOT.std.vector('string')()
-#for f in ['QCD300toinf.root']:
-#  QCD300toinf_list.push_back(path+f)
-
 #histograms name
-hists_name = ['OPS_l1_pt','OPS_l1_eta','OPS_l1_phi','OPS_l2_pt','OPS_l2_eta','OPS_l2_phi','OPS_z_pt','OPS_z_eta','OPS_z_phi','OPS_z_mass','j1_pt','j1_eta','j1_phi','j1_mass','j2_pt','j2_eta','j2_phi','j2_mass','j3_pt','j3_eta','j3_phi','j3_mass','n_tight_jet','n_bjet_DeepB']
+#hists_name = ['OPS_l1_pt','OPS_l1_eta','OPS_l1_phi','OPS_l2_pt','OPS_l2_eta','OPS_l2_phi','OPS_z_pt','OPS_z_eta','OPS_z_phi','OPS_z_mass','j1_pt','j1_eta','j1_phi','j1_mass','j2_pt','j2_eta','j2_phi','j2_mass','j3_pt','j3_eta','j3_phi','j3_mass','n_tight_jet','n_bjet_DeepB']
+hists_name = ['OPS_l1_pt']
 
 #histograms bins
 histos_bins = {
-hists_name[0]:20,
-hists_name[1]:20,
-hists_name[2]:20,
-hists_name[3]:20,
-hists_name[4]:20,
-hists_name[5]:20,
-hists_name[6]:50,
-hists_name[7]:20,
-hists_name[8]:20,
-hists_name[9]:60,
-hists_name[10]:30,
-hists_name[11]:20,
-hists_name[12]:20,
-hists_name[13]:10,
-hists_name[14]:20,
-hists_name[15]:20,
-hists_name[16]:20,
-hists_name[17]:10,
-hists_name[18]:20,
-hists_name[19]:20,
-hists_name[20]:20,
-hists_name[21]:10,
-hists_name[22]:10,
-hists_name[23]:5,
+hists_name[0]:14,
+#hists_name[1]:20,
+#hists_name[2]:20,
+#hists_name[3]:20,
+#hists_name[4]:20,
+#hists_name[5]:20,
+#hists_name[6]:50,
+#hists_name[7]:20,
+#hists_name[8]:20,
+#hists_name[9]:60,
+#hists_name[10]:30,
+#hists_name[11]:20,
+#hists_name[12]:20,
+#hists_name[13]:10,
+#hists_name[14]:20,
+#hists_name[15]:20,
+#hists_name[16]:20,
+#hists_name[17]:10,
+#hists_name[18]:20,
+#hists_name[19]:20,
+#hists_name[20]:20,
+#hists_name[21]:10,
+#hists_name[22]:10,
+#hists_name[23]:5,
 }
 
 #low edge
 histos_bins_low = {
 hists_name[0]:0,
-hists_name[1]:-3,
-hists_name[2]:-4,
-hists_name[3]:0,
-hists_name[4]:-3,
-hists_name[5]:-4,
-hists_name[6]:0,
-hists_name[7]:-3,
-hists_name[8]:-4,
-hists_name[9]:60,
-hists_name[10]:0,
-hists_name[11]:-3,
-hists_name[12]:-4,
-hists_name[13]:0,
-hists_name[14]:0,
-hists_name[15]:-3,
-hists_name[16]:-4,
-hists_name[17]:0,
-hists_name[18]:0,
-hists_name[19]:-3,
-hists_name[20]:-4,
-hists_name[21]:0,
-hists_name[22]:-0.5,
-hists_name[23]:-0.5,
+#hists_name[1]:-3,
+#hists_name[2]:-4,
+#hists_name[3]:0,
+#hists_name[4]:-3,
+#hists_name[5]:-4,
+#hists_name[6]:0,
+#hists_name[7]:-3,
+#hists_name[8]:-4,
+#hists_name[9]:60,
+#hists_name[10]:0,
+#hists_name[11]:-3,
+#hists_name[12]:-4,
+#hists_name[13]:0,
+#hists_name[14]:0,
+#hists_name[15]:-3,
+#hists_name[16]:-4,
+#hists_name[17]:0,
+#hists_name[18]:0,
+#hists_name[19]:-3,
+#hists_name[20]:-4,
+#hists_name[21]:0,
+#hists_name[22]:-0.5,
+#hists_name[23]:-0.5,
 }
 
 #high edge
 histos_bins_high = {
-hists_name[0]:200,
-hists_name[1]:3,
-hists_name[2]:4,
-hists_name[3]:100,
-hists_name[4]:3,
-hists_name[5]:4,
-hists_name[6]:200,
-hists_name[7]:3,
-hists_name[8]:4,
-hists_name[9]:120,
-hists_name[10]:400,
-hists_name[11]:3,
-hists_name[12]:4,
-hists_name[13]:50,
-hists_name[14]:200,
-hists_name[15]:3,
-hists_name[16]:4,
-hists_name[17]:50,
-hists_name[18]:200,
-hists_name[19]:3,
-hists_name[20]:4,
-hists_name[21]:50,
-hists_name[22]:9.5,
-hists_name[23]:4.5,
+hists_name[0]:210,
+#hists_name[1]:3,
+#hists_name[2]:4,
+#hists_name[3]:100,
+#hists_name[4]:3,
+#hists_name[5]:4,
+#hists_name[6]:200,
+#hists_name[7]:3,
+#hists_name[8]:4,
+#hists_name[9]:120,
+#hists_name[10]:400,
+#hists_name[11]:3,
+#hists_name[12]:4,
+#hists_name[13]:50,
+#hists_name[14]:200,
+#hists_name[15]:3,
+#hists_name[16]:4,
+#hists_name[17]:50,
+#hists_name[18]:200,
+#hists_name[19]:3,
+#hists_name[20]:4,
+#hists_name[21]:50,
+#hists_name[22]:9.5,
+#hists_name[23]:4.5,
 }
 
 def TTC_Analysis():
@@ -434,21 +441,6 @@ def TTC_Analysis():
 
   tttt_xs = 0.0082
   tttt_ev = get_mcEventnumber(TTTT_list)
-
-#  QCD50to80_xs = 1984000.0
-#  QCD50to80_ev = get_mcEventnumber(QCD50to80_list)
-#
-#  QCD80to120_xs = 366500.0
-#  QCD80to120_ev = get_mcEventnumber(QCD80to120_list)
-#
-#  QCD120to170_xs = 66490.0
-#  QCD120to170_ev = get_mcEventnumber(QCD120to170_list)
-#
-#  QCD170to300_xs = 16480.0
-#  QCD170to300_ev = get_mcEventnumber(QCD170to300_list)
-#
-#  QCD300toinf_xs = 1097.0
-#  QCD300toinf_ev = get_mcEventnumber(QCD300toinf_list)
 
   # define the filters here, 1:2mu, 2:1e1m, 3:2ele
   filters="OPS_region==3 && OPS_2P0F && OPS_z_mass>20 && (OPS_z_mass<76 || OPS_z_mass>106) && n_tight_jet>1 && n_bjet_DeepB>0 && OPS_l1_pt>30 && OPS_l2_pt>20 && OPS_drll>0.3 && Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_eeBadScFilter && Flag_ecalBadCalibFilter && nHad_tau==0"
@@ -773,56 +765,6 @@ def TTC_Analysis():
     df_tttt_histo = df_tttt_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'genweight')
     df_tttt_histos.append(df_tttt_histo)
 
-#  df_QCD50to80_tree = ROOT.RDataFrame("Events",QCD50to80_list)
-#  df_QCD50to80_tree = df_QCD50to80_tree.Define("trigger_SF","trigger_sf_ee(DY_l1_pt,DY_l2_pt,DY_l1_eta,DY_l2_eta)")
-#  df_QCD50to80_tree = df_QCD50to80_tree.Define("genweight","puWeight*PrefireWeight*Electron_RECO_SF[DY_l1_id]*Electron_RECO_SF[DY_l2_id]*Electron_CutBased_TightID_SF[DY_l1_id]*Electron_CutBased_TightID_SF[DY_l2_id]*trigger_SF*genWeight/abs(genWeight)")
-#  df_QCD50to80 = df_QCD50to80_tree.Filter(filters)
-#  df_QCD50to80_trigger = all_trigger(df_QCD50to80)
-#  df_QCD50to80_histos=[]
-#  for i in hists_name:
-#    df_QCD50to80_histo = df_QCD50to80_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'genweight')
-#    df_QCD50to80_histos.append(df_QCD50to80_histo)
-#
-#  df_QCD80to120_tree = ROOT.RDataFrame("Events",QCD80to120_list)
-#  df_QCD80to120_tree = df_QCD80to120_tree.Define("trigger_SF","trigger_sf_ee(DY_l1_pt,DY_l2_pt,DY_l1_eta,DY_l2_eta)")
-#  df_QCD80to120_tree = df_QCD80to120_tree.Define("genweight","puWeight*PrefireWeight*Electron_RECO_SF[DY_l1_id]*Electron_RECO_SF[DY_l2_id]*Electron_CutBased_TightID_SF[DY_l1_id]*Electron_CutBased_TightID_SF[DY_l2_id]*trigger_SF*genWeight/abs(genWeight)")
-#  df_QCD80to120 = df_QCD80to120_tree.Filter(filters)
-#  df_QCD80to120_trigger = all_trigger(df_QCD80to120)
-#  df_QCD80to120_histos=[]
-#  for i in hists_name:
-#    df_QCD80to120_histo = df_QCD80to120_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'genweight')
-#    df_QCD80to120_histos.append(df_QCD80to120_histo)
-#
-#  df_QCD120to170_tree = ROOT.RDataFrame("Events",QCD120to170_list)
-#  df_QCD120to170_tree = df_QCD120to170_tree.Define("trigger_SF","trigger_sf_ee(DY_l1_pt,DY_l2_pt,DY_l1_eta,DY_l2_eta)")
-#  df_QCD120to170_tree = df_QCD120to170_tree.Define("genweight","puWeight*PrefireWeight*Electron_RECO_SF[DY_l1_id]*Electron_RECO_SF[DY_l2_id]*Electron_CutBased_TightID_SF[DY_l1_id]*Electron_CutBased_TightID_SF[DY_l2_id]*trigger_SF*genWeight/abs(genWeight)")
-#  df_QCD120to170 = df_QCD120to170_tree.Filter(filters)
-#  df_QCD120to170_trigger = all_trigger(df_QCD120to170)
-#  df_QCD120to170_histos=[]
-#  for i in hists_name:
-#    df_QCD120to170_histo = df_QCD120to170_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'genweight')
-#    df_QCD120to170_histos.append(df_QCD120to170_histo)
-#
-#  df_QCD170to300_tree = ROOT.RDataFrame("Events",QCD170to300_list)
-#  df_QCD170to300_tree = df_QCD170to300_tree.Define("trigger_SF","trigger_sf_ee(DY_l1_pt,DY_l2_pt,DY_l1_eta,DY_l2_eta)")
-#  df_QCD170to300_tree = df_QCD170to300_tree.Define("genweight","puWeight*PrefireWeight*Electron_RECO_SF[DY_l1_id]*Electron_RECO_SF[DY_l2_id]*Electron_CutBased_TightID_SF[DY_l1_id]*Electron_CutBased_TightID_SF[DY_l2_id]*trigger_SF*genWeight/abs(genWeight)")
-#  df_QCD170to300 = df_QCD170to300_tree.Filter(filters)
-#  df_QCD170to300_trigger = all_trigger(df_QCD170to300)
-#  df_QCD170to300_histos=[]
-#  for i in hists_name:
-#    df_QCD170to300_histo = df_QCD170to300_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'genweight')
-#    df_QCD170to300_histos.append(df_QCD170to300_histo)
-#
-#  df_QCD300toinf_tree = ROOT.RDataFrame("Events",QCD300toinf_list)
-#  df_QCD300toinf_tree = df_QCD300toinf_tree.Define("trigger_SF","trigger_sf_ee(DY_l1_pt,DY_l2_pt,DY_l1_eta,DY_l2_eta)")
-#  df_QCD300toinf_tree = df_QCD300toinf_tree.Define("genweight","puWeight*PrefireWeight*Electron_RECO_SF[DY_l1_id]*Electron_RECO_SF[DY_l2_id]*Electron_CutBased_TightID_SF[DY_l1_id]*Electron_CutBased_TightID_SF[DY_l2_id]*trigger_SF*genWeight/abs(genWeight)")
-#  df_QCD300toinf = df_QCD300toinf_tree.Filter(filters)
-#  df_QCD300toinf_trigger = all_trigger(df_QCD300toinf)
-#  df_QCD300toinf_histos=[]
-#  for i in hists_name:
-#    df_QCD300toinf_histo = df_QCD300toinf_trigger.Histo1D((i,'',histos_bins[i],histos_bins_low[i],histos_bins_high[i]), i,'genweight')
-#    df_QCD300toinf_histos.append(df_QCD300toinf_histo)
-
   df_TTTo2L_tree = ROOT.RDataFrame("Events",TTTo2L_list)
   df_TTTo2L_tree = df_TTTo2L_tree.Define("trigger_SF","trigger_sf_ee(OPS_l1_pt,OPS_l2_pt,OPS_l1_eta,OPS_l2_eta)")
   df_TTTo2L_tree = df_TTTo2L_tree.Define("genweight","puWeight*PrefireWeight*Electron_RECO_SF[OPS_l1_id]*Electron_RECO_SF[OPS_l2_id]*genWeight/abs(genWeight)")
@@ -935,11 +877,6 @@ def TTC_Analysis():
     h_tttJ = df_tttJ_histos[ij].GetValue()
     h_tttW = df_tttW_histos[ij].GetValue()
     h_tttt = df_tttt_histos[ij].GetValue()
-#    h_QCD50to80 = df_QCD50to80_histos[ij].GetValue()
-#    h_QCD80to120 = df_QCD80to120_histos[ij].GetValue()
-#    h_QCD120to170 = df_QCD120to170_histos[ij].GetValue()
-#    h_QCD170to300 = df_QCD170to300_histos[ij].GetValue()
-#    h_QCD300toinf = df_QCD300toinf_histos[ij].GetValue()
     h_TTTo2L = df_TTTo2L_histos[ij].GetValue()
     h_TTTo1L = df_TTTo1L_histos[ij].GetValue()
     h_DoubleEle = df_DoubleEle_histos[ij].GetValue()
@@ -977,11 +914,6 @@ def TTC_Analysis():
     h_tttJ.Scale(tttJ_xs/tttJ_ev)
     h_tttW.Scale(tttW_xs/tttW_ev)
     h_tttt.Scale(tttt_xs/tttt_ev)
-#    h_QCD50to80.Scale(QCD50to80_xs/QCD50to80_ev)
-#    h_QCD80to120.Scale(QCD80to120_xs/QCD80to120_ev)
-#    h_QCD120to170.Scale(QCD120to170_xs/QCD120to170_ev)
-#    h_QCD170to300.Scale(QCD170to300_xs/QCD170to300_ev)
-#    h_QCD300toinf.Scale(QCD300toinf_xs/QCD300toinf_ev)
     h_TTTo2L.Scale(TTTo2L_xs/TTTo2L_ev)
     h_TTTo1L.Scale(TTTo1L_xs/TTTo1L_ev)
 
@@ -1017,11 +949,6 @@ def TTC_Analysis():
     histos.append(h_tttW.Clone())
     histos.append(h_tttt.Clone())
     histos.append(h_tzq.Clone())
-#    histos.append(h_QCD50to80.Clone())
-#    histos.append(h_QCD80to120.Clone())
-#    histos.append(h_QCD120to170.Clone())
-#    histos.append(h_QCD170to300.Clone())
-#    histos.append(h_QCD300toinf.Clone())
     histos.append(h_TTTo2L.Clone())
     histos.append(h_TTTo1L.Clone())
     histos.append(h_DoubleEle.Clone()) 
@@ -1030,7 +957,7 @@ def TTC_Analysis():
     for i in range(0,36):
       histos[i]=overunder_flowbin(histos[i])
 
-    c1 = plot_DYregion.draw_plots(histos, 1, hists_name[ij], 0)
+    c1 = plot_DYregion.draw_plots(opts, histos, 1, hists_name[ij], 0)
     del histos[:]
  
 if __name__ == "__main__":

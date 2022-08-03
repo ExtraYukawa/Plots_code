@@ -1,6 +1,8 @@
 import ROOT
 import numpy as np
 from ROOT import kFALSE
+import datetime
+import os
 
 import CMSTDRStyle
 CMSTDRStyle.setTDRStyle().cd()
@@ -32,9 +34,35 @@ def set_axis(the_histo, coordinate, title, is_energy):
 	else:
 		axis.SetTitle(title) 
 
-def draw_plots(hist_array =[], draw_data=0, x_name='', isem=0):
+def draw_plots(opts, hist_array =[], draw_data=0, x_name='', isem=0):
 
-	lumi=41480.
+        if opts.saveDir == None:
+                opts.saveDir = datetime.datetime.now().strftime("%d%b%YT%H%M")
+
+        if not os.path.exists(opts.saveDir):
+                print ("save direcotry does not exits! so creating", opts.saveDir)
+                os.mkdir(opts.saveDir)
+
+        if opts.era == "2016APV":
+                print ("year: 2016 APV")
+                lumi=19520. 
+        elif opts.era == "2016postAPV":
+                print ("year: 2016 postAPV")
+                lumi=16810.
+        elif opts.era == "2017":
+                print ("year: 2017")
+                lumi=41480.
+        elif opts.era == "2018":
+                print ("year: 2018")
+                lumi=59830.
+        elif opts.era == "2016merged":
+                print ("year: 2016")
+                lumi=1.
+        else:
+                raise Exception ("select correct era!")
+
+	# lumi=41480.
+        
 	DY = hist_array[0].Clone()
 	DY.SetFillColor(ROOT.kRed)
 	DY.Scale(lumi)
@@ -88,18 +116,14 @@ def draw_plots(hist_array =[], draw_data=0, x_name='', isem=0):
 	tzq.SetFillColor(ROOT.kYellow-4)
 	tzq.Scale(lumi)
 
-#	QCD = hist_array[23].Clone()
-#	QCD.Add(hist_array[24])
-#	QCD.Add(hist_array[25])
-#	QCD.Add(hist_array[26])
-#	QCD.Add(hist_array[27])
-#	QCD.SetFillColor(ROOT.kOrange+1)
-#	QCD.Scale(lumi)
-
-	TT = hist_array[32].Clone()
-	TT.Add(hist_array[33])
-	TT.SetFillColor(ROOT.kBlue)
-	TT.Scale(lumi)
+        
+	TTTo2L = hist_array[32].Clone()
+	TTTo2L.SetFillColor(ROOT.kMagenta)
+	TTTo2L.Scale(lumi)
+        
+        TTTo1L = hist_array[33].Clone()
+	TTTo1L.SetFillColor(ROOT.kBlue-6)
+	TTTo1L.Scale(lumi)
 
 	Data = hist_array[34].Clone()
 	Data.Add(hist_array[35])
@@ -113,7 +137,8 @@ def draw_plots(hist_array =[], draw_data=0, x_name='', isem=0):
 
 	h_stack = ROOT.THStack()
 	h_stack.Add(DY)
-	h_stack.Add(TT)
+	h_stack.Add(TTTo2L)
+        h_stack.Add(TTTo1L)
 	h_stack.Add(WJet)
 	h_stack.Add(VV)
 	h_stack.Add(VVV)
@@ -154,7 +179,8 @@ def draw_plots(hist_array =[], draw_data=0, x_name='', isem=0):
 	gr = ROOT.TGraphAsymmErrors(len(x), np.array(x), np.array(y),np.array(xerror_l),np.array(xerror_r), np.array(yerror_d), np.array(yerror_u))
 
 	DY_yield =round(DY.Integral(),1)
-	TT_yield =round(TT.Integral(),1)
+	TTTo2L_yield =round(TTTo2L.Integral(),1)
+        TTTo1L_yield =round(TTTo1L.Integral(),1)
 	WJet_yield =round(WJet.Integral(),1)
 	VV_yield =round(VV.Integral(),1)
 	VVV_yield =round(VVV.Integral(),1)
@@ -237,7 +263,7 @@ def draw_plots(hist_array =[], draw_data=0, x_name='', isem=0):
 	
 	set_axis(h_stack,'y', 'Event/Bin', False)
 
-	CMSstyle.SetStyle(pad1)
+	CMSstyle.SetStyle(pad1, opts.era)
 
 	##legend
 	leg1 = ROOT.TLegend(0.66, 0.75, 0.94, 0.88)
@@ -250,7 +276,8 @@ def draw_plots(hist_array =[], draw_data=0, x_name='', isem=0):
         leg3.AddEntry(DY,'DY ['+str(DY_yield)+']','f')
         leg3.AddEntry(gr,'Stat. unc','f')
         leg3.AddEntry(Data,'Data ['+str(Data_yield)+']','pe')
-        leg2.AddEntry(TT,'TT ['+str(TT_yield)+']','f')
+        leg2.AddEntry(TTTo2L,'TTTo2L ['+str(TTTo2L_yield)+']','f')
+        leg2.AddEntry(TTTo1L,'TTTo1L ['+str(TTTo1L_yield)+']','f')
         leg2.AddEntry(WJet,'WJet ['+str(WJet_yield)+']','f')
         leg2.AddEntry(VV,'VV ['+str(VV_yield)+']','f')
         leg1.AddEntry(VVV,'VVV ['+str(VVV_yield)+']','f')
@@ -288,9 +315,8 @@ def draw_plots(hist_array =[], draw_data=0, x_name='', isem=0):
 	hData.Draw()
 
 	c.Update()
-	c.SaveAs(x_name+'.pdf')
-	c.SaveAs(x_name+'.png')
-	c.SaveAs(x_name+'.root')
+        c.SaveAs(opts.saveDir+'/'+x_name+'.pdf')
+        c.SaveAs(opts.saveDir+'/'+x_name+'.png')
 	return c
 	pad1.Close()
 	pad2.Close()
