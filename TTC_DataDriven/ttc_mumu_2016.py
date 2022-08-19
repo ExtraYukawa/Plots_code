@@ -53,7 +53,7 @@ def histos_book(flist, filters, variables, isData = "False", isFake = "False"):
   df_xyz_tree = ROOT.RDataFrame("Events",flist)
 
   if not isData:
-    df_xyz_tree = df_xyz_tree.Define("trigger_SF","trigger_sf_mm_"+opts.era+"(ttc_l1_pt,ttc_l2_pt,ttc_l1_eta,ttc_l2_eta)")
+    df_xyz_tree = df_xyz_tree.Define("trigger_SF","trigger_sf_mm_"+opts.era+"(ttc_l1_pt,ttc_l2_pt)")
     # check if the events are fake or not
     if isFake:
       df_xyz_tree = df_xyz_tree.Define("fakelep_weight","fakelepweight_mm_"+opts.era+"(ttc_1P1F,ttc_0P2F,ttc_lep1_faketag,muon_conePt[ttc_l1_id],ttc_l1_eta,muon_conePt[ttc_l2_id],ttc_l2_eta, "+str(isData).lower()+")")
