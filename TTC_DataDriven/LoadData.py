@@ -37,7 +37,10 @@ xsec['TTZZ']   = 0.001386
 xsec['tZq']    = 0.07561
 xsec['tW']     = 35.85
 xsec['tbarW']  = 35.85
-
+xsec['WLLJJ']  = 0.01628  #AN2019_089_v8 (page #75) is large, took from xsdb
+xsec['WpWpJJ_EWK']  = 0.02597 #AN2019_089_v8 (page #75) is large, took from xsdb
+xsec['ZZJJTo4L']  = 0.008645 # https://mattermost.web.cern.ch/cms-exp/pl/eyi4qm4agbdp7rm8hwu6m59umo
+xsec['WpWpJJ_QCD']  = 0.02221 # https://mattermost.web.cern.ch/cms-exp/pl/eyi4qm4agbdp7rm8hwu6m59umo
 
 def selections(analtype="ee"):
   if analtype == "ee":
