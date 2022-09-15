@@ -46,7 +46,7 @@ def draw_plots(opts, hist_array =[], x_name='', isem=0):
 	fileout = ROOT.TFile(opts.saveDir+'/'+x_name+'.root', 'RECREATE')
 	fileout.cd()
 	for i in range(0,len(hist_array)):
-		hist_array[i].Write() #try to rename while save
+		hist_array[i].Write() #Fixme: try to rename while save
 	fileout.Close()
         
         # https://twiki.cern.ch/twiki/bin/viewauth/CMS/TopSystematics#Luminosity
@@ -119,6 +119,13 @@ def draw_plots(opts, hist_array =[], x_name='', isem=0):
 	TT.SetFillColor(ROOT.kBlue)
 	TT.Scale(lumi)
 
+        VBS = hist_array[64].Clone()
+        VBS.SetFillColor(ROOT.kRed+2)
+        VBS.Add(hist_array[65])
+        VBS.Add(hist_array[66])
+        VBS.Add(hist_array[67])
+        VBS.Scale(lumi)
+
 	FakeLep_mc = hist_array[30].Clone()
 	FakeLep_mc.Add(hist_array[31])
 	FakeLep_mc.Add(hist_array[32])
@@ -149,19 +156,25 @@ def draw_plots(opts, hist_array =[], x_name='', isem=0):
 	FakeLep_mc.Add(hist_array[57])
 	FakeLep_mc.Add(hist_array[58])
 	FakeLep_mc.Add(hist_array[59])
+        #four fakeVBS
+        FakeLep_mc.Add(hist_array[68])
+        FakeLep_mc.Add(hist_array[69])
+        FakeLep_mc.Add(hist_array[70])
+        FakeLep_mc.Add(hist_array[71])
+        
 	FakeLep_mc.Scale(lumi)
 
 	FakeLep = hist_array[60].Clone() #this is data-fake
 	FakeLep.Add(hist_array[61])      #this is data-fake
 	if isem==1:
-		FakeLep.Add(hist_array[64])#if emu channel
+		FakeLep.Add(hist_array[72])#if emu channel
 	FakeLep.Add(FakeLep_mc.Clone())
 	FakeLep.SetFillColor(ROOT.kBlue-7)
 
 	Data = hist_array[62].Clone()
 	Data.Add(hist_array[63])
 	if isem==1:
-		Data.Add(hist_array[65])#if emu channel
+		Data.Add(hist_array[73])#if emu channel
 	if not opts.draw_data: Data.Reset('ICE')
 	Data.SetMarkerStyle(20)
 	Data.SetMarkerSize(0.85)
@@ -177,6 +190,8 @@ def draw_plots(opts, hist_array =[], x_name='', isem=0):
 	h_stack.Add(SingleTop)
 	h_stack.Add(ttXorXX)
 	h_stack.Add(tzq)
+        h_stack.Add(VBS)
+        
 	max_yields = 0
 	Nbins=h_stack.GetStack().Last().GetNbinsX()
 	for i in range(1,Nbins+1):
@@ -227,6 +242,7 @@ def draw_plots(opts, hist_array =[], x_name='', isem=0):
 	SingleTop_yield =round(SingleTop.Integral(),1)
 	ttXorXX_yield =round(ttXorXX.Integral(),1)
 	tzq_yield =round(tzq.Integral(),1)
+        VBS_yield =round(VBS.Integral(),1)
 	FakeLep_yield =round(FakeLep.Integral(),1)
 	Data_yield = round(Data.Integral())
 
@@ -302,7 +318,8 @@ def draw_plots(opts, hist_array =[], x_name='', isem=0):
 	set_axis(h_stack,'y', 'Event/Bin', False)
 
 	CMSstyle.SetStyle(pad1, opts.era)
-
+        CMSstyle.addChannelText(pad1, opts.channel) #new
+        
 	##legend
 	leg1 = ROOT.TLegend(0.66, 0.75, 0.94, 0.88)
         leg2 = ROOT.TLegend(0.44, 0.75, 0.64, 0.88)
@@ -317,10 +334,12 @@ def draw_plots(opts, hist_array =[], x_name='', isem=0):
         leg2.AddEntry(TT,'TT ['+str(TT_yield)+']','f')
         leg2.AddEntry(FakeLep,'FakeLep ['+str(FakeLep_yield)+']','f')
         leg2.AddEntry(VV,'VV ['+str(VV_yield)+']','f')
+        leg2.AddEntry(VBS,'VBS ['+str(VBS_yield)+']','f')
         leg1.AddEntry(VVV,'VVV ['+str(VVV_yield)+']','f')
         leg1.AddEntry(SingleTop,'SingleTop ['+str(SingleTop_yield)+']','f')
         leg1.AddEntry(ttXorXX,'TTXorXX ['+str(ttXorXX_yield)+']','f')
         leg1.AddEntry(tzq,'tzq ['+str(tzq_yield)+']','f')
+        
         leg1.SetFillColor(ROOT.kWhite)
         leg1.Draw('same')
         leg2.SetFillColor(ROOT.kWhite);
