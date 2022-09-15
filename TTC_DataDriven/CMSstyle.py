@@ -78,3 +78,19 @@ def SetStyle(gPad, era='2016APV'):
 	latex.SetTextAlign(31);
 	latex.SetTextSize(lumiTextSize * t);
 	return gPad
+
+def addChannelText(gPad, channel='mm'):
+        latex = TLatex();
+        latex.SetNDC()
+        latex.SetTextFont(50)
+        posX_ = 0.17
+        posY_ = 0.70
+        channelText = " "
+        if channel == 'mm':
+                channelText = "\mu\mu"
+        elif channel == 'ee':
+                channelText = "ee"
+        else:
+                channelText = "e#{mu}"
+        latex.DrawLatex(posX_, posY_, channelText)
+        return gPad
