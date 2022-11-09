@@ -26,6 +26,9 @@ parser = ArgumentParser()
 parser.add_argument("--era", dest="era", default="2016APV",
                     help="When making the plots, read the files with this era(years), default: 2016APV")
 
+parser.add_argument("--channel", dest="channel", default="ee",
+                    help="Channel for drawing plots [default: ee]")
+
 parser.add_argument("-s", "--saveFormats", dest="saveFormats", default = SAVEFORMATS,
                       help="Save formats for all plots [default: %s]" % SAVEFORMATS)
 
@@ -172,6 +175,10 @@ ttWZ_list = get_filelist(path, ['ttWZ.root'])
 ttZZ_list = get_filelist(path, ['ttZZ.root'])
 tzq_list = get_filelist(path, ['tzq.root'])
 TTTo2L_list = get_filelist(path, ['TTTo2L.root'])
+WLLJJ_list = get_filelist(path, ['WLLJJ.root'])
+WpWpJJ_EWK_list = get_filelist(path, ['WpWpJJ_EWK.root'])
+WpWpJJ_QCD_list = get_filelist(path, ['WpWpJJ_QCD.root'])
+ZZJJTo4L_list = get_filelist(path, ['ZZJJTo4L.root'])
 
 
 def TTC_Analysis(opts):
@@ -449,6 +456,35 @@ def TTC_Analysis(opts):
       df_FakeLep_SingleEle_histos.append(h2.Clone())
 
   # print ("df_FakeLep_SingleEle_histos[0] integral: ", df_FakeLep_SingleEle_histos[0].Integral())
+
+  ##############
+  ## WLLJJ samples
+  ##############
+  df_WLLJJ_histos = histos_book(WLLJJ_list, filters_mc, variables, False, False) #isData, isFake 
+  df_Fake_WLLJJ_histos = histos_book(WLLJJ_list, filters_mc_fake, variables, False, True) #isData, isFake
+  print ("WLLJJ both genuine and fake histo loading complete!")
+  
+  ##############
+  ## ZZJJTo4L samples
+  ##############
+  df_ZZJJTo4L_histos = histos_book(ZZJJTo4L_list, filters_mc, variables, False, False) #isData, isFake 
+  df_Fake_ZZJJTo4L_histos = histos_book(ZZJJTo4L_list, filters_mc_fake, variables, False, True) #isData, isFake
+  print ("ZZJJTo4L both genuine and fake histo loading complete!")
+  
+  ##############
+  ## WpWpJJ_EWK samples
+  ##############
+  df_WpWpJJ_EWK_histos = histos_book(WpWpJJ_EWK_list, filters_mc, variables, False, False) #isData, isFake 
+  df_Fake_WpWpJJ_EWK_histos = histos_book(WpWpJJ_EWK_list, filters_mc_fake, variables, False, True) #isData, isFake
+  print ("WpWpJJ_EWK both genuine and fake histo loading complete!")
+  
+  ##############
+  ## WpWpJJ_QCD samples
+  ##############
+  df_WpWpJJ_QCD_histos = histos_book(WpWpJJ_QCD_list, filters_mc, variables, False, False) #isData, isFake 
+  df_Fake_WpWpJJ_QCD_histos = histos_book(WpWpJJ_QCD_list, filters_mc_fake, variables, False, True) #isData, isFake
+  print ("WpWpJJ_QCD both genuine and fake histo loading complete!")
+  
   
   # Loop over histograms  
   for ij in range(0,len(variables)):
@@ -491,6 +527,10 @@ def TTC_Analysis(opts):
     h_TTTo2L = df_TTTo2L_histos[ij].Clone()
     h_DoubleEle = df_DoubleEle_histos[ij].Clone()
     h_SingleEle = df_SingleEle_histos[ij].Clone()
+    h_WLLJJ = df_WLLJJ_histos[ij].Clone()
+    h_ZZJJTo4L = df_ZZJJTo4L_histos[ij].Clone()
+    h_WpWpJJ_EWK = df_WpWpJJ_EWK_histos[ij].Clone()
+    h_WpWpJJ_QCD = df_WpWpJJ_QCD_histos[ij].Clone()
     h_fakelep_DoubleEle = df_FakeLep_DoubleEle_histos[ij].Clone()
     h_fakelep_SingleEle = df_FakeLep_SingleEle_histos[ij].Clone()
     h_fake_DY = df_Fake_DY_histos[ij].Clone()
@@ -523,7 +563,11 @@ def TTC_Analysis(opts):
     h_fake_ttZZ = df_Fake_ttZZ_histos[ij].Clone()
     h_fake_tzq = df_Fake_tzq_histos[ij].Clone()
     h_fake_TTTo2L = df_Fake_TTTo2L_histos[ij].Clone()
-
+    h_fake_WLLJJ = df_Fake_WLLJJ_histos[ij].Clone()
+    h_fake_ZZJJTo4L = df_Fake_ZZJJTo4L_histos[ij].Clone()
+    h_fake_WpWpJJ_EWK = df_Fake_WpWpJJ_EWK_histos[ij].Clone()
+    h_fake_WpWpJJ_QCD = df_Fake_WpWpJJ_QCD_histos[ij].Clone()
+    
     h_DY.Scale(xsec['DY']/get_mcEventnumber(DY_list))
     h_osWW.Scale(xsec['osWW']/get_mcEventnumber(osWW_list))
     h_ssWW.Scale(xsec['ssWW']/get_mcEventnumber(ssWW_list))
@@ -557,7 +601,11 @@ def TTC_Analysis(opts):
     h_ttZZ.Scale(xsec['TTZZ']/get_mcEventnumber(ttZZ_list))
     h_tzq.Scale(xsec['tZq']/get_mcEventnumber(tzq_list))
     h_TTTo2L.Scale(xsec['TTTo2L']/get_mcEventnumber(TTTo2L_list))
-
+    h_WLLJJ.Scale(xsec['WLLJJ']/get_mcEventnumber(WLLJJ_list))
+    h_ZZJJTo4L.Scale(xsec['ZZJJTo4L']/get_mcEventnumber(ZZJJTo4L_list))
+    h_WpWpJJ_EWK.Scale(xsec['WpWpJJ_EWK']/get_mcEventnumber(WpWpJJ_EWK_list))
+    h_WpWpJJ_QCD.Scale(xsec['WpWpJJ_QCD']/get_mcEventnumber(WpWpJJ_QCD_list))
+    
     h_fake_DY.Scale(xsec['DY']/get_mcEventnumber(DY_list))
     h_fake_osWW.Scale(xsec['osWW']/get_mcEventnumber(osWW_list))
     h_fake_ssWW.Scale(xsec['ssWW']/get_mcEventnumber(ssWW_list))
@@ -591,7 +639,11 @@ def TTC_Analysis(opts):
     h_fake_ttZZ.Scale(xsec['TTZZ']/get_mcEventnumber(ttZZ_list))
     h_fake_tzq.Scale(xsec['tZq']/get_mcEventnumber(tzq_list))
     h_fake_TTTo2L.Scale(xsec['TTTo2L']/get_mcEventnumber(TTTo2L_list))
-
+    h_fake_WLLJJ.Scale(xsec['WLLJJ']/get_mcEventnumber(WLLJJ_list))
+    h_fake_ZZJJTo4L.Scale(xsec['ZZJJTo4L']/get_mcEventnumber(ZZJJTo4L_list))
+    h_fake_WpWpJJ_EWK.Scale(xsec['WpWpJJ_EWK']/get_mcEventnumber(WpWpJJ_EWK_list))
+    h_fake_WpWpJJ_QCD.Scale(xsec['WpWpJJ_QCD']/get_mcEventnumber(WpWpJJ_QCD_list))
+    
     histos.append(h_DY.Clone())
     histos.append(h_osWW.Clone())
     histos.append(h_ssWW.Clone())
@@ -656,6 +708,15 @@ def TTC_Analysis(opts):
     histos.append(h_fakelep_SingleEle.Clone())
     histos.append(h_DoubleEle.Clone()) 
     histos.append(h_SingleEle.Clone())
+    # adding VBS samples:
+    histos.append(h_WLLJJ.Clone())
+    histos.append(h_ZZJJTo4L.Clone())
+    histos.append(h_WpWpJJ_EWK.Clone())
+    histos.append(h_WpWpJJ_QCD.Clone())
+    histos.append(h_fake_WLLJJ.Clone())
+    histos.append(h_fake_ZZJJTo4L.Clone())
+    histos.append(h_fake_WpWpJJ_EWK.Clone())
+    histos.append(h_fake_WpWpJJ_QCD.Clone())
 
     for i in range(0,64):
       histos[i]=overunder_flowbin(histos[i])
