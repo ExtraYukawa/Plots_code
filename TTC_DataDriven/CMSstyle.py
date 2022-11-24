@@ -81,16 +81,19 @@ def SetStyle(gPad, era='2016APV'):
 
 def addChannelText(gPad, channel='mm'):
         latex = TLatex();
+        # cmsTextFont = 60;
+        cmsTextSize = 0.6;
         latex.SetNDC()
-        latex.SetTextFont(50)
-        posX_ = 0.17
-        posY_ = 0.70
+        # latex.SetTextFont(42) #cmsTextFont)
+        posX_ = 0.19
+        posY_ = 0.55
         channelText = " "
-        if channel == 'mm':
+        if channel == "mm":
                 channelText = "\mu\mu"
-        elif channel == 'ee':
+        elif channel == "ee":
                 channelText = "ee"
         else:
-                channelText = "e#{mu}"
+                channelText = "e\mu"
         latex.DrawLatex(posX_, posY_, channelText)
+        latex.SetTextSize(cmsTextSize)
         return gPad

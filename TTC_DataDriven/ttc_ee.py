@@ -195,7 +195,7 @@ def TTC_Analysis(opts):
   print ("filters_mc_fake:   ", filters_mc_fake)
   print ("filters_data:      ", filters_data)
   print ("filters_data_fake: ", filters_data_fake)
-  
+
   ##############
   ## DY samples
   ##############
@@ -205,7 +205,7 @@ def TTC_Analysis(opts):
   # print ("df_DY_histos[0] integral", df_DY_histos[0].Integral())
   # print ("df_Fake_DY_histos[0] integral", df_Fake_DY_histos[0].Integral())
   # sys.exit(1)
-  
+
   ##############
   ## osWW samples
   ##############
@@ -297,6 +297,25 @@ def TTC_Analysis(opts):
   df_Fake_tbarW_histos = histos_book(tbarW_list, filters_mc_fake, variables, False, True) #isData, isFake
   print ("tbarW both genuine and fake histo loading complete!")
   
+  # lumi = 59830.
+  # df_tW_histos[0].Scale(lumi*xsec['tW']/get_mcEventnumber(tW_list))
+  # print ("tW input events: ", get_mcEventnumber(tW_list))
+  # print ("df_tW_histos[0] Entries", df_tW_histos[0].GetEntries())
+  # print ("tW final integral(): ", df_tW_histos[0].Integral())
+  # df_tbarW_histos[0].Scale(lumi*xsec['tbarW']/get_mcEventnumber(tbarW_list))
+  # print ("tbarW input events: ", get_mcEventnumber(tbarW_list))
+  # print ("df_tbarW_histos[0] Entries", df_tbarW_histos[0].GetEntries())
+  # print ("tbarW final integral(): ", df_tbarW_histos[0].Integral())
+
+  # df_Fake_tW_histos[0].Scale(lumi*xsec['tW']/get_mcEventnumber(tW_list))
+  # print ("Fake_tW input events: ", get_mcEventnumber(tW_list))
+  # print ("df_tFake_W_histos[0] Entries", df_Fake_tW_histos[0].GetEntries())
+  # print ("Fake tW final integral(): ", df_Fake_tW_histos[0].Integral())
+  # df_Fake_tbarW_histos[0].Scale(lumi*xsec['tbarW']/get_mcEventnumber(tbarW_list))
+  # print ("Fake tbarW input events: ", get_mcEventnumber(tbarW_list))
+  # print ("df_Fake_tbarW_histos[0] Entries", df_Fake_tbarW_histos[0].GetEntries())
+  # print ("Fake tbarW final integral(): ", df_Fake_tbarW_histos[0].Integral())
+
   ##############
   ## ttWtoLNu samples
   ##############
@@ -421,6 +440,12 @@ def TTC_Analysis(opts):
   df_Fake_TTTo2L_histos = histos_book(TTTo2L_list, filters_mc_fake, variables, False, True) #isData, isFake
   print ("TTTo2L both genuine and fake histo loading complete!")
   
+  # lumi = 59830.
+  # df_Fake_TTTo2L_histos[0].Scale(lumi*xsec['TTTo2L']/get_mcEventnumber(TTTo2L_list))
+  # print ("Fake_TTTo2L input events: ", get_mcEventnumber(TTTo2L_list))
+  # print ("df_tFake_W_histos[0] Entries", df_Fake_TTTo2L_histos[0].GetEntries())
+  # print ("Fake TTTo2L final integral(): ", df_Fake_TTTo2L_histos[0].Integral())
+
   ##############
   ## DoubleEle samples
   ##############
@@ -662,7 +687,7 @@ def TTC_Analysis(opts):
     histos.append(h_ttWtoQQ.Clone())
     histos.append(h_ttZ.Clone())
     histos.append(h_ttZtoQQ.Clone())
-    histos.append(h_ttH.Clone())
+    histos.append(h_ttH.Clone()) #gkole: 18
     histos.append(h_ttG.Clone())
     histos.append(h_tttW.Clone())
     histos.append(h_tttJ.Clone())

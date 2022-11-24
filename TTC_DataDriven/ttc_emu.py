@@ -185,7 +185,7 @@ def TTC_Analysis(opts):
   print ("filters_mc_fake:   ", filters_mc_fake)
   print ("filters_data:      ", filters_data)
   print ("filters_data_fake: ", filters_data_fake)
-  
+
   ##############
   ## DY samples
   ##############
@@ -403,7 +403,7 @@ def TTC_Analysis(opts):
   df_tzq_histos = histos_book(tzq_list, filters_mc, variables, False, False) #isData, isFake 
   df_Fake_tzq_histos = histos_book(tzq_list, filters_mc_fake, variables, False, True) #isData, isFake
   print ("tzq both genuine and fake histo loading complete!")
-  
+
   ##############
   ## TTTo2L samples
   ##############
@@ -411,6 +411,12 @@ def TTC_Analysis(opts):
   df_Fake_TTTo2L_histos = histos_book(TTTo2L_list, filters_mc_fake, variables, False, True) #isData, isFake
   print ("TTTo2L both genuine and fake histo loading complete!")
 
+  # lumi = 59830.  
+  # df_TTTo2L_histos[0].Scale(lumi*xsec['TTTo2L']/get_mcEventnumber(TTTo2L_list))
+  # print ("TTTo2L input events: ", get_mcEventnumber(TTTo2L_list))
+  # print ("df_TTTo2L_histos[0] Entries", df_TTTo2L_histos[0].GetEntries())
+  # print ("TTTo2L final integral(): ",   df_TTTo2L_histos[0].Integral())
+  
   ##############
   ## SingleMu samples 
   ##############
