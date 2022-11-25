@@ -67,19 +67,19 @@ def draw_plots(opts, hist_array =[], x_name='', isem=0):
                 lumi=1.
         else:
                 raise Exception ("select correct era!")
-        # lumi=41480.
+
 	DY = hist_array[0].Clone()
 	DY.SetFillColor(ROOT.kRed)
 	DY.Scale(lumi)
 
 	VV = hist_array[1].Clone()
-	VV.Add(hist_array[2])
+	# VV.Add(hist_array[2]) #ssWW
 	VV.Add(hist_array[3])
-	VV.Add(hist_array[4])
+	# VV.Add(hist_array[4]) #WZew
 	VV.Add(hist_array[5])
-	VV.Add(hist_array[6])
-	VV.Add(hist_array[7])
-	VV.SetFillColor(ROOT.kCyan-7)
+	# VV.Add(hist_array[6]) #ZZ
+	# VV.Add(hist_array[7]) #ZG
+	VV.SetFillColor(ROOT.kCyan-9)
 	VV.Scale(lumi)
 
 	VVV = hist_array[8].Clone()
@@ -88,29 +88,42 @@ def draw_plots(opts, hist_array =[], x_name='', isem=0):
 	VVV.Add(hist_array[11])
 	VVV.SetFillColor(ROOT.kSpring-9)
 	VVV.Scale(lumi)
-
+        
 	SingleTop = hist_array[12].Clone()
 	SingleTop.Add(hist_array[13])
 	SingleTop.SetFillColor(ROOT.kGray)
 	SingleTop.Scale(lumi)
+        
+        ttW = hist_array[14].Clone()
+        ttW.Add(hist_array[15])
+        ttW.SetFillColor(ROOT.kGreen-2)
+        ttW.Scale(lumi)
+        
+        ttZ = hist_array[16].Clone()
+        ttZ.Add(hist_array[17])
+        ttZ.SetFillColor(ROOT.kCyan-2)
+        ttZ.Scale(lumi)
 
-	ttXorXX = hist_array[14].Clone()
-	ttXorXX.Add(hist_array[15])
-	ttXorXX.Add(hist_array[16])
-	ttXorXX.Add(hist_array[17])
-	ttXorXX.Add(hist_array[18])
-	ttXorXX.Add(hist_array[19])
-	ttXorXX.Add(hist_array[20])
-	ttXorXX.Add(hist_array[21])
-	ttXorXX.Add(hist_array[22])
-	ttXorXX.Add(hist_array[23])
-	ttXorXX.Add(hist_array[24])
-	ttXorXX.Add(hist_array[25])
-	ttXorXX.Add(hist_array[26])
-	ttXorXX.Add(hist_array[27])
-	ttXorXX.SetFillColor(ROOT.kViolet-4)
-	ttXorXX.Scale(lumi)
-
+        ttVH = hist_array[18].Clone()
+        ttVH.Add(hist_array[23])
+        ttVH.Add(hist_array[24])
+        ttVH.SetFillColor(ROOT.kRed-9)
+        ttVH.Scale(lumi)
+        
+        tttX = hist_array[20].Clone()
+        tttX.Add(hist_array[21])
+        tttX.Add(hist_array[22])
+        tttX.SetFillColor(ROOT.kPink-3)
+        tttX.Scale(lumi)
+        
+        ttVV = hist_array[25].Clone()
+        ttVV.Add(hist_array[26])
+        ttVV.Add(hist_array[27])
+        ttVV.SetFillColor(ROOT.kOrange+3)
+        ttVV.Scale(lumi)
+        
+	# ttXorXX.Add(hist_array[19]) #not used in Limit
+        
 	tzq = hist_array[28].Clone()
 	tzq.SetFillColor(ROOT.kYellow-4)
 	tzq.Scale(lumi)
@@ -120,7 +133,7 @@ def draw_plots(opts, hist_array =[], x_name='', isem=0):
 	TT.Scale(lumi)
 
         VBS = hist_array[64].Clone()
-        VBS.SetFillColor(ROOT.kRed+2)
+        VBS.SetFillColor(ROOT.kBlue-6)
         VBS.Add(hist_array[65])
         VBS.Add(hist_array[66])
         VBS.Add(hist_array[67])
@@ -169,7 +182,7 @@ def draw_plots(opts, hist_array =[], x_name='', isem=0):
 	if isem==1:
 		FakeLep.Add(hist_array[72])#if emu channel
 	FakeLep.Add(FakeLep_mc.Clone())
-	FakeLep.SetFillColor(ROOT.kBlue-7)
+	FakeLep.SetFillColor(ROOT.kViolet-4)
 
 	Data = hist_array[62].Clone()
 	Data.Add(hist_array[63])
@@ -188,7 +201,11 @@ def draw_plots(opts, hist_array =[], x_name='', isem=0):
 	h_stack.Add(VV)
 	h_stack.Add(VVV)
 	h_stack.Add(SingleTop)
-	h_stack.Add(ttXorXX)
+	h_stack.Add(ttW)
+        h_stack.Add(ttZ)
+        h_stack.Add(ttVH)
+        h_stack.Add(tttX)
+        h_stack.Add(ttVV)
 	h_stack.Add(tzq)
         h_stack.Add(VBS)
         
@@ -235,12 +252,17 @@ def draw_plots(opts, hist_array =[], x_name='', isem=0):
 	gr = ROOT.TGraphAsymmErrors(len(x), np.array(x), np.array(y),np.array(xerror_l),np.array(xerror_r), np.array(yerror_d), np.array(yerror_u))
 	gr_pad2 = ROOT.TGraphAsymmErrors(len(x), np.array(x), np.array(y_pad2),np.array(xerror_l),np.array(xerror_r), np.array(y_pad2_error_d), np.array(y_pad2_error_u))
 
-	DY_yield =round(DY.Integral(),1)
-	TT_yield =round(TT.Integral(),1)
-	VV_yield =round(VV.Integral(),1)
-	VVV_yield =round(VVV.Integral(),1)
+	DY_yield =   round(DY.Integral(),1)
+	TT_yield =   round(TT.Integral(),1)
+	VV_yield =   round(VV.Integral(),1)
+	VVV_yield =  round(VVV.Integral(),1)
 	SingleTop_yield =round(SingleTop.Integral(),1)
-	ttXorXX_yield =round(ttXorXX.Integral(),1)
+        ttW_yield =  round(ttW.Integral(),1)
+        ttZ_yield =  round(ttZ.Integral(),1)
+        ttVH_yield = round(ttVH.Integral(),1)
+        tttX_yield = round(tttX.Integral(),1)
+        ttVV_yield = round(ttVV.Integral(),1)
+	#ttXorXX_yield =round(ttXorXX.Integral(),1)
 	tzq_yield =round(tzq.Integral(),1)
         VBS_yield =round(VBS.Integral(),1)
 	FakeLep_yield =round(FakeLep.Integral(),1)
@@ -321,23 +343,27 @@ def draw_plots(opts, hist_array =[], x_name='', isem=0):
         CMSstyle.addChannelText(pad1, opts.channel) #new
         
 	##legend
-	leg1 = ROOT.TLegend(0.66, 0.75, 0.94, 0.88)
-        leg2 = ROOT.TLegend(0.44, 0.75, 0.64, 0.88)
-        leg3 = ROOT.TLegend(0.17, 0.75, 0.40, 0.88)
+	leg1 = ROOT.TLegend(0.66, 0.62, 0.94, 0.88)
+        leg2 = ROOT.TLegend(0.44, 0.62, 0.64, 0.88)
+        leg3 = ROOT.TLegend(0.17, 0.62, 0.40, 0.88)
         leg1.SetMargin(0.4)
         leg2.SetMargin(0.4)
         leg3.SetMargin(0.4)
 
         leg3.AddEntry(DY,'DY ['+str(DY_yield)+']','f')
+        leg3.AddEntry(ttW,'ttW ['+str(ttW_yield)+']','f')
+        leg3.AddEntry(ttZ,'ttZ ['+str(ttZ_yield)+']','f')
         leg3.AddEntry(gr,'Stat. unc','f')
         leg3.AddEntry(Data,'Data ['+str(Data_yield)+']','pe')
         leg2.AddEntry(TT,'TT ['+str(TT_yield)+']','f')
         leg2.AddEntry(FakeLep,'FakeLep ['+str(FakeLep_yield)+']','f')
         leg2.AddEntry(VV,'VV ['+str(VV_yield)+']','f')
         leg2.AddEntry(VBS,'VBS ['+str(VBS_yield)+']','f')
+        leg2.AddEntry(ttVH,'ttVH ['+str(ttVH_yield)+']','f')
         leg1.AddEntry(VVV,'VVV ['+str(VVV_yield)+']','f')
         leg1.AddEntry(SingleTop,'SingleTop ['+str(SingleTop_yield)+']','f')
-        leg1.AddEntry(ttXorXX,'TTXorXX ['+str(ttXorXX_yield)+']','f')
+        leg1.AddEntry(tttX,'tttX ['+str(tttX_yield)+']','f')
+        leg1.AddEntry(ttVV,'ttVV ['+str(ttVV_yield)+']','f')
         leg1.AddEntry(tzq,'tzq ['+str(tzq_yield)+']','f')
         
         leg1.SetFillColor(ROOT.kWhite)
