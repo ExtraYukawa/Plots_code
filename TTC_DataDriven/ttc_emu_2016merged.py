@@ -26,6 +26,9 @@ parser = ArgumentParser()
 parser.add_argument("--era", dest="era", default="2016APV",
                     help="When making the plots, read the files with this era(years), default: 2016APV")
 
+parser.add_argument("--channel", dest="channel", default="em",
+                    help="Channel for drawing plots [default: em]")
+
 parser.add_argument("-s", "--saveFormats", dest="saveFormats", default = SAVEFORMATS,
                       help="Save formats for all plots [default: %s]" % SAVEFORMATS)
 
@@ -173,7 +176,11 @@ ttWW_list_APV = get_filelist(pathAPV, ['ttWW.root'])
 ttWZ_list_APV = get_filelist(pathAPV, ['ttWZ.root'])
 ttZZ_list_APV = get_filelist(pathAPV, ['ttZZ.root'])
 tzq_list_APV = get_filelist(pathAPV, ['tZq.root'])
-TTTo2L_list_APV = get_filelist(pathAPV, ['TTTo2L2Nu.root'])
+TTTo2L_list_APV = get_filelist(pathAPV, ['TTTo2L.root'])
+WLLJJ_list_APV = get_filelist(pathAPV, ['WLLJJ.root'])
+WpWpJJ_EWK_list_APV = get_filelist(pathAPV, ['WpWpJJ_EWK.root'])
+WpWpJJ_QCD_list_APV = get_filelist(pathAPV, ['WpWpJJ_QCD.root'])
+ZZJJTo4L_list_APV = get_filelist(pathAPV, ['ZZJJTo4L.root'])
 
 # MC for postAPV
 DY_list_postAPV = get_filelist(pathpostAPV, ['DYnlo.root'])
@@ -205,8 +212,11 @@ ttWW_list_postAPV = get_filelist(pathpostAPV, ['ttWW.root'])
 ttWZ_list_postAPV = get_filelist(pathpostAPV, ['ttWZ.root'])
 ttZZ_list_postAPV = get_filelist(pathpostAPV, ['ttZZ.root'])
 tzq_list_postAPV = get_filelist(pathpostAPV, ['tZq.root'])
-TTTo2L_list_postAPV = get_filelist(pathpostAPV, ['TTTo2L2Nu.root'])
-
+TTTo2L_list_postAPV = get_filelist(pathpostAPV, ['TTTo2L.root'])
+WLLJJ_list_postAPV = get_filelist(pathpostAPV, ['WLLJJ.root'])
+WpWpJJ_EWK_list_postAPV = get_filelist(pathpostAPV, ['WpWpJJ_EWK.root'])
+WpWpJJ_QCD_list_postAPV = get_filelist(pathpostAPV, ['WpWpJJ_QCD.root'])
+ZZJJTo4L_list_postAPV = get_filelist(pathpostAPV, ['ZZJJTo4L.root'])
 
 def TTC_Analysis(opts):
 
@@ -593,7 +603,44 @@ def TTC_Analysis(opts):
   df_MuonEle_histos_postAPV = histos_book(muonEle_names_postAPV, filters_data, variables, True, False, "2016postAPV") #isData, isFake 
   df_FakeLep_MuonEle_histos_APV = histos_book(muonEle_names_APV, filters_data_fake, variables, True, True, "2016APV") #isData, isFake 
   df_FakeLep_MuonEle_histos_postAPV = histos_book(muonEle_names_postAPV, filters_data_fake, variables, True, True, "2016postAPV") #isData, isFake
-  
+
+  ##############
+  ## WLLJJ samples
+  ##############
+  df_WLLJJ_histos_APV = histos_book(WLLJJ_list_APV, filters_mc, variables, False, False, "2016APV") #isData, isFake 
+  df_WLLJJ_histos_postAPV = histos_book(WLLJJ_list_postAPV, filters_mc, variables, False, False, "2016postAPV") #isData, isFake 
+  df_Fake_WLLJJ_histos_APV = histos_book(WLLJJ_list_APV, filters_mc_fake, variables, False, True, "2016APV") #isData, isFake
+  df_Fake_WLLJJ_histos_postAPV = histos_book(WLLJJ_list_postAPV, filters_mc_fake, variables, False, True, "2016postAPV") #isData, isFake
+  print ("WLLJJ both genuine and fake histo loading complete!")
+
+  ##############
+  ## ZZJJTo4L samples
+  ##############
+  df_ZZJJTo4L_histos_APV = histos_book(ZZJJTo4L_list_APV, filters_mc, variables, False, False, "2016APV") #isData, isFake 
+  df_ZZJJTo4L_histos_postAPV = histos_book(ZZJJTo4L_list_postAPV, filters_mc, variables, False, False, "2016postAPV") #isData, isFake
+  df_Fake_ZZJJTo4L_histos_APV = histos_book(ZZJJTo4L_list_APV, filters_mc_fake, variables, False, True, "2016APV") #isData, isFake
+  df_Fake_ZZJJTo4L_histos_postAPV = histos_book(ZZJJTo4L_list_postAPV, filters_mc_fake, variables, False, True, "2016postAPV") #isData, isFake
+  print ("ZZJJTo4L both genuine and fake histo loading complete!")
+
+  ##############
+  ## WpWpJJ_EWK samples
+  ##############
+  df_WpWpJJ_EWK_histos_APV = histos_book(WpWpJJ_EWK_list_APV, filters_mc, variables, False, False, "2016APV") #isData, isFake 
+  df_WpWpJJ_EWK_histos_postAPV = histos_book(WpWpJJ_EWK_list_postAPV, filters_mc, variables, False, False, "2016postAPV") #isData, isFake
+  df_Fake_WpWpJJ_EWK_histos_APV = histos_book(WpWpJJ_EWK_list_APV, filters_mc_fake, variables, False, True, "2016APV") #isData, isFake
+  df_Fake_WpWpJJ_EWK_histos_postAPV = histos_book(WpWpJJ_EWK_list_postAPV, filters_mc_fake, variables, False, True, "2016postAPV") #isData, isFake
+  print ("WpWpJJ_EWK both genuine and fake histo loading complete!")
+
+  ##############
+  ## WpWpJJ_QCD samples
+  ##############
+  df_WpWpJJ_QCD_histos_APV = histos_book(WpWpJJ_QCD_list_APV, filters_mc, variables, False, False, "2016APV") #isData, isFake 
+  df_WpWpJJ_QCD_histos_postAPV = histos_book(WpWpJJ_QCD_list_postAPV, filters_mc, variables, False, False, "2016postAPV") #isData, isFake 
+  df_Fake_WpWpJJ_QCD_histos_APV = histos_book(WpWpJJ_QCD_list_APV, filters_mc_fake, variables, False, True, "2016APV") #isData, isFake
+  df_Fake_WpWpJJ_QCD_histos_postAPV = histos_book(WpWpJJ_QCD_list_postAPV, filters_mc_fake, variables, False, True, "2016postAPV") #isData, isFake
+  print ("WpWpJJ_QCD both genuine and fake histo loading complete!")
+
+
   APV_lumi = 19520.
   postAPV_lumi = 16810.
   
@@ -636,7 +683,10 @@ def TTC_Analysis(opts):
     h_SingleEle_APV = df_SingleEle_histos_APV[ij].Clone()
     h_SingleMu_APV = df_SingleMu_histos_APV[ij].Clone()
     h_MuonEle_APV = df_MuonEle_histos_APV[ij].Clone()
-    
+    h_WLLJJ_APV = df_WLLJJ_histos_APV[ij].Clone()
+    h_ZZJJTo4L_APV = df_ZZJJTo4L_histos_APV[ij].Clone()
+    h_WpWpJJ_EWK_APV = df_WpWpJJ_EWK_histos_APV[ij].Clone()
+    h_WpWpJJ_QCD_APV = df_WpWpJJ_QCD_histos_APV[ij].Clone()
     
     h_DY_postAPV = df_DY_histos_postAPV[ij].Clone()
     h_osWW_postAPV = df_osWW_histos_postAPV[ij].Clone()
@@ -671,6 +721,10 @@ def TTC_Analysis(opts):
     h_SingleEle_postAPV = df_SingleEle_histos_postAPV[ij].Clone()
     h_SingleMu_postAPV = df_SingleMu_histos_postAPV[ij].Clone()
     h_MuonEle_postAPV = df_MuonEle_histos_postAPV[ij].Clone()
+    h_WLLJJ_postAPV = df_WLLJJ_histos_postAPV[ij].Clone()
+    h_ZZJJTo4L_postAPV = df_ZZJJTo4L_histos_postAPV[ij].Clone()
+    h_WpWpJJ_EWK_postAPV = df_WpWpJJ_EWK_histos_postAPV[ij].Clone()
+    h_WpWpJJ_QCD_postAPV = df_WpWpJJ_QCD_histos_postAPV[ij].Clone()
     
     # FakeAPV
     h_fake_DY_APV = df_Fake_DY_histos_APV[ij].Clone()
@@ -706,6 +760,10 @@ def TTC_Analysis(opts):
     h_fakelep_SingleEle_APV = df_FakeLep_SingleEle_histos_APV[ij].Clone()
     h_fakelep_SingleMu_APV = df_FakeLep_SingleMu_histos_APV[ij].Clone()
     h_fakelep_MuonEle_APV = df_FakeLep_MuonEle_histos_APV[ij].Clone()
+    h_fake_WLLJJ_APV = df_Fake_WLLJJ_histos_APV[ij].Clone()
+    h_fake_ZZJJTo4L_APV = df_Fake_ZZJJTo4L_histos_APV[ij].Clone()
+    h_fake_WpWpJJ_EWK_APV = df_Fake_WpWpJJ_EWK_histos_APV[ij].Clone()
+    h_fake_WpWpJJ_QCD_APV = df_Fake_WpWpJJ_QCD_histos_APV[ij].Clone()
 
     h_fake_DY_postAPV = df_Fake_DY_histos_postAPV[ij].Clone()
     h_fake_osWW_postAPV = df_Fake_osWW_histos_postAPV[ij].Clone()
@@ -740,6 +798,10 @@ def TTC_Analysis(opts):
     h_fakelep_SingleEle_postAPV = df_FakeLep_SingleEle_histos_postAPV[ij].Clone()
     h_fakelep_SingleMu_postAPV = df_FakeLep_SingleMu_histos_postAPV[ij].Clone()
     h_fakelep_MuonEle_postAPV = df_FakeLep_MuonEle_histos_postAPV[ij].Clone()
+    h_fake_WLLJJ_postAPV = df_Fake_WLLJJ_histos_postAPV[ij].Clone()
+    h_fake_ZZJJTo4L_postAPV = df_Fake_ZZJJTo4L_histos_postAPV[ij].Clone()
+    h_fake_WpWpJJ_EWK_postAPV = df_Fake_WpWpJJ_EWK_histos_postAPV[ij].Clone()
+    h_fake_WpWpJJ_QCD_postAPV = df_Fake_WpWpJJ_QCD_histos_postAPV[ij].Clone()
 
     # check_histo(h_DY_APV)
     h_DY_APV.Scale(APV_lumi*xsec['DY']/get_mcEventnumber(DY_list_APV))
@@ -801,6 +863,11 @@ def TTC_Analysis(opts):
     h_tzq_APV.Scale(APV_lumi*xsec['tZq']/get_mcEventnumber(tzq_list_APV))
     # check_histo(h_TTTo2L_APV)
     h_TTTo2L_APV.Scale(APV_lumi*xsec['TTTo2L']/get_mcEventnumber(TTTo2L_list_APV))
+    
+    h_WLLJJ_APV.Scale(xsec['WLLJJ']/get_mcEventnumber(WLLJJ_list_APV))
+    h_ZZJJTo4L_APV.Scale(xsec['ZZJJTo4L']/get_mcEventnumber(ZZJJTo4L_list_APV))
+    h_WpWpJJ_EWK_APV.Scale(xsec['WpWpJJ_EWK']/get_mcEventnumber(WpWpJJ_EWK_list_APV))
+    h_WpWpJJ_QCD_APV.Scale(xsec['WpWpJJ_QCD']/get_mcEventnumber(WpWpJJ_QCD_list_APV))
     
     #postAPV
     # check_histo(h_DY_postAPV)
@@ -864,6 +931,11 @@ def TTC_Analysis(opts):
     # check_histo(h_TTTo2L_postAPV)
     h_TTTo2L_postAPV.Scale(postAPV_lumi*xsec['TTTo2L']/get_mcEventnumber(TTTo2L_list_postAPV))
     
+    h_WLLJJ_postAPV.Scale(xsec['WLLJJ']/get_mcEventnumber(WLLJJ_list_postAPV))
+    h_ZZJJTo4L_postAPV.Scale(xsec['ZZJJTo4L']/get_mcEventnumber(ZZJJTo4L_list_postAPV))
+    h_WpWpJJ_EWK_postAPV.Scale(xsec['WpWpJJ_EWK']/get_mcEventnumber(WpWpJJ_EWK_list_postAPV))
+    h_WpWpJJ_QCD_postAPV.Scale(xsec['WpWpJJ_QCD']/get_mcEventnumber(WpWpJJ_QCD_list_postAPV))
+    
     # Fake (APV)
     h_fake_DY_APV.Scale(APV_lumi*xsec['DY']/get_mcEventnumber(DY_list_APV))
     h_fake_osWW_APV.Scale(APV_lumi*xsec['osWW']/get_mcEventnumber(osWW_list_APV))
@@ -895,7 +967,11 @@ def TTC_Analysis(opts):
     h_fake_ttZZ_APV.Scale(APV_lumi*xsec['TTZZ']/get_mcEventnumber(ttZZ_list_APV))
     h_fake_tzq_APV.Scale(APV_lumi*xsec['tZq']/get_mcEventnumber(tzq_list_APV))
     h_fake_TTTo2L_APV.Scale(APV_lumi*xsec['TTTo2L']/get_mcEventnumber(TTTo2L_list_APV))
-    
+    h_fake_WLLJJ_APV.Scale(xsec['WLLJJ']/get_mcEventnumber(WLLJJ_list_APV))
+    h_fake_ZZJJTo4L_APV.Scale(xsec['ZZJJTo4L']/get_mcEventnumber(ZZJJTo4L_list_APV))
+    h_fake_WpWpJJ_EWK_APV.Scale(xsec['WpWpJJ_EWK']/get_mcEventnumber(WpWpJJ_EWK_list_APV))
+    h_fake_WpWpJJ_QCD_APV.Scale(xsec['WpWpJJ_QCD']/get_mcEventnumber(WpWpJJ_QCD_list_APV))
+
     # Fake (postAPV)
     h_fake_DY_postAPV.Scale(postAPV_lumi*xsec['DY']/get_mcEventnumber(DY_list_postAPV))
     h_fake_osWW_postAPV.Scale(postAPV_lumi*xsec['osWW']/get_mcEventnumber(osWW_list_postAPV))
@@ -927,6 +1003,10 @@ def TTC_Analysis(opts):
     h_fake_ttZZ_postAPV.Scale(postAPV_lumi*xsec['TTZZ']/get_mcEventnumber(ttZZ_list_postAPV))
     h_fake_tzq_postAPV.Scale(postAPV_lumi*xsec['tZq']/get_mcEventnumber(tzq_list_postAPV))
     h_fake_TTTo2L_postAPV.Scale(postAPV_lumi*xsec['TTTo2L']/get_mcEventnumber(TTTo2L_list_postAPV))
+    h_fake_WLLJJ_postAPV.Scale(xsec['WLLJJ']/get_mcEventnumber(WLLJJ_list_postAPV))
+    h_fake_ZZJJTo4L_postAPV.Scale(xsec['ZZJJTo4L']/get_mcEventnumber(ZZJJTo4L_list_postAPV))
+    h_fake_WpWpJJ_EWK_postAPV.Scale(xsec['WpWpJJ_EWK']/get_mcEventnumber(WpWpJJ_EWK_list_postAPV))
+    h_fake_WpWpJJ_QCD_postAPV.Scale(xsec['WpWpJJ_QCD']/get_mcEventnumber(WpWpJJ_QCD_list_postAPV))
 
     # function which does hadd 
     h_DY_APV.Add(h_DY_postAPV)
@@ -1060,6 +1140,26 @@ def TTC_Analysis(opts):
     histos.append(h_SingleEle_APV.Clone())
     h_SingleMu_APV.Add(h_SingleMu_postAPV)
     histos.append(h_SingleMu_APV.Clone())
+
+    # adding VBS
+    h_WLLJJ_APV.Add(h_WLLJJ_postAPV)
+    histos.append(h_WLLJJ_APV.Clone())
+    h_ZZJJTo4L_APV.Add(h_ZZJJTo4L_postAPV)
+    histos.append(h_ZZJJTo4L_APV.Clone())
+    h_WpWpJJ_EWK_APV.Add(h_WpWpJJ_EWK_postAPV)
+    histos.append(h_WpWpJJ_EWK_APV.Clone())
+    h_WpWpJJ_QCD_APV.Add(h_WpWpJJ_QCD_postAPV)
+    histos.append(h_WpWpJJ_QCD_APV.Clone())
+
+    h_fake_WLLJJ_APV.Add(h_fake_WLLJJ_postAPV)
+    histos.append(h_fake_WLLJJ_APV.Clone())
+    h_fake_ZZJJTo4L_APV.Add(h_fake_ZZJJTo4L_postAPV)
+    histos.append(h_fake_ZZJJTo4L_APV.Clone())
+    h_fake_WpWpJJ_EWK_APV.Add(h_fake_WpWpJJ_EWK_postAPV)
+    histos.append(h_fake_WpWpJJ_EWK_APV.Clone())
+    h_fake_WpWpJJ_QCD_APV.Add(h_fake_WpWpJJ_QCD_postAPV)
+    histos.append(h_fake_WpWpJJ_QCD_APV.Clone())
+
     h_fakelep_MuonEle_APV.Add(h_fakelep_MuonEle_postAPV)
     histos.append(h_fakelep_MuonEle_APV.Clone())
     h_MuonEle_APV.Add(h_MuonEle_postAPV)
