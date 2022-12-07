@@ -176,6 +176,9 @@ def draw_plots(opts, hist_array =[], x_name='', isem=0):
         FakeLep_mc.Add(hist_array[71])
         
 	FakeLep_mc.Scale(lumi)
+        # print ("===================================================")
+        # print ("Fakelep_mc integral final: ", FakeLep_mc.Integral())
+        # print ("===================================================")
 
 	FakeLep = hist_array[60].Clone() #this is data-fake
 	FakeLep.Add(hist_array[61])      #this is data-fake
@@ -183,6 +186,12 @@ def draw_plots(opts, hist_array =[], x_name='', isem=0):
 		FakeLep.Add(hist_array[72])#if emu channel
 	FakeLep.Add(FakeLep_mc.Clone())
 	FakeLep.SetFillColor(ROOT.kViolet-4)
+
+        # print ("===================================================")
+        # print ("Fakelep data1 integral(): ", hist_array[60].Integral())
+        # print ("Fakelep data2 integral(): ", hist_array[61].Integral())
+        # print ("Final FakeLep Integral(): ", FakeLep.Integral())
+        # print ("===================================================")
 
 	Data = hist_array[62].Clone()
 	Data.Add(hist_array[63])

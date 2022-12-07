@@ -28,20 +28,20 @@ parser.add_argument("-draw_data", "--draw_data", action="store_true", dest="draw
                     help="make it to True if you want to draw_data on MC stacks")
 parser.add_argument("--test", action="store_true")
 
-args = parser.parse_args()
+opts = parser.parse_args()
 
 ###########################################################################
 # Make a condor submission script
 ###########################################################################
 
-config_filename = os.path.basename(args.inputfile)
+config_filename = os.path.basename(opts.inputfile)
 
-if not args.outputDir:
-    args.outputDir = '%s_%s_%s' % (config_filename.replace(".py", ""), args.era, datetime.datetime.now().strftime("%d%b%YT%H%M"))
+if not opts.outputDir:
+    opts.outputDir = '%s_%s_%s' % (config_filename.replace(".py", ""), opts.era, datetime.datetime.now().strftime("%d%b%YT%H%M"))
     
 # Go to the actual submission dir
-os.mkdir(cmsswBase + '/src/Plots_code/TTC_DataDriven/'+args.outputDir)
-os.chdir(cmsswBase + '/src/Plots_code/TTC_DataDriven/'+args.outputDir)
+os.mkdir(cmsswBase + '/src/Plots_code/TTC_DataDriven/'+opts.outputDir)
+os.chdir(cmsswBase + '/src/Plots_code/TTC_DataDriven/'+opts.outputDir)
 print ("submission dir: ", os. getcwd())
 
 # prepare submit jdl file
@@ -52,14 +52,14 @@ os.system(r'cp ../Util/sub.jdl .')
 #os.system(r'cp ../wrapper.sh wrapper_%s.sh' %(Era))
 os.system(r'cp ../Util/wrapper.sh .')
 os.system(r'sed -i "s/INPUTFILE/%s/g" wrapper.sh' %(config_filename))
-os.system(r'sed -i "s/ERA/%s/g" wrapper.sh' %(args.era))
-os.system(r'sed -i "s/OUTPUTDIR/%s/g" wrapper.sh' %(args.outputDir))
-if args.draw_data:
+os.system(r'sed -i "s/ERA/%s/g" wrapper.sh' %(opts.era))
+os.system(r'sed -i "s/OUTPUTDIR/%s/g" wrapper.sh' %(opts.outputDir))
+if opts.draw_data:
     os.system(r'sed -i "s/DATAFLAG/%s/g" wrapper.sh' %("--draw_data"))
 else:
     os.system(r'sed -i "s/DATAFLAG/%s/g" wrapper.sh' %(""))
 
 # Final submission
-if not args.test:
+if not opts.test:
     print ("Submitting Jobs on Condor")
     os.system('condor_submit sub.jdl')
