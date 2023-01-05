@@ -54,6 +54,7 @@ os.system(r'cp ../Util/wrapper.sh .')
 os.system(r'sed -i "s/INPUTFILE/%s/g" wrapper.sh' %(config_filename))
 os.system(r'sed -i "s/ERA/%s/g" wrapper.sh' %(opts.era))
 os.system(r'sed -i "s/OUTPUTDIR/%s/g" wrapper.sh' %(opts.outputDir))
+os.system(r'sed -i "s+ACTUALDIR+%s+g" wrapper.sh' %(CURRENT_WORKDIR)) #carefull about the sed with "/" https://www.cyberciti.biz/faq/how-to-use-sed-to-find-and-replace-text-in-files-in-linux-unix-shell/
 if opts.draw_data:
     os.system(r'sed -i "s/DATAFLAG/%s/g" wrapper.sh' %("--draw_data"))
 else:

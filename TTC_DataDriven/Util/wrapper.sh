@@ -8,8 +8,8 @@ echo $HOME
 export SCRAM_ARCH=slc7_amd64_gcc700
 source /cvmfs/cms.cern.ch/cmsset_default.sh
 
-# this should not be USER dependent FIXME
-WorkDir=/afs/cern.ch/user/g/gkole/work/TTC/plots/CMSSW_10_6_27/src/Plots_code/TTC_DataDriven
+# this is the actual work dir (replaced from python)
+WorkDir=ACTUALDIR
 
 cd $WorkDir
 ls -lrth
