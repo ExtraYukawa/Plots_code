@@ -62,5 +62,5 @@ else:
 
 # Final submission
 if not opts.test:
-    print ("Submitting Jobs on Condor")
+    print ("\033[0;35m Submitting Jobs on Condor \033[0;m")
     os.system('condor_submit sub.jdl')
