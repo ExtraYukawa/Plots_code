@@ -97,15 +97,20 @@ def histos_book(flist, filters, variables, isData = "False", isFake = "False"):
     else:
       print ("choose correct trigger function")
   # put histos in a list
+  df_xyz_trigger = df_xyz_trigger.Define("max_lep_pt","max(ttc_l1_pt, ttc_l2_pt)")
   df_xyz_histos = []
   for variable in variables:
     if not isData:
-      df_xyz_histo = df_xyz_trigger.Histo1D((variable,'',len(ranges[variable])-1, ranges[variable]), variable,'genweight')
+      # print ("variable -> ", variable)
+      # print ("len(ranges_emu[variable])-1 -> ",len(ranges_emu[variable])-1)
+      # print ("ranges_emu[variable] -> ", ranges_emu[variable])
+      df_xyz_histo = df_xyz_trigger.Histo1D((variable,'',len(ranges_emu[variable])-1, ranges_emu[variable]), variable,'genweight')
+      # df_xyz_histo = df_xyz_trigger.Histo1D(('test','',100,0,100), 'max_lep','genweight')
     else:
       if isFake:
-        df_xyz_histo = df_xyz_trigger.Histo1D((variable,'',len(ranges[variable])-1, ranges[variable]), variable,'fakelep_weight')
+        df_xyz_histo = df_xyz_trigger.Histo1D((variable,'',len(ranges_emu[variable])-1, ranges_emu[variable]), variable,'fakelep_weight')
       else:
-        df_xyz_histo = df_xyz_trigger.Histo1D((variable,'',len(ranges[variable])-1, ranges[variable]), variable)
+        df_xyz_histo = df_xyz_trigger.Histo1D((variable,'',len(ranges_emu[variable])-1, ranges_emu[variable]), variable)
     h = df_xyz_histo.GetValue()
     h.SetDirectory(0)
     df_xyz_histos.append(h.Clone())
@@ -175,7 +180,7 @@ def TTC_Analysis(opts):
 
   histos = []
   
-  variables = ranges.keys()
+  variables = ranges_emu.keys()
   for ij in range(0,len(variables)):
     print (variables[ij])
 
@@ -192,8 +197,10 @@ def TTC_Analysis(opts):
   df_DY_histos = histos_book(DY_list, filters_mc, variables, False, False) #isData, isFake
   df_Fake_DY_histos = histos_book(DY_list, filters_mc_fake, variables, False, True) #isData, isFake
   print ("DY both genuine and fake histo loading complete!")
-  # print ("df_DY_histos[0] integral", df_DY_histos[0].Integral())
-  # print ("df_Fake_DY_histos[0] integral", df_Fake_DY_histos[0].Integral())
+  print ("df_DY_histos[0] GetEntries", df_DY_histos[0].GetEntries())
+  # print ("df_DY_histos[0] Name", df_DY_histos[0].GetName())
+  # print ("df_DY_histos[0] Integral", df_DY_histos[0].Integral())
+  # print ("df_Fake_DY_histos[0] integral", df_Fake_DY_histos[0].GetEntries())
   # sys.exit(1)
   
   ##############

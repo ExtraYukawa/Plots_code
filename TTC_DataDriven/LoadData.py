@@ -193,6 +193,10 @@ ranges = {
   #  "GoodFatJet_pt"        : (200, 0 , 2000),
 }
 
+ranges_emu = {
+  "max_lep_pt": (array.array('d', [i for i in range(0, 210+15, 15)] )), #NOTE: max_lep_pt = max(ttc_l1_pt, ttc_l2_pt) is defined in the ttc_emu.py file
+}
+
 
 ######################################################
 
