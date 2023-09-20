@@ -3,7 +3,7 @@ import numpy as np
 from ROOT import kFALSE
 import datetime
 import os, sys
-
+sys.path.append('../python')
 import CMSTDRStyle
 CMSTDRStyle.setTDRStyle().cd()
 import CMSstyle
