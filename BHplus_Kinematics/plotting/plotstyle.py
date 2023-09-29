@@ -5,7 +5,7 @@ import ROOT
 
 #WEBDIR = os.environ['HOME'] + '/public_html/cmsplots'
 
-WEBDIR = '/eos/user/g/gkole/www/public/TTC/tmp/'
+WEBDIR = '/eos/user/g/gkole/www/public/bhplus/tmp/'
 
 
 ROOT.gStyle.SetOptStat(0)

@@ -24,7 +24,7 @@ parser.add_argument("--era", dest="era", default="2016APV",
                     help="When making the plots, read the files with this era(years), default: 2016APV")
 
 parser.add_argument("--channel", dest="channel", default="mujets",
-                    help="Channel for drawing plots [default: ejets]")
+                    help="Channel for drawing plots [default: mujets]")
 
 parser.add_argument("-s", "--saveFormats", dest="saveFormats", default = SAVEFORMATS,
                       help="Save formats for all plots [default: %s]" % SAVEFORMATS)
@@ -174,13 +174,16 @@ def bhplus_kinematics(opts):
   #df_DY_histos = histos_book(DY_list, filters_mc, variables, False, False) #isData, isFake
   
   ###############
-  # Mass list
-  masses = ["200","350","500","800","1000"]
+  # Samples list
+  samples = ["200","350","500","800","1000","TTTo1L"]
   
   h_prefit = {}
-  for mass in masses:
-    mfile = get_filelist(path, ['CGToBHpm_MH-'+mass+'_rtt06_rtc04.root'])
-    h_prefit[mass] = histos_book(mfile, filters_mc, variables, False, False) #isData, isFake
+  for sample in samples:
+    if sample == "TTTo1L":
+      mfile = get_filelist(path, ['TTTo1L_default.root'])
+    else:
+      mfile = get_filelist(path, ['CGToBHpm_MH-'+sample+'_rtt06_rtc04.root'])
+    h_prefit[sample] = histos_book(mfile, filters_mc, variables, False, False) #isData, isFake
     
   # print h_prefit
   # print ("df_DY_histos[0] integral", df_DY_histos[0].Integral())

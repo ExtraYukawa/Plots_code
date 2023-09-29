@@ -28,6 +28,7 @@ colors = {
     '500'    : ROOT.kBlue,
     '800'    : ROOT.kCyan,
     '1000'   : ROOT.kOrange,
+    'TTTo1L' : ROOT.kViolet-4,
     'zg'     :"#99ffaa",
     'wg'     :"#99eeff",
     'efake'  :"#ffee99",
@@ -66,11 +67,10 @@ def makePlot(folder, hname, xmin, xmax, year="2018", isNorm=True):
     #Get histograms
     root_file = ROOT.TFile("../%s/%s.root"%(folder,hname))
     h_all = {}
-    masses = ["200","350","500","800","1000"]
-    for mass in masses:
-        #print ("adding histogram for mass: %s GeV",%(mass))
-        # print ("mass: ", mass)
-        h_all[mass] = root_file.Get("%s"%hname+"_"+mass)
+    samples = ["200","350","500","800","1000","TTTo1L"]
+    for sample in samples:
+        #print ("adding histogram for sample: %s GeV",%(sample))
+        h_all[sample] = root_file.Get("%s"%hname+"_"+sample)
     
     if wRatio:
         canvas = RatioCanvas(" "," ",41500)
@@ -84,8 +84,8 @@ def makePlot(folder, hname, xmin, xmax, year="2018", isNorm=True):
 
     # Adding to canvas
     for i, key in enumerate(h_all):
-        key = masses[i]
-        print ("key: ", key)
+        key = samples[i]
+        print ("sample: ", key)
         h_all[key].Scale(1.0/h_all[key].Integral()) #normalize histogram
         canvas.legend.add(h_all[key], title = key, opt = 'LP', color = colors[key], fstyle = 0, lwidth = 2)
         canvas.addHistogram(h_all[key], drawOpt = 'HIST E')
@@ -99,16 +99,25 @@ def makePlot(folder, hname, xmin, xmax, year="2018", isNorm=True):
 # Main
 if __name__ == "__main__":
     # plottting
-    # makePlot("2017_sel1_mujets_kinematics_26Sep2023","DeepB_loose_j1_pt",30.0,200.0)
-    # makePlot("2017_sel1_mujets_kinematics_26Sep2023","DeepB_loose_j2_pt",30.0,200.0)
-    # makePlot("2017_sel1_mujets_kinematics_26Sep2023","DeepB_loose_j3_pt",30.0,200.0)
-    # makePlot("2017_sel1_mujets_kinematics_26Sep2023","DeepB_loose_j1_eta",-2.5,2.5)
-    # makePlot("2017_sel1_mujets_kinematics_26Sep2023","DeepB_loose_j2_eta",-2.5,2.5)
-    # makePlot("2017_sel1_mujets_kinematics_26Sep2023","DeepB_loose_j3_eta",-2.5,2.5)
-    makePlot("2017_sel2_mujets_kinematics","j1_pt",30.0,200.0)
-    makePlot("2017_sel2_mujets_kinematics","j1_eta",-2.5,2.5)
-    makePlot("2017_sel2_mujets_kinematics","j2_pt",30.0,200.0)
-    makePlot("2017_sel2_mujets_kinematics","j2_eta",-2.5,2.5)
-    makePlot("2017_sel2_mujets_kinematics","j3_pt",30.0,200.0)
-    makePlot("2017_sel2_mujets_kinematics","j3_eta",-2.5,2.5)
+    # sel1
+    # makePlot("2017_sel1_mujets_kinematics_29Sep2023","DeepB_loose_j1_pt",30.0,200.0)
+    # makePlot("2017_sel1_mujets_kinematics_29Sep2023","DeepB_loose_j2_pt",30.0,200.0)
+    # makePlot("2017_sel1_mujets_kinematics_29Sep2023","DeepB_loose_j3_pt",30.0,200.0)
+    # makePlot("2017_sel1_mujets_kinematics_29Sep2023","DeepB_loose_j1_eta",-2.5,2.5)
+    # makePlot("2017_sel1_mujets_kinematics_29Sep2023","DeepB_loose_j2_eta",-2.5,2.5)
+    # makePlot("2017_sel1_mujets_kinematics_29Sep2023","DeepB_loose_j3_eta",-2.5,2.5)
+    # makePlot("2017_sel1_mujets_kinematics_29Sep2023","j1_pt",30.0,200.0)
+    # makePlot("2017_sel1_mujets_kinematics_29Sep2023","j1_eta",-2.5,2.5)
+    # makePlot("2017_sel1_mujets_kinematics_29Sep2023","j2_pt",30.0,200.0)
+    # makePlot("2017_sel1_mujets_kinematics_29Sep2023","j2_eta",-2.5,2.5)
+    # makePlot("2017_sel1_mujets_kinematics_29Sep2023","j3_pt",30.0,200.0)
+    # makePlot("2017_sel1_mujets_kinematics_29Sep2023","j3_eta",-2.5,2.5)
+
+    # sel2
+    makePlot("2017_sel2_mujets_kinematics_29Sep2023","j1_pt",30.0,200.0)
+    makePlot("2017_sel2_mujets_kinematics_29Sep2023","j1_eta",-2.5,2.5)
+    makePlot("2017_sel2_mujets_kinematics_29Sep2023","j2_pt",30.0,200.0)
+    makePlot("2017_sel2_mujets_kinematics_29Sep2023","j2_eta",-2.5,2.5)
+    makePlot("2017_sel2_mujets_kinematics_29Sep2023","j3_pt",30.0,200.0)
+    makePlot("2017_sel2_mujets_kinematics_29Sep2023","j3_eta",-2.5,2.5)
     
