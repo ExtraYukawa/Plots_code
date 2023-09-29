@@ -1,6 +1,6 @@
 #==============
 # Last used:
-# python compare_plots.py
+# python compare_plots.py --inputDir 2017_sel2_mujets_kinematics_29Sep2023
 #==============
 
 #!/usr/bin/env python
@@ -18,8 +18,16 @@ print (thisdir)
 #from datasets import allsamples
 #from plotstyle import SimpleCanvas
 from plotstyle import *
-
 import ROOT
+
+
+from argparse import ArgumentParser
+parser = ArgumentParser()
+
+parser.add_argument("--inputDir", "-i", dest="inputDir", default="",
+                    help="Provide inputDir containing histograms")
+opts = parser.parse_args()
+
 #from ROOT import *
 ROOT.gROOT.SetBatch(True)
 colors = {
@@ -60,12 +68,12 @@ histo_xtitle = {
 }
 
 
-def makePlot(folder, hname, xmin, xmax, year="2018", isNorm=True):
+def makePlot(inDir, hname, xmin=0.0, xmax=100.0, year="2018", isNorm=True):
     
     wRatio = True
     
     #Get histograms
-    root_file = ROOT.TFile("../%s/%s.root"%(folder,hname))
+    root_file = ROOT.TFile("../%s/%s.root"%(inDir,hname))
     h_all = {}
     samples = ["200","350","500","800","1000","TTTo1L"]
     for sample in samples:
@@ -92,32 +100,15 @@ def makePlot(folder, hname, xmin, xmax, year="2018", isNorm=True):
 
     canvas.applyStyles()
     if wRatio:
-        canvas.printWeb('compare_wRatio', hname, logy = True)
+        canvas.printWeb(inDir, hname, logy = True)
     else:
-        canvas.printWeb('compare', hname, logy = True)
+        canvas.printWeb(inDir, hname, logy = True)
 
 # Main
 if __name__ == "__main__":
     # plottting
-    # sel1
-    # makePlot("2017_sel1_mujets_kinematics_29Sep2023","DeepB_loose_j1_pt",30.0,200.0)
-    # makePlot("2017_sel1_mujets_kinematics_29Sep2023","DeepB_loose_j2_pt",30.0,200.0)
-    # makePlot("2017_sel1_mujets_kinematics_29Sep2023","DeepB_loose_j3_pt",30.0,200.0)
-    # makePlot("2017_sel1_mujets_kinematics_29Sep2023","DeepB_loose_j1_eta",-2.5,2.5)
-    # makePlot("2017_sel1_mujets_kinematics_29Sep2023","DeepB_loose_j2_eta",-2.5,2.5)
-    # makePlot("2017_sel1_mujets_kinematics_29Sep2023","DeepB_loose_j3_eta",-2.5,2.5)
-    # makePlot("2017_sel1_mujets_kinematics_29Sep2023","j1_pt",30.0,200.0)
-    # makePlot("2017_sel1_mujets_kinematics_29Sep2023","j1_eta",-2.5,2.5)
-    # makePlot("2017_sel1_mujets_kinematics_29Sep2023","j2_pt",30.0,200.0)
-    # makePlot("2017_sel1_mujets_kinematics_29Sep2023","j2_eta",-2.5,2.5)
-    # makePlot("2017_sel1_mujets_kinematics_29Sep2023","j3_pt",30.0,200.0)
-    # makePlot("2017_sel1_mujets_kinematics_29Sep2023","j3_eta",-2.5,2.5)
 
-    # sel2
-    makePlot("2017_sel2_mujets_kinematics_29Sep2023","j1_pt",30.0,200.0)
-    makePlot("2017_sel2_mujets_kinematics_29Sep2023","j1_eta",-2.5,2.5)
-    makePlot("2017_sel2_mujets_kinematics_29Sep2023","j2_pt",30.0,200.0)
-    makePlot("2017_sel2_mujets_kinematics_29Sep2023","j2_eta",-2.5,2.5)
-    makePlot("2017_sel2_mujets_kinematics_29Sep2023","j3_pt",30.0,200.0)
-    makePlot("2017_sel2_mujets_kinematics_29Sep2023","j3_eta",-2.5,2.5)
+    histos = ["j1_pt","j2_pt","j3_pt","j1_eta","j2_eta","j3_eta"]
+    for hist in histos:
+        makePlot(opts.inputDir, hist)
     
