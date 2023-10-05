@@ -73,12 +73,12 @@ def selections(analtype="ee"):
     filters_data="ttc_jets && ttc_region==3 && ttc_l1_pt>30 && ttc_met>30 && ttc_mll>20 && ttc_drll>0.3 && Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_eeBadScFilter && Flag_ecalBadCalibFilter && nHad_tau==0 && ttc_2P0F"
     filters_data_fake="ttc_jets && ttc_region==3 && ttc_l1_pt>30 && ttc_met>30 && ttc_mll>20 && ttc_drll>0.3 && Flag_goodVertices && Flag_globalSuperTightHalo2016Filter && Flag_HBHENoiseFilter && Flag_HBHENoiseIsoFilter && Flag_EcalDeadCellTriggerPrimitiveFilter && Flag_BadPFMuonFilter && Flag_eeBadScFilter && Flag_ecalBadCalibFilter && nHad_tau==0 && (ttc_1P1F || ttc_0P2F)"
   elif analtype == "mujets":
-    filters_mc="bh_nl==1 && bh_region==1 && nHad_tau==0 && bh_jets==1 && bh_met > 35 && n_bjet_DeepB_loose >= 3"
+    filters_mc="bh_nl==1 && bh_region==1 && nHad_tau==0 && bh_jets==1"
     filters_mc_fake="bh_nl==1 && bh_region==1 && nHad_tau==0 && bh_jets==1 && bh_met > 35 && n_bjet_DeepB_loose >= 3"
     filters_data="bh_nl==1 && bh_region==1 && nHad_tau==0 && bh_jets==1 && bh_met > 35 && n_bjet_DeepB_loose >= 3"
     filters_data_fake="bh_nl==1 && bh_region==1 && nHad_tau==0 && bh_jets==1 && bh_met > 35 && n_bjet_DeepB_loose >= 3"
   elif analtype == "elejets":
-    filters_mc="bh_nl==1 && bh_region==2 && nHad_tau==0 && bh_jets==1 && bh_met > 35 && n_bjet_DeepB_loose >= 3"
+    filters_mc="bh_nl==1 && bh_region==2 && nHad_tau==0 && bh_jets==1 && bh_met > 35"
     filters_mc_fake="bh_nl==1 && bh_region==2 && nHad_tau==0 && bh_jets==1 && bh_met > 35 && n_bjet_DeepB_loose >= 3"
     filters_data="bh_nl==1 && bh_region==2 && nHad_tau==0 && bh_jets==1 && bh_met > 35 && n_bjet_DeepB_loose >= 3"
     filters_data_fake="bh_nl==1 && bh_region==2 && nHad_tau==0 && bh_jets==1 && bh_met > 35 && n_bjet_DeepB_loose >= 3"
@@ -196,18 +196,25 @@ def for_cross_trigger(df, year="2017"):
 ranges = {
   # "ttc_l1_pt"              : (array.array('d', [20, 35, 50, 80, 120, 160, 200, 260] )), #Just for testing coarse binning
   # "ttc_l1_pt"              : (array.array('d', [i for i in range(0, 210+15, 15)] )), 
-  "DeepB_loose_j1_pt"        : (array.array('d', [0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180, 195, 210, 225, 250, 275, 300, 325, 350, 400, 450, 500] )),
-  "DeepB_loose_j2_pt"        : (array.array('d', [0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180, 195, 210, 225, 250, 275, 300, 325, 350, 400, 450, 500] )),
-  "DeepB_loose_j3_pt"        : (array.array('d', [0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180, 195, 210, 225, 250, 275, 300, 325, 350, 400, 450, 500] )),
-  #"loose_DeepB_j1_pt"        : (array.array('d', [0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180, 195, 210, 225, 250, 275, 300, 325, 350, 400, 450, 500] )),
-  #"loose_DeepB_j2_pt"        : (array.array('d', [0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180, 195, 210, 225, 250, 275, 300, 325, 350, 400, 450, 500] )),
-  #"loose_DeepB_j3_pt"        : (array.array('d', [0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180, 195, 210, 225, 250, 275, 300, 325, 350, 400, 450, 500] )),
-  "DeepB_loose_j1_eta"       : (array.array('d', [-2.6+i*0.2 for i in range(0, 26+1, 1)] )),
-  "DeepB_loose_j2_eta"       : (array.array('d', [-2.6+i*0.2 for i in range(0, 26+1, 1)] )),
-  "DeepB_loose_j3_eta"       : (array.array('d', [-2.6+i*0.2 for i in range(0, 26+1, 1)] ))
+#  "DeepB_loose_j1_pt"        : (array.array('d', [0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180, 195, 210, 225, 250, 275, 300, 325, 350, 400, 450, 500] )),
+#  "DeepB_loose_j2_pt"        : (array.array('d', [0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180, 195, 210, 225, 250, 275, 300, 325, 350, 400, 450, 500] )),
+#  "DeepB_loose_j3_pt"        : (array.array('d', [0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180, 195, 210, 225, 250, 275, 300, 325, 350, 400, 450, 500] )),
+#  #"loose_DeepB_j1_pt"        : (array.array('d', [0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180, 195, 210, 225, 250, 275, 300, 325, 350, 400, 450, 500] )),
+#  #"loose_DeepB_j2_pt"        : (array.array('d', [0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180, 195, 210, 225, 250, 275, 300, 325, 350, 400, 450, 500] )),
+#  #"loose_DeepB_j3_pt"        : (array.array('d', [0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180, 195, 210, 225, 250, 275, 300, 325, 350, 400, 450, 500] )),
+#  "DeepB_loose_j1_eta"       : (array.array('d', [-2.6+i*0.2 for i in range(0, 26+1, 1)] )),
+#  "DeepB_loose_j2_eta"       : (array.array('d', [-2.6+i*0.2 for i in range(0, 26+1, 1)] )),
+#  "DeepB_loose_j3_eta"       : (array.array('d', [-2.6+i*0.2 for i in range(0, 26+1, 1)] )),
+  "j1_pt"                    : (array.array('d', [0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180, 195, 210, 225, 250, 275, 300, 325, 350, 400, 450, 500] )),
+  "j2_pt"                    : (array.array('d', [0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180, 195, 210, 225, 250, 275, 300, 325, 350, 400, 450, 500] )),
+  "j3_pt"                    : (array.array('d', [0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180, 195, 210, 225, 250, 275, 300, 325, 350, 400, 450, 500] )),
+  "j1_eta"                   : (array.array('d', [-2.6+i*0.2 for i in range(0, 26+1, 1)] )),
+  "j2_eta"                   : (array.array('d', [-2.6+i*0.2 for i in range(0, 26+1, 1)] )),
+  "j3_eta"                   : (array.array('d', [-2.6+i*0.2 for i in range(0, 26+1, 1)] )),
+  "l1_pt"                    : (array.array('d', [10, 20, 30, 40, 50, 60, 75, 90, 105, 120, 135, 150, 165, 180, 195, 210, 225, 250, 275, 300] )),
+  "l1_eta"                   : (array.array('d', [-2.6+i*0.2 for i in range(0, 26+1, 1)] )),
+  "MET_T1Smear_pt"           : (array.array('d', [i for i in range(0, 500+10, 10)] ))
   
-  
-
   # "ttc_mll"               : (30, 0, 300), 
   #  "ttc_l1_eta"            : (12, -3.0, 3.0),
   #  "n_bjet_DeepB"          : (10, 0, 10),
