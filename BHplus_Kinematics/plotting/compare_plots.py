@@ -24,7 +24,7 @@ import ROOT
 from argparse import ArgumentParser
 parser = ArgumentParser()
 
-parser.add_argument("--inputDir", "-i", dest="inputDir", default="",
+parser.add_argument("--inputDir", "-i", dest="inputDir", default=None,
                     help="Provide inputDir containing histograms")
 opts = parser.parse_args()
 
@@ -53,18 +53,21 @@ colors = {
     }
 
 histo_xtitle = {
-    "DeepB_loose_j1_pt"  : "Leading b-jet p_{T}",
-    "DeepB_loose_j2_pt"  : "2^{nd} leading b-jet p_{T}",
-    "DeepB_loose_j3_pt"  : "3^{rd} leading b-jet p_{T}",
-    "DeepB_loose_j1_eta" : "Leading b-jet #eta",
-    "DeepB_loose_j2_eta" : "2^{nd} leading b-jet #eta",
-    "DeepB_loose_j3_eta" : "3^{rd} leading b-jet #eta",
-    "j1_pt"              : "Leading jet p_{T}",
-    "j2_pt"              : "2^{nd} leading jet p_{T}",
-    "j3_pt"              : "3^{rd} leading jet p_{T}",
-    "j1_eta"             : "Leading jet #eta",
-    "j2_eta"             : "2^{nd} leading jet #eta",
-    "j3_eta"             : "3^{rd} leading jet #eta"
+    'DeepB_loose_j1_pt'  : "Leading b-jet p_{T}",
+    'DeepB_loose_j2_pt'  : "2^{nd} leading b-jet p_{T}",
+    'DeepB_loose_j3_pt'  : "3^{rd} leading b-jet p_{T}",
+    'DeepB_loose_j1_eta' : "Leading b-jet #eta",
+    'DeepB_loose_j2_eta' : "2^{nd} leading b-jet #eta",
+    'DeepB_loose_j3_eta' : "3^{rd} leading b-jet #eta",
+    'l1_pt'              : "Leading lepton p_{T}",
+    'l1_eta'             : "Leading lepton #eta",
+    'j1_pt'              : "Leading jet p_{T}",
+    'MET_T1Smear_pt'     : "#slash{E}_{T} [GeV]",
+    'j2_pt'              : "2^{nd} leading jet p_{T}",
+    'j3_pt'              : "3^{rd} leading jet p_{T}",
+    'j1_eta'             : "Leading jet #eta",
+    'j2_eta'             : "2^{nd} leading jet #eta",
+    'j3_eta'             : "3^{rd} leading jet #eta"
 }
 
 
@@ -108,7 +111,7 @@ def makePlot(inDir, hname, xmin=0.0, xmax=100.0, year="2018", isNorm=True):
 if __name__ == "__main__":
     # plottting
 
-    histos = ["j1_pt","j2_pt","j3_pt","j1_eta","j2_eta","j3_eta"]
+    histos = ["j1_pt","j2_pt","j3_pt","j1_eta","j2_eta","j3_eta","l1_pt","l1_eta","MET_T1Smear_pt"]
     for hist in histos:
         makePlot(opts.inputDir, hist)
     
