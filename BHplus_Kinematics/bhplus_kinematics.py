@@ -104,7 +104,15 @@ def histos_book(flist, filters, variables, isData = "False", isFake = "False"):
   df_xyz = df_xyz.Define("loose_DeepB_j1_pt","Jet_pt_nom[tightJets_b_DeepJetloose_id[0]]")
   df_xyz = df_xyz.Define("loose_DeepB_j2_pt","Jet_pt_nom[tightJets_b_DeepJetloose_id[1]]")
   df_xyz = df_xyz.Define("loose_DeepB_j3_pt","Jet_pt_nom[tightJets_b_DeepJetloose_id[2]]")
-  
+  if opts.channel == "mujets":
+    df_xyz = df_xyz.Define("l1_pt","Muon_corrected_pt[tightMuons_id[0]]")
+    df_xyz = df_xyz.Define("l1_eta","Muon_eta[tightMuons_id[0]]")
+  elif opts.channel == "ejets":
+    df_xyz = df_xyz.Define("l1_pt","Electron_pt[tightElectrons_id[0]]")
+    df_xyz = df_xyz.Define("l1_eta","Electron_eta[tightElectrons_id[0]]")
+  else:
+    pass
+
   # put histos in a list
   df_xyz_histos = []
   for variable in variables:
