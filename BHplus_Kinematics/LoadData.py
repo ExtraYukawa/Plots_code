@@ -42,6 +42,25 @@ xsec['WpWpJJ_EWK']  = 0.02597 #AN2019_089_v8 (page #75) is large, took from xsdb
 xsec['ZZJJTo4L']  = 0.008645 # https://mattermost.web.cern.ch/cms-exp/pl/eyi4qm4agbdp7rm8hwu6m59umo
 xsec['WpWpJJ_QCD']  = 0.02221 # https://mattermost.web.cern.ch/cms-exp/pl/eyi4qm4agbdp7rm8hwu6m59umo
 
+def ntuples_path(era):
+  # Data paths
+  if era == "2017":
+    print ("Reading 2017 files")
+    path='/eos/cms/store/group/phys_b2g/ExYukawa/bHplus/2017/'
+  elif era == "2018" or era == "2016apv" or era == "2016posrapv":
+    print ("Not available yet")
+    raise Exception ("select only 2017!")
+  else:
+    raise Exception ("select correct era!")
+  return path
+
+def get_filelist(path, flist=[]):
+  f_list = ROOT.std.vector('string')()
+  for f in flist:
+    # print (path+f)
+    f_list.push_back(path+f)
+  return f_list
+
 def selections(analtype="ee"):
   if analtype == "ee":
     # define the filters here, 1:2mu, 2:1e1m, 3:2ele
