@@ -5,11 +5,11 @@
 
 import ROOT
 import time
-import os
-import sys
+import os, sys
 import math
 from math import sqrt
 import plot
+sys.path.append('../python')
 from LoadData import *
 
 ROOT.gROOT.SetBatch(True)
@@ -42,13 +42,6 @@ ROOT.gInterpreter.Declare('#include "{}"'.format(TTC_header_path))
 
 # the EnableImplicitMT option should only use in cluster, at lxplus, it will make the code slower(my experience)
 #ROOT.ROOT.EnableImplicitMT()
-
-def get_filelist(path, flist=[]):
-  f_list = ROOT.std.vector('string')()
-  for f in flist:
-    # print (path+f)
-    f_list.push_back(path+f)
-  return f_list
 
 def histos_book(flist, filters, variables, isData = "False", isFake = "False"):
   # print ("flist: ", str(flist[0]).split('/')[-1])
@@ -143,23 +136,14 @@ def histos_book(flist, filters, variables, isData = "False", isFake = "False"):
   return df_xyz_histos
 
 
-# Data paths
-if opts.era == "2017":
-  print ("Reading 2017 files")
-  path=' /eos/cms/store/group/phys_b2g/ExYukawa/bHplus/2017/'
-elif opts.era == "2018" or opts.era == "2016apv" or opts.era == "2016posrapv":
-  print ("Not available yet")
-  raise Exception ("select only 2017!")
-else:
-  raise Exception ("select correct era!")
 
-singleEle_names = get_filelist(path, ["SingleEGB.root","SingleEGC.root","SingleEGD.root","SingleEGE.root","SingleEGF.root"])
-doubleEle_names = get_filelist(path, ["DoubleEGB.root","DoubleEGC.root","DoubleEGD.root","DoubleEGE.root","DoubleEGF.root"])
+# singleEle_names = get_filelist(path, ["SingleEGB.root","SingleEGC.root","SingleEGD.root","SingleEGE.root","SingleEGF.root"])
+# doubleEle_names = get_filelist(path, ["DoubleEGB.root","DoubleEGC.root","DoubleEGD.root","DoubleEGE.root","DoubleEGF.root"])
 
-egamma_names = get_filelist(path, ["EGammaA.root","EGammaB.root","EGammaC.root","EGammaD_0.root","EGammaD_1.root"])
+# egamma_names = get_filelist(path, ["EGammaA.root","EGammaB.root","EGammaC.root","EGammaD_0.root","EGammaD_1.root"])
 
 # MC Location 
-DY_list = get_filelist(path, ['DYnlo.root']) #after discussion with Meng on 14Jul2022
+# DY_list = get_filelist(path, ['DYnlo.root']) #after discussion with Meng on 14Jul2022
 
 def bhplus_kinematics(opts):
 
@@ -180,6 +164,10 @@ def bhplus_kinematics(opts):
 
   # old test
   #df_DY_histos = histos_book(DY_list, filters_mc, variables, False, False) #isData, isFake
+  
+  ###############
+  path = ntuples_path(opts.era)
+  print ("path: ", path)
   
   ###############
   # Samples list
