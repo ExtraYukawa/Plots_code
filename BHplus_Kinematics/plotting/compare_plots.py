@@ -17,6 +17,7 @@ print (thisdir)
 #import config
 #from datasets import allsamples
 #from plotstyle import SimpleCanvas
+sys.path.append('../../python')
 from plotstyle import *
 import ROOT
 
