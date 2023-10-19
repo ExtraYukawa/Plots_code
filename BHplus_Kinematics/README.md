@@ -1,5 +1,5 @@
 # Kinematic Plot Tool
-This tool is made for plotting distribution and skim the root files in general purpose. The main input is controled by the `json` files in `../data` and main functions are defined in the `h` files in `../script`. Since it utilize the novel function in RDataFrame, it **requires ROOT v6.26** and thus **do not run cmsenv** , otherwise it will conflict with each other. \\
+This tool is made for plotting distribution and skim the root files in general purpose. The main input is controled by the `json` files in `../data` and main functions are defined in the `h` files in `../script`. Since it utilize the novel function in RDataFrame, it **requires ROOT v6.26** and thus **do not run cmsenv** , otherwise it will conflict with each other. 
 ## Input - sample
 The sample information should be keep in `../data/sample_ERA.json`. It contains following information:
 1. **xsec**:  cross section for MC samples.
@@ -31,3 +31,5 @@ The nuisance information is stored in `../data/nuisance.json`. It follows the st
   - Nominal: List of variables that change
   - Def: RVec of variated varialbe definition 
   - Label: affect which type of data [MC/data\_driven]
+## Step1 - produce root file
+## Step2 - plotting
