@@ -1,0 +1,496 @@
+{
+  "bh_l1_pt":{
+    "Def": "Defined",
+    "Label": ["Normal", "BDT"],
+    "Save":  ["Normal", "BDT"]
+  },
+
+  "j1_FlavB":{
+    "Def": "Jet_btagDeepFlavB[tightJets_id_in24[0]]",
+    "Label": ["Normal", "BDT"],
+    "Save":  ["Normal", "BDT"]
+  },
+
+  "j1_FlavCvB":{
+    "Def": "Jet_btagDeepFlavCvB[tightJets_id_in24[0]]",
+    "Label": ["Normal", "BDT"],
+    "Save":  ["Normal", "BDT"]
+  },
+
+  "nElectron":{
+    "Def": "Defined",
+    "Label": ["Normal"],
+    "Save":  ["Normal"]
+  },
+
+  "nMuon":{
+    "Def": "Defined",
+    "Label": ["Normal"],
+    "Save":  ["Normal"]
+  },
+
+  "nJet":{
+    "Def": "Defined",
+    "Label": ["Normal"],
+    "Save":  ["Normal"]
+  },
+
+  "puWeight":{
+    "Def": "Defined",
+    "Label": ["Normal", "MC"],
+    "Save":  []
+  },
+
+  "nGenPart":{
+    "Def": "Defined",
+    "Label": ["Gen", "MC"],
+    "Save": ["Gen"]
+  },
+
+  "GenPart_pdgId":{
+    "Def": "Defined",
+    "Label": ["Gen", "MC"],
+    "Save": ["Gen"]
+  },
+
+  "GenPart_genPartIdxMother":{
+    "Def": "Defined",
+    "Label": ["Gen", "MC"],
+    "Save": ["Gen"]
+  },
+  
+  "Electron_Genidx":{
+    "Def": "match_idx(nElectron, Electron_pt, Electron_eta, Electron_phi, nGenDressedLepton, GenDressedLepton_pt, GenDressedLepton_eta, GenDressedLepton_phi, 0.1, 0.1)",
+    "Label": ["Normal", "Gen", "MC"],
+    "Save":  []
+  },
+
+  "Muon_Genidx":{
+    "Def": "match_idx(nMuon, Muon_pt, Muon_eta, Muon_phi, nGenDressedLepton, GenDressedLepton_pt, GenDressedLepton_eta, GenDressedLepton_phi, 0.1, 0.1)",
+    "Label": ["Normal", "Gen", "MC"],
+    "Save":  []
+  },
+
+  "Jet_Genidx":{
+    "Def": "match_idx(nJet, Jet_pt, Jet_eta, Jet_phi, nGenJet, GenJet_pt, GenJet_eta, GenJet_phi, 0.4, 0.2)",
+    "Label": ["Normal", "Gen", "MC"],
+    "Save":  []
+  },
+
+  "tightJet_Genidx":{
+    "Def": "match_idx(tightJets_id_in24, Jet_pt, Jet_eta, Jet_phi, nGenJet, GenJet_pt, GenJet_eta, GenJet_phi, 0.4, 0.2)",
+    "Label": ["Normal", "Gen", "MC"],
+    "Save":  []
+  },
+
+  "GenDressedLepton_Partidx":{
+    "Def": "match_idx(nGenDressedLepton, GenDressedLepton_pt, GenDressedLepton_eta, GenDressedLepton_phi, nGenPart, GenPart_pt, GenPart_eta, GenPart_phi, 0.1, 0.1)",
+    "Label": ["Normal", "Gen", "MC"],
+    "Save":  ["Gen"]
+  },
+
+  "GenJet_Partidx":{
+    "Def": "match_idx(nGenJet, GenJet_pt, GenJet_eta, GenJet_phi, nGenPart, GenPart_pt, GenPart_eta, GenPart_phi, 0.4, 0.4, GenPart_statusFlags)",
+    "Label": ["Normal", "Gen", "MC"],
+    "Save":  ["Gen"]
+  },
+  
+  "GenPart_MotherIdx_hard":{
+    "Def": "match_idx_parton(nGenPart, GenPart_genPartIdxMother, GenPart_pdgId, GenPart_statusFlags)",
+    "Label": ["Normal", "Gen", "MC"],
+    "Save": ["Gen"]
+  },
+
+  "PartIdx_b_from_top_H":{
+    "Def": "iArray(search_parton_cv(GenPart_MotherIdx_hard, GenPart_pdgId, GenPart_statusFlags, {5,6,5000003}),0)",
+    "Label": ["Gen", "MC"],
+    "Save":["Gen"]
+  },
+
+  "PartIdx_b_from_H":{
+    "Def": "iArray(search_parton_cv(GenPart_MotherIdx_hard, GenPart_pdgId, GenPart_statusFlags, {5,5000003}),0)",
+    "Label": ["Gen", "MC"],
+    "Save": ["Gen"]
+  },
+
+  "PartIdx_b_from_C":{
+    "Def": "iArray(search_parton_cv(GenPart_MotherIdx_hard, GenPart_pdgId, GenPart_statusFlags, {5,6}),0)",
+    "Label": ["Gen", "MC"],
+    "Save": ["Gen", "GenPart"]
+  },
+
+  "b_from_top_H_pt":{
+    "Def": "iArray(GenPart_pt, PartIdx_b_from_top_H)",
+    "Label": ["Gen", "MC"],
+    "Save": []
+  },
+
+  "b_from_H_pt":{
+    "Def": "iArray(GenPart_pt, PartIdx_b_from_H)",
+    "Label": ["Gen", "MC"],
+    "Save": []
+  },
+
+  "b_from_C_pt": {
+    "Def": "iArray(GenPart_pt, PartIdx_b_from_C)",
+    "Label": ["Gen", "MC"],
+    "Save": []
+  },
+
+  "b_from_top_H_phi":{
+    "Def": "iArray(GenPart_phi, PartIdx_b_from_top_H)",
+    "Label": ["Gen", "MC"],
+    "Save": []
+  },
+
+  "b_from_H_phi":{
+    "Def": "iArray(GenPart_phi, PartIdx_b_from_H)",
+    "Label": ["Gen", "MC"],
+    "Save": []
+  },
+
+  "b_from_C_phi": {
+    "Def": "iArray(GenPart_phi, PartIdx_b_from_C)",
+    "Label": ["Gen", "MC"],
+    "Save": []
+  },
+
+  "b_from_top_H_eta":{
+    "Def": "iArray(GenPart_eta, PartIdx_b_from_top_H)",
+    "Label": ["Gen", "MC"],
+    "Save": []
+  },
+
+  "b_from_H_eta":{
+    "Def": "iArray(GenPart_eta, PartIdx_b_from_H)",
+    "Label": ["Gen", "MC"],
+    "Save": []
+  },
+
+  "b_from_C_eta": {
+    "Def": "iArray(GenPart_eta, PartIdx_b_from_C)",
+    "Label": ["Gen", "MC"],
+    "Save": []
+  },
+
+  "b_from_top_H_pdgId":{
+    "Def": "iArray(GenPart_pdgId, PartIdx_b_from_top_H)",
+    "Label": ["Gen", "MC"],
+    "Save": []
+  },
+
+  "b_from_H_pdgId":{
+    "Def": "iArray(GenPart_pdgId, PartIdx_b_from_H)",
+    "Label": ["Gen", "MC"],
+    "Save": []
+  },
+
+ "nb_from_C":{
+    "Def": "(search_parton_cv(GenPart_MotherIdx_hard, GenPart_pdgId, GenPart_statusFlags, {5,4})).size()",
+    "Label": ["Gen", "MC"],
+    "Save":[]
+  },
+
+  "nb_from_H":{
+    "Def": "(search_parton_cv(GenPart_MotherIdx_hard, GenPart_pdgId, GenPart_statusFlags, {5,5000003})).size()",
+    "Label": ["Gen", "MC"],
+    "Save":[]
+  },
+
+  "b_from_C_pdgId": {
+    "Def": "iArray(GenPart_pdgId, PartIdx_b_from_C)",
+    "Label": ["Gen", "MC"],
+    "Save": []
+  },
+
+  "Lep_Genidx":{
+    "Def": "if(bh_region==2) return Electron_Genidx; else return Muon_Genidx;",
+    "Label":["Gen", "MC"],
+    "Save":["Gen"]
+  },
+
+  "l1_Part_idx":{
+    "Def":  "match_reco_parton(bh_l1_id, Lep_Genidx, GenDressedLepton_Partidx, GenPart_MotherIdx_hard)",
+    "Label": ["Gen", "MC"],
+    "Save":[]
+  },
+
+  "l1_Part_pdgid":{
+    "Def": "iArray(GenPart_pdgId, l1_Part_idx, 1)",
+    "Label": ["Gen", "MC"],
+    "Save":  []
+  },
+
+  "l1_Part_mass":{
+    "Def": "iArray(GenPart_mass, l1_Part_idx)",
+    "Label": ["Gen", "MC"],
+    "Save":  []
+  },
+
+  "j1_fromH_id":{
+    "Def": "iArray(tightJets_id_in24, match_parton_to_reco(5000003, 0, tightJet_Genidx, GenJet_Partidx, GenPart_MotherIdx_hard, GenPart_pdgId))",
+    "Label": ["Gen", "MC"],
+    "Save":  []
+  },
+
+  "j1_fromH_pdgid":{
+    "Def": "iArray(Jet_partonFlavour, j1_fromH_id, 1)",
+    "Label": ["Gen", "MC"],
+    "Save":  []
+  },
+
+  "j1_fromH_pt":{
+    "Def": "iArray(Jet_pt, j1_fromH_id)",
+    "Label": ["Gen", "MC"],
+    "Save":  []
+  },
+
+  "j1_fromH_eta":{
+    "Def": "iArray(Jet_eta, j1_fromH_id)",
+    "Label": ["Gen", "MC"],
+    "Save":  []
+  },
+
+  "j2_fromH_id":{
+    "Def": "iArray(tightJets_id_in24, match_parton_to_reco(5000003, 1, tightJet_Genidx, GenJet_Partidx, GenPart_MotherIdx_hard, GenPart_pdgId))",
+    "Label": ["Gen", "MC"],
+    "Save":  []
+  },
+
+  "j2_fromH_pdgid":{
+    "Def": "iArray(Jet_partonFlavour, j2_fromH_id, 1)",
+    "Label": ["Gen", "MC"],
+    "Save":  []
+  },
+
+  "j2_fromH_pt":{
+    "Def": "iArray(Jet_pt, j2_fromH_id)",
+    "Label": ["Gen", "MC"],
+    "Save":  []
+  },
+
+  "j2_fromH_eta":{
+    "Def": "iArray(Jet_eta, j2_fromH_id)",
+    "Label": ["Gen", "MC"],
+    "Save":  []
+  },
+
+  "j1_fromC_id":{
+    "Def": "iArray(tightJets_id_in24, match_parton_to_reco(4, 0, tightJet_Genidx, GenJet_Partidx, GenPart_MotherIdx_hard, GenPart_pdgId))",
+    "Label": ["Gen", "MC"],
+    "Save": []
+  },
+
+  "j1_fromC_pdgid":{
+    "Def": "iArray(Jet_partonFlavour, j1_fromC_id, 1)",
+    "Label": ["Gen", "MC"],
+    "Save":  []
+  },
+
+  "j1_fromC_pt":{
+    "Def": "iArray(Jet_pt, j1_fromC_id)",
+    "Label": ["Gen", "MC"],
+    "Save":  []
+  },
+
+  "j1_fromC_eta":{
+    "Def": "iArray(Jet_eta, j1_fromC_id)",
+    "Label": ["Gen", "MC"],
+    "Save":  []
+  },
+
+  "MET_part_idx":{
+    "Def": "MET_part_index(GenPart_MotherIdx_hard, GenPart_pdgId)",
+    "Label": ["Gen", "MC"],
+    "Save":  []
+  },
+
+  "MET_part_pt":{
+    "Def": "iArray(GenPart_pt, MET_part_idx)",
+    "Label": ["Gen", "MC"],
+    "Save":  []
+  },
+
+  "MET_part_phi":{
+    "Def": "iArray(GenPart_phi, MET_part_idx)",
+    "Label": ["Gen", "MC"],
+    "Save":  []
+  },
+
+  "MET_part_eta":{
+    "Def": "iArray(GenPart_eta, MET_part_idx)",
+    "Label": ["Gen", "MC"],
+    "Save":  []
+  },
+
+  "MET_part_pz":{
+    "Def": "if(MET_part_idx<0) return float(-99999.); else return sinh(MET_part_eta)*MET_part_pt;",
+    "Label": ["Gen", "MC"],
+    "Save":  []
+  },
+
+  "MET_reco_pz":{
+    "Def": "MET_pz_reconstruction(bh_l1_pt, bh_l1_eta, bh_l1_phi, bh_met, bh_met_phi)",
+    "Label": ["Reco","Normal"],
+    "Save":[]
+  },
+
+  "MET_diff_pz":{
+    "Def": "if(MET_part_idx<0) return float(-99999.); else return (MET_reco_pz - MET_part_pz);",
+    "Label": ["Gen", "MC"],
+    "Save":  []
+  },
+
+  "MET_reco_E":{
+    "Def": "sqrt(bh_met*bh_met + MET_reco_pz*MET_reco_pz)",
+    "Label": ["Reco", "Normal"],
+    "Save": []
+  },
+
+  "bh_l1_E":{
+    "Def": "sqrt(bh_l1_pt*bh_l1_pt*(cosh(bh_l1_eta)*cosh(bh_l1_eta)) + bh_l1_mass*bh_l1_mass)",
+    "Label": ["Reco", "Normal"],
+    "Save": []
+  },
+
+  "W_reco_E":{
+    "Def": "MET_reco_E + bh_l1_E",
+    "Label": ["Reco", "Normal"],
+    "Save": []
+  },
+
+  "W_reco_px":{
+    "Def": "bh_l1_pt*cos(bh_l1_phi) + bh_met*cos(bh_met_phi)",
+    "Label": ["Reco", "Normal"],
+    "Save":  []
+  },
+
+  "W_reco_py":{
+    "Def": "bh_l1_pt*sin(bh_l1_phi) + bh_met*sin(bh_met_phi)",
+    "Label": ["Reco", "Normal"],
+    "Save":  []
+  },
+
+  "W_reco_pz":{
+    "Def": "bh_l1_pt*sinh(bh_l1_eta) + MET_reco_pz",
+    "Label": ["Reco", "Normal"],
+    "Save":  []
+  },
+
+  "W_reco_mass":{
+    "Def": "sqrt(W_reco_E*W_reco_E - W_reco_px*W_reco_px - W_reco_py*W_reco_py - W_reco_pz*W_reco_pz)",
+    "Label": ["Reco", "Normal"],
+    "Save":  []
+  },
+
+  "top_reco_mass_medium":{
+    "Def": "top_reconstruction(W_reco_E, W_reco_px, W_reco_py, W_reco_pz, tightJets_b_DeepJetmedium_id, Jet_pt, Jet_eta, Jet_phi, Jet_mass)",
+    "Label": ["Reco", "Normal"],
+    "Save": []
+  },
+
+  "top_reco_mass_tight":{
+    "Def": "top_reconstruction(W_reco_E, W_reco_px, W_reco_py, W_reco_pz, tightJets_b_DeepJettight_id, Jet_pt, Jet_eta, Jet_phi, Jet_mass)",
+    "Label": ["Reco", "Normal"],
+    "Save": []
+  },
+
+  "top_reco_mass_loose":{
+    "Def": "top_reconstruction(W_reco_E, W_reco_px, W_reco_py, W_reco_pz, tightJets_b_DeepJetloose_id, Jet_pt, Jet_eta, Jet_phi, Jet_mass)",
+    "Label": ["Reco", "Normal"],
+    "Save": []
+  },
+
+  "GenJet_b1_DeepJetmedium_idx":{
+    "Def": "iArray(Jet_Genidx, iArray(tightJets_b_DeepJetmedium_id, 0))",
+    "Label": ["Gen", "MC"],
+    "Save": []
+  },
+
+  "GenJet_b2_DeepJetmedium_idx":{
+    "Def": "iArray(Jet_Genidx, iArray(tightJets_b_DeepJetmedium_id, 1))",
+    "Label": ["Gen", "MC"],
+    "Save": []
+  },
+
+  "GenJet_b3_DeepJetmedium_idx":{
+    "Def": "iArray(Jet_Genidx, iArray(tightJets_b_DeepJetmedium_id, 2))",
+    "Label": ["Gen", "MC"],
+    "Save": []
+  },
+
+  "GenJet_b1_DeepJetmedium_pt":{
+    "Def": "iArray(GenJet_pt, GenJet_b1_DeepJetmedium_idx)",
+    "Label": ["Gen", "MC"],
+    "Save": []   
+  },
+
+  "GenJet_b2_DeepJetmedium_pt":{
+    "Def": "iArray(GenJet_pt, GenJet_b2_DeepJetmedium_idx)",
+    "Label": ["Gen", "MC"],
+    "Save": []   
+  },
+
+  "GenJet_b3_DeepJetmedium_pt":{
+    "Def": "iArray(GenJet_pt, GenJet_b3_DeepJetmedium_idx)",
+    "Label": ["Gen", "MC"],
+    "Save": []   
+  },
+
+  "GenJet_b1_DeepJetmedium_eta":{
+    "Def": "iArray(GenJet_eta, GenJet_b1_DeepJetmedium_idx)",
+    "Label": ["Gen", "MC"],
+    "Save": []   
+  },
+
+  "GenJet_b2_DeepJetmedium_eta":{
+    "Def": "iArray(GenJet_eta, GenJet_b2_DeepJetmedium_idx)",
+    "Label": ["Gen", "MC"],
+    "Save": []   
+  },
+
+  "GenJet_b3_DeepJetmedium_eta":{
+    "Def": "iArray(GenJet_eta, GenJet_b3_DeepJetmedium_idx)",
+    "Label": ["Gen", "MC"],
+    "Save": []   
+  },
+
+  "LHE_b_from_top_idx":{
+    "Def": "find_b_inLHE(LHEPart_pt, LHEPart_eta, LHEPart_phi, LHEPart_mass, LHEPart_pdgId, LHEPart_status, 500, 0)",
+    "Label": ["Gen", "MC"],
+    "Save": []
+  },
+
+  "LHE_b_from_H_idx":{
+    "Def": "find_b_inLHE(LHEPart_pt, LHEPart_eta, LHEPart_phi, LHEPart_mass, LHEPart_pdgId, LHEPart_status, 500, 1)",
+    "Label": ["Gen", "MC"],
+    "Save": []
+  },
+
+  "LHE_b_from_C_idx":{
+    "Def": "find_b_inLHE(LHEPart_pt, LHEPart_eta, LHEPart_phi, LHEPart_mass, LHEPart_pdgId, LHEPart_status, 500, 2)",
+    "Label": ["Gen", "MC"],
+    "Save": []
+  },
+
+  "LHE_b_from_top_eta":{
+    "Def": "iArray(LHEPart_eta, LHE_b_from_top_idx)",
+    "Label": ["Gen", "MC"],
+    "Save": []
+  },
+
+  "LHE_b_from_H_eta":{
+    "Def": "iArray(LHEPart_eta, LHE_b_from_H_idx)",
+    "Label": ["Gen", "MC"],
+    "Save": []
+  },
+
+  "LHE_b_from_C_eta":{
+    "Def": "iArray(LHEPart_eta, LHE_b_from_C_idx)",
+    "Label": ["Gen", "MC"],
+    "Save": []
+  }
+
+
+
+}

@@ -1,0 +1,37 @@
+{
+  "CGToBHpm_MH-200_rtt06_rtc04":{
+    "xsec": 1,
+    "MC": 1,
+    "Category": "cgTobH(200)",
+    "Color": 623,
+    "Label": ["MC","Signal"]
+  },
+  "CGToBHpm_MH-350_rtt06_rtc04":{
+    "xsec": 1,
+    "MC": 1,
+    "Category": "cgTobH(350)",
+    "Color": 623,
+    "Label": ["MC","Signal"]
+  },
+  "CGToBHpm_MH-500_rtt06_rtc04":{
+    "xsec": 1,
+    "MC": 1,
+    "Category": "cgTobH(500)",
+    "Color": 623,
+    "Label": ["MC","Signal"]
+  },
+  "CGToBHpm_MH-800_rtt06_rtc04":{
+    "xsec": 1,
+    "MC": 1,
+    "Category": "cgTobH(800)",
+    "Color": 623,
+    "Label": ["MC","Signal"]
+  },
+  "CGToBHpm_MH-1000_rtt06_rtc04":{
+    "xsec": 1,
+    "MC": 1,
+    "Category": "cgTobH(1000)",
+    "Color": 623,
+    "Label": ["MC","Signal"]
+  }
+}

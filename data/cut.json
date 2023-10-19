@@ -1,0 +1,22 @@
+{
+  "TTTo1L_control_region":{
+     "channel_cut":{
+       "ele": {
+         "channel_lepton": "bh_region == 2"
+       },
+       "mu": {
+         "channel_lepton": "bh_region == 1"
+       }
+     },
+     "general_cut":{
+       "veto_Had_tau": "nHad_tau==0",
+       "one lepton": "bh_nl==1",
+       "jet cond.": "bh_jets==1",
+       "met":     "bh_met>35",
+       "b jet cut": "n_bjet_DeepB_loose == 2",
+       "njet":    "n_tight_jet>=4"
+     }
+  }
+}
+
+
