@@ -17,9 +17,8 @@ The arguments are:
 11. `--test`: Do not trigger condor submission
 12. `--check`: Check all files are produced successfully and merged them.
 
-
-
 After running `runcondor.py`, the code will produce `check.sh`, which is cheat sheet to do the checking and merging. Feel free to modify the `JobFlavour` in it etc. (TODO: it is normal to have failed job and need to resubmit again, need to fix it)
+**It is important to check and merge the files, it may take one or two more trials to make all files correct**
 ```
 sh check.sh
 ``` 
