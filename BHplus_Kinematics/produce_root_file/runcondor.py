@@ -31,7 +31,7 @@ if __name__ == "__main__":
   parser = argparse.ArgumentParser(description=usage)
   parser.add_argument('-m', '--method', dest='method', help='[data/slim_mc/slim_data/...]', default='all', type=str)
   parser.add_argument('-e', '--era',    dest='era',    help='[all/2016apv/2016postapv/2017/2018]',default='all',type=str, choices=["all","2016apv","2016postapv","2017","2018"])
-  parser.add_argument('--JobFlavour', dest = 'JobFlavour', help='espresso/microcentury/longlunch/workday/tomorrow', type=str, default='espresso')
+  parser.add_argument('--JobFlavour', dest = 'JobFlavour', help='espresso/microcentury/longlunch/workday/tomorrow', type=str, default='longlunch')
   parser.add_argument('--universe',   dest = 'universe', help='vanilla/local', type=str, default='vanilla')
   parser.add_argument('--outdir',     dest = 'outdir',     help='output directory',   type=str, default='./')
   parser.add_argument("--test",       action = "store_true")
