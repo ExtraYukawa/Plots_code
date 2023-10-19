@@ -14,7 +14,7 @@ The region definition is kept in `../data/cut.json`. It supports multiple region
   - general\_cut
     - cut name: cut definition
 ## Input - variable
-The variable definition is kept in `../data/variable.json`. **All the new variables and variables used to vary nuisance (even it is already defined in NanoAOD)** should be in this file. It contains following information:
+The variable definition is kept in `../data/variable.json`. **All the new variables and variables used to vary nuisance (even it is already defined in NanoAOD)** should be in this file. Note that the variables are defined following the order in this file, so **order matters**. It contains following information:
 1. **Def**: Definition of this variable. If it is defined, just type "Defined".
 2. **Labels**: Labels of this variable. In later stage, we can utilize it to control which group of variables to use. Please note that if this variable is **MC only**, please type "MC".
 3. **Save**: This is highly related to Labels, it means when certain group is called, the variable will be saved in the skim root file.
