@@ -15,7 +15,8 @@ The arguments are:
 9. `--universe`: condor universe
 10. `--blocksize`: Events processed in each condor job` 
 11. `--test`: Do not trigger condor submission
-12. `--check`: Check all files are produced successfully and merged them.\\
+12. `--check`: Check all files are produced successfully and merged them. 
+\\
 After running `runcondor.py`, the code will produce `check.sh`, which is cheat sheet to do the checking and merging. Feel free to modify the `JobFlavour` in it etc. (TODO: it is normal to have failed job and need to resubmit again, need to fix it)
 ```
 sh check.sh
