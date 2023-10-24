@@ -1,0 +1,7 @@
+{
+  "puWeight":{
+    "Nominal": ["puWeight"],
+    "Def":     "RVecF{puWeightDown, puWeightUp}",
+    "Label": ["MC"]  
+  }
+}

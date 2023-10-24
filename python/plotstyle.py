@@ -5,7 +5,6 @@ import ROOT
 
 #WEBDIR = os.environ['HOME'] + '/public_html/cmsplots'
 
-WEBDIR = '/eos/user/g/gkole/www/public/bhplus/tmp/'
 
 
 ROOT.gStyle.SetOptStat(0)
@@ -83,7 +82,6 @@ def makeAxis(axis, xmin = 0., xmax = 1., x = 0., ymin = 0., ymax = 1., y = 0., v
     args = tuple(list(args) + [options])
 
     gaxis = ROOT.TGaxis(*args)
-
     gaxis.SetLabelFont(font)
     gaxis.SetTitleFont(font)
     if titleSize > 0.:
@@ -230,7 +228,7 @@ class Legend(object):
 
         self.legend.Draw()
 
-    def __getattr__(self, name):
+    def __getattr__(self, name):      
         return getattr(self.legend, name)
 
 
@@ -513,7 +511,8 @@ class SimpleCanvas(object):
                     minimum = 1.e-5
                 else:
                     minimum *= 0.2
-                maximum *= 5.
+                minimum = max(minimum, 1.e-1) # Make hard cut to have better plot | terry # May made this into more flexible way TODO
+                maximum *= 1000. # Change from 5 to 1000 to accommodate legend | terry
 
             else:
                 minimum = min(minimum, 0.)
@@ -655,7 +654,8 @@ class SimpleCanvas(object):
     def printWeb(self, directory, name, **options):
         self.Update(**options)
 
-        targetDir = WEBDIR + '/' + directory
+        # targetDir = WEBDIR + '/' + directory # Not convenient to maintain/change WEBDIR in basic code/ may use high level code to control it
+        targetDir = directory
         if not os.path.isdir(targetDir):
             os.makedirs(targetDir)
 
@@ -1141,7 +1141,6 @@ class RatioCanvas(SimpleCanvas):
 
         if hList is None:
             hList = range(len(self._histograms))
-
         base = self._updateMainPad(self.plotPad, hList, logx, logy, rooHists, drawLegend = drawLegend)
 
         if base:
@@ -1214,7 +1213,7 @@ class RatioCanvas(SimpleCanvas):
                 except KeyError:
                     obj = hist
 
-                ratio = normalizer.normalize(obj, 'ratio_' + hist.GetName())
+                ratio = normalizer.normalize(obj, 'ratio_' + hist.GetName() + str(ir))
                 ratio.SetTitle('')
 
                 self._temporaries.append(ratio)
@@ -1422,6 +1421,7 @@ class DataMCCanvas(RatioCanvas):
         self._bkgs = []
         self._sigs = []
 
+
         self._stack = ROOT.THStack('stack', '')
         self.addHistogram(self._stack, 'HIST', clone = False)
 
@@ -1454,7 +1454,7 @@ class DataMCCanvas(RatioCanvas):
 
         return self._obs
 
-    def addStacked(self, bkg, title = '', color = 0, style = 1001, idx = -1, drawOpt = 'HIST'):
+    def addStacked(self, bkg, title = '', color = 0, style = 1001, idx = -1, drawOpt = 'HIST', opt='LF'):
         idx = self.addHistogram(bkg, drawOpt, idx = idx)
 
         if idx not in self._bkgs:
@@ -1481,7 +1481,7 @@ class DataMCCanvas(RatioCanvas):
             else:
                 lcolor = color
 
-            self.legend.add('bkg%d' % idx, title = title, opt = 'LF', fcolor = (-1 if style == 0 else color), mcolor = lcolor, lcolor = lcolor, fstyle = style, lwidth = 2, lstyle = ROOT.kSolid)
+            self.legend.add('bkg%d' % idx, title = title, opt = opt, fcolor = (-1 if style == 0 else color), mcolor = lcolor, lcolor = lcolor, fstyle = style, lwidth = 2, lstyle = ROOT.kSolid)
             self.legend.apply('bkg%d' % idx, bkgHist)
 
             self._stack.Add(bkgHist)
@@ -1547,7 +1547,7 @@ class DataMCCanvas(RatioCanvas):
                 borderHist.SetMarkerColor(self.borderColor)
                 borderHist.SetFillStyle(0)
 
-                self.addHistogram(borderHist, drawOpt = 'HIST', clone = False)
+                self.addHistogram(borderHist, drawOpt = 'HIST', clone = True)
                 iBorder = len(self._histograms) - 1
                 hList.append(iBorder)
                 rList.append(iBorder)
@@ -1566,7 +1566,7 @@ class DataMCCanvas(RatioCanvas):
             uncertHist.SetMarkerColor(ROOT.kGray + 2)
             uncertHist.SetLineWidth(0)
 
-            self.addHistogram(uncertHist, drawOpt = 'E2', clone = False)
+            self.addHistogram(uncertHist, drawOpt = 'E2', clone = True)
             iUncert = len(self._histograms) - 1
             hList.append(iUncert)
             rList.append(iUncert)
